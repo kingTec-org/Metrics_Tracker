@@ -19,7 +19,7 @@ def add_crew_member(employee_number, first_name, last_name, middle_name, crew_po
 	DB_connection.my_cursor.execute(add_new_crew)
 
 
-add_crew_member(11111112, 'Nick', 'Stewart', 'Crishaun', 'USN')
+#example of how to use function: add_crew_member(11111112, 'Nick', 'Stewart', 'Crishaun', 'SO')
 
 #my_cursor.execute("INSERT into crew_members values (11111111, 'Nick', 'Westbrooks', 'SonicNess', 'SO');")
 

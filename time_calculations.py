@@ -35,7 +35,7 @@ def flight_period(entry_time, exit_time, entry_date, exit_date):
 	if len(minutes) == 1:
 		minutes = str(0)+minutes
 
-	hours_flown_string = ('{}{}'.format(hours, minutes))
+	hours_flown_string = (f'{hours}{minutes}')
 
 	print(hours_flown_string)
 	print(flight_date_of_entry, flight_date_of_exit)
