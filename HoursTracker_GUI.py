@@ -10,11 +10,9 @@ class MainWindow(QMainWindow):
 		self.setCentralWidget(new_crew_button)
 
 
-
 app = QApplication(sys.argv)
 
 window = MainWindow()
 window.show()
 
 app.exec_()
-
