@@ -11,7 +11,6 @@ def current_time():
 		time.sleep(60)
 
 
-
 def flight_period(entry_time, exit_time, entry_date, exit_date):
 	flight_time_of_entry = datetime.datetime.strptime(entry_time, "%H%M")
 	flight_date_of_entry = datetime.datetime.strptime(entry_date, "%d %b %Y")
@@ -30,20 +29,19 @@ def flight_period(entry_time, exit_time, entry_date, exit_date):
 	minutes = str(minutes)
 
 	if len(hours) == 1:
-		hours = str(0)+hours
+		hours = str(0) + hours
 
 	if len(minutes) == 1:
-		minutes = str(0)+minutes
+		minutes = str(0) + minutes
 
 	hours_flown_string = (f'{hours}{minutes}')
 
 	print(hours_flown_string)
 	print(flight_date_of_entry, flight_date_of_exit)
 
+# entry_time = input("Enter Start Time: ")
+# exit_time = input("Enter End Time: ")
+# entry_date = input("Enter ATO T/O Date: ")
+# exit_date = input("Enter ATO Land Date; )"
 
-#entry_time = input("Enter Start Time: ")
-#exit_time = input("Enter End Time: ")
-#entry_date = input("Enter ATO T/O Date: ")
-#exit_date = input("Enter ATO Land Date; )"
-
-#flight_period(entry_time, exit_time, entry_date=date, exit_date=date)
+# flight_period(entry_time, exit_time, entry_date=date, exit_date=date)
