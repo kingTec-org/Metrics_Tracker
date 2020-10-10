@@ -4,8 +4,6 @@ from PyQt5.QtWidgets import QApplication, QGridLayout, QMainWindow, QPushButton,
 	QMessageBox, QLabel
 from PyQt5 import QtCore, QtGui, QtSql
 
-sites = ["Arkansas", "New Jersey", "Washington", "Nevada"]
-
 class Crew_Edit_Window(QWidget):
 	"""
 	This Widget(QWidget) creates a new window. Since it has no parent, it
@@ -64,7 +62,6 @@ class Crew_Edit_Window(QWidget):
 		grid.addWidget(edit_crew_btn, 6, 1)
 		grid.addWidget(remove_crew_btn, 6, 2)
 
-		grid.addWidget(self.label)
 		self.setLayout(grid)
 
 	def add_crew_member(self):
@@ -91,7 +88,7 @@ class Window(QMainWindow):
 
 	def __init__(self):
 		super(Window, self).__init__()
-		#self.setGeometry(50, 50, 500, 500)
+		self.setGeometry(50, 50, 500, 500)
 		self.setWindowTitle("Aircraft Hours Tracker")
 
 		extract_action = QAction("Exit", self)
