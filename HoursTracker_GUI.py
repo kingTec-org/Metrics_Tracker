@@ -1,8 +1,26 @@
 import sys
 import DB_connection
-from PyQt5.QtWidgets import QApplication, QGridLayout, QMainWindow, QPushButton, QAction, QLineEdit, QWidget
-from PyQt5 import QtCore, QtGui
+from PyQt5.QtWidgets import QApplication, QGridLayout, QMainWindow, QPushButton, QAction, QLineEdit, QWidget, \
+	QMessageBox, QLabel
+from PyQt5 import QtCore, QtGui, QtSql
 
+sites = ["Arkansas", "New Jersey", "Washington", "Nevada"]
+
+class Crew_Edit_Window(QWidget):
+	"""
+	This Widget(QWidget) creates a new window. Since it has no parent, it
+	appears as a free-floating window.
+	"""
+	def __init__(self):
+		super().__init__()
+		grid = QGridLayout()
+
+		self.label = QLabel("Another Window")
+		#self.title = "Add/Remove/Edit Crew-member"
+		#self.setWindowTitle(self.title)
+
+		grid.addWidget(self.label)
+		self.setLayout(grid)
 
 class Window(QMainWindow):
 
@@ -22,53 +40,55 @@ class Window(QMainWindow):
 		file_menu.addAction(extract_action)
 
 		self.grid = QGridLayout()
-		w = QWidget()
-		w.setLayout(self.grid)
-		self.setCentralWidget(w)
+		widget = QWidget()
+		widget.setLayout(self.grid)
+		self.setCentralWidget(widget)
 
 		self.home()
 
 	def home(self):
-
-		quit_btn = QPushButton("Quit", self)
-		self.grid.addWidget(quit_btn, 0, 0)
-		quit_btn.clicked.connect(self.close_application)
-
 		crew_btn = QPushButton("Add New Crew-member", self)
-		self.grid.addWidget(crew_btn, 0, 1)
-
+		self.grid.addWidget(crew_btn, 0, 0)
 		crew_btn.clicked.connect(self.add_crew_member)
 
 		global enter_employee_id
 		enter_employee_id = QLineEdit(self)
-		self.grid.addWidget(enter_employee_id, 0, 2)
+		self.grid.addWidget(enter_employee_id, 1, 0)
 		enter_employee_id.setPlaceholderText("Enter Employee ID#")
 		enter_employee_id.setMaxLength(8)
 
 		global enter_first_name
 		enter_first_name = QLineEdit(self)
-		self.grid.addWidget(enter_first_name, 0, 3)
+		self.grid.addWidget(enter_first_name, 2, 0)
 		enter_first_name.setPlaceholderText("Enter First Name")
 		enter_first_name.setMaxLength(32)
 
 		global enter_middle_name
 		enter_middle_name = QLineEdit(self)
-		self.grid.addWidget(enter_middle_name, 0, 4)
+		self.grid.addWidget(enter_middle_name, 3, 0)
 		enter_middle_name.setPlaceholderText("Enter Middle Name")
 		enter_middle_name.setMaxLength(32)
 
 		global enter_last_name
 		enter_last_name = QLineEdit(self)
-		self.grid.addWidget(enter_last_name, 0, 5)
+		self.grid.addWidget(enter_last_name, 4, 0)
 		enter_last_name.setPlaceholderText("Enter Last Name")
 		enter_last_name.setMaxLength(32)
 
 		## TODO: Turn this into a drop-down box to select crew positions and ratings
 		global enter_crew_position
 		enter_crew_position = QLineEdit(self)
-		self.grid.addWidget(enter_crew_position, 0, 6)
+		self.grid.addWidget(enter_crew_position, 5, 0)
 		enter_crew_position.setPlaceholderText("Select Crew Position")
 		enter_crew_position.setMaxLength(16)
+
+		crew_functions = QPushButton("Crew-member Functions", self)
+		self.grid.addWidget(crew_functions, 6, 0)
+		crew_functions.clicked.connect(self.show_crew_edit_window)
+
+		quit_btn = QPushButton("Quit", self)
+		self.grid.addWidget(quit_btn, 7, 0)
+		quit_btn.clicked.connect(self.close_application)
 
 		self.show()
 
@@ -83,8 +103,18 @@ class Window(QMainWindow):
 		DB_connection.db_connection.commit()
 		print(add_new_crew)
 
+	def show_crew_edit_window(self):
+		self.w = Crew_Edit_Window()
+		self.w.show()
+
 	def close_application(self):
 		sys.exit()
+
+
+
+
+
+
 
 
 def run():
