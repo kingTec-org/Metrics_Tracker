@@ -4,11 +4,13 @@ from PyQt5.QtWidgets import QApplication, QGridLayout, QMainWindow, QPushButton,
 	QMessageBox, QLabel
 from PyQt5 import QtCore, QtGui, QtSql
 
-class Crew_Edit_Window(QWidget):
+
+class CrewEditWindow(QWidget):
 	"""
 	This Widget(QWidget) creates a new window. Since it has no parent, it
 	appears as a free-floating window.
 	"""
+
 	def __init__(self):
 		super().__init__()
 		grid = QGridLayout()
@@ -36,7 +38,7 @@ class Crew_Edit_Window(QWidget):
 		enter_last_name.setPlaceholderText("Enter Last Name")
 		enter_last_name.setMaxLength(32)
 
-		#TODO: Turn this into a drop-down box to select crew positions and ratings
+		# TODO: Turn this into a drop-down box to select crew positions and ratings
 		global enter_crew_position
 		enter_crew_position = QLineEdit(self)
 		enter_crew_position.setPlaceholderText("Select Crew Position")
@@ -45,11 +47,11 @@ class Crew_Edit_Window(QWidget):
 		add_crew_btn = QPushButton("Add New Crew-member", self)
 		add_crew_btn.clicked.connect(self.add_crew_member)
 
-		#TODO: Create function to edit crew-member table in MySQL DB
+		# TODO: Create function to edit crew-member table in MySQL DB
 		edit_crew_btn = QPushButton("Edit Crew-member", self)
 		edit_crew_btn.clicked.connect(self.edit_crew_member)
 
-		#TODO: Create function to remove crew-member from MySQL DB
+		# TODO: Create function to remove crew-member from MySQL DB
 		remove_crew_btn = QPushButton("Remove Crew-member", self)
 		remove_crew_btn.clicked.connect(self.remove_crew_member)
 
@@ -84,6 +86,7 @@ class Crew_Edit_Window(QWidget):
 	def remove_crew_member(self):
 		pass
 
+
 class Window(QMainWindow):
 
 	def __init__(self):
@@ -109,7 +112,6 @@ class Window(QMainWindow):
 		self.home()
 
 	def home(self):
-
 		crew_functions = QPushButton("Crew-member Functions", self)
 		self.grid.addWidget(crew_functions, 6, 0)
 		crew_functions.clicked.connect(self.show_crew_edit_window)
@@ -120,28 +122,19 @@ class Window(QMainWindow):
 
 		self.show()
 
-
-
 	def show_crew_edit_window(self):
-		self.w = Crew_Edit_Window()
+		self.w = CrewEditWindow()
 		self.w.show()
 
+	# noinspection PyMethodMayBeStatic
 	def close_application(self):
 		sys.exit()
 
 
-
-
-
-
-
-
 def run():
 	app = QApplication(sys.argv)
-	GUI = Window()
+	gui = Window()
 	sys.exit(app.exec_())
 
 
 run()
-
-# TODO: Attach add new crew-member to the button
