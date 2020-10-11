@@ -1,7 +1,7 @@
 import sys
 import DB_connection
-from PyQt5.QtWidgets import QApplication, QGridLayout, QMainWindow, QPushButton, QAction, QLineEdit, QWidget, \
-	QMessageBox, QLabel
+from PyQt5.QtWidgets import QApplication, QComboBox, QGridLayout, QMainWindow, QPushButton, QAction, QLineEdit, \
+													 QWidget, QMessageBox, QLabel
 from PyQt5 import QtCore, QtGui, QtSql
 
 
@@ -44,6 +44,14 @@ class CrewEditWindow(QWidget):
 		enter_crew_position.setPlaceholderText("Select Crew Position")
 		enter_crew_position.setMaxLength(16)
 
+		crew_positions = ['P', 'SO', 'IP', 'ISO', 'EP', 'ESO']
+
+
+		#TODO Replace enter_crew_position function
+		global crew_position_selector
+		crew_position_selector = QComboBox(self)
+		crew_position_selector.addItems(crew_positions)
+
 		add_crew_btn = QPushButton("Add New Crew-member", self)
 		add_crew_btn.clicked.connect(self.add_crew_member)
 
@@ -60,13 +68,16 @@ class CrewEditWindow(QWidget):
 		grid.addWidget(enter_middle_name, 3, 0, 1, 3)
 		grid.addWidget(enter_last_name, 4, 0, 1, 3)
 		grid.addWidget(enter_crew_position, 5, 0, 1, 3)
+		grid.addWidget(crew_position_selector, 0, 0, 1, 3)
 		grid.addWidget(add_crew_btn, 6, 0)
 		grid.addWidget(edit_crew_btn, 6, 1)
 		grid.addWidget(remove_crew_btn, 6, 2)
 
+
+
 		self.setLayout(grid)
 
-	def add_crew_member(self):
+	def add_crew_member():
 		try:
 			emp = enter_employee_id.text()
 			eln = enter_last_name.text()
@@ -80,10 +91,51 @@ class CrewEditWindow(QWidget):
 		except:
 			print("Something is missing")
 
-	def edit_crew_member(self):
+	# TODO change or get rid of this function after proof of concept
+	def view_employee_details():
+		# The view_deets variable send the correct instruction
+		view_details = "SELECT * FROM crew_members;"
+		DB_connection.my_cursor.execute(view_details)
+		what_to_return = DB_connection.my_cursor.fetchall()
+		columns = DB_connection.my_cursor.column_names
+		print(columns)
+		column_count = len(DB_connection.my_cursor.column_names)
+		print(column_count)
+		row_count = DB_connection.my_cursor.rowcount
+		print(row_count)
+
+	def change_employee_details(self):
+		#TODO create new popup window for edit and removal of crewmembers
+		set_first_name = alter_first_name.text()
+		set_middle_name = alter_middle_name.text()
+		set_last_name = alter_last_name.text()
+
+		# for reference
+		f"INSERT INTO crew_members VALUES ({emp}, '{eln}', '{efn}', '{emn}', '{ecp}');"
+
+		#TODO create a table selector
+		#TODO create databases for sights, aircraft, dynamic table for state/end dates for administrative usage
+
+
+		alter_employee_entry = f"UPDATE `flight_hours_db`.`crew_members` SET `last_name` = '{set_last_name}' WHERE(" \
+							   f"`employee_number` = '{emp}');"
+
+		#UPDATE `flight_hours_db`.`crew_members` SET `first_name` = 'Keisha'
+		#WHERE(`employee_number` = '12345678');
+
+		#UPDATE `flight_hours_db`.`crew_members` SET
+		#`last_name` = 'Player', `first_name` = 'The', `middle_name` = 'Best'
+		#WHERE(`employee_number` = '22222222');
+
+		#UPDATE `flight_hours_db`.`crew_members` SET `crew_position` = 'IP'
+		#WHERE(`employee_number` = '33333333');
+
+
+
+	def edit_crew_member():
 		pass
 
-	def remove_crew_member(self):
+	def remove_crew_member():
 		pass
 
 
@@ -129,6 +181,9 @@ class Window(QMainWindow):
 	# noinspection PyMethodMayBeStatic
 	def close_application(self):
 		sys.exit()
+
+
+CrewEditWindow.view_employee_details()
 
 
 def run():
