@@ -1,7 +1,7 @@
 import sys
 import DB_connection
 from PyQt5.QtWidgets import QApplication, QComboBox, QGridLayout, QMainWindow, QPushButton, QAction, QLineEdit, \
-	QWidget, QMessageBox, QLabel
+	QWidget, QMessageBox, QLabel, QTableView
 from PyQt5 import QtCore, QtGui, QtSql
 
 
@@ -79,19 +79,6 @@ class CrewEditWindow(QWidget):
 		except:
 			print("Something is missing")
 
-	# TODO change or get rid of this function after proof of concept
-	def view_employee_details():
-		# The view_deets variable send the correct instruction
-		view_details = "SELECT * FROM crew_members;"
-		DB_connection.my_cursor.execute(view_details)
-		what_to_return = DB_connection.my_cursor.fetchall()
-		columns = DB_connection.my_cursor.column_names
-		print(columns)
-		column_count = len(DB_connection.my_cursor.column_names)
-		print(column_count)
-		row_count = DB_connection.my_cursor.rowcount
-		print(row_count)
-
 	def change_employee_details(self):
 		# TODO create new popup window for edit and removal of crew-members
 		set_first_name = alter_first_name.text()
@@ -106,7 +93,6 @@ class CrewEditWindow(QWidget):
 
 		alter_employee_entry = f"UPDATE `flight_hours_db`.`crew_members` SET `last_name` = '{set_last_name}' WHERE(" \
 							   f"`employee_number` = '{emp}');"
-
 
 	def edit_crew_member():
 		pass
@@ -141,14 +127,36 @@ class Window(QMainWindow):
 
 	def home(self):
 		crew_functions = QPushButton("Crew-member Functions", self)
-		self.grid.addWidget(crew_functions, 6, 0)
+		self.grid.addWidget(crew_functions, 5, 0)
 		crew_functions.clicked.connect(self.show_crew_edit_window)
 
+		self.crew_tables = QTableView(self)
+		self.grid.addWidget(self.crew_tables, 7, 0)
+
+		crew_member_selector = QComboBox(self)
+		crew_member_selector.addItems(data[1])
+		self.grid.addWidget(crew_member_selector, 6, 0)
+
 		quit_btn = QPushButton("Quit", self)
-		self.grid.addWidget(quit_btn, 7, 0)
+		self.grid.addWidget(quit_btn, 8, 0)
 		quit_btn.clicked.connect(self.close_application)
 
 		self.show()
+
+	# TODO change this function to fill table
+	def view_employee_details():
+		view_details = "SELECT * FROM crew_members;"
+		DB_connection.my_cursor.execute(view_details)
+		crew_table_data = DB_connection.my_cursor.fetchall()
+		columns = DB_connection.my_cursor.column_names
+		column_count = len(DB_connection.my_cursor.column_names)
+		row_count = DB_connection.my_cursor.rowcount
+		global data
+		desc = DB_connection.my_cursor.description
+		data = [dict(zip(columns, row)) for row in crew_table_data]
+
+		for x in data:
+			print(x)
 
 	def show_crew_edit_window(self):
 		self.w = CrewEditWindow()
@@ -159,7 +167,7 @@ class Window(QMainWindow):
 		sys.exit()
 
 
-CrewEditWindow.view_employee_details()
+Window.view_employee_details()
 
 
 def run():
