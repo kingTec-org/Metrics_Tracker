@@ -1,7 +1,7 @@
 import sys
 import DB_connection
 from PyQt5.QtWidgets import QApplication, QComboBox, QGridLayout, QMainWindow, QPushButton, QAction, QLineEdit, \
-													 QWidget, QMessageBox, QLabel
+	QWidget, QMessageBox, QLabel
 from PyQt5 import QtCore, QtGui, QtSql
 
 
@@ -38,19 +38,10 @@ class CrewEditWindow(QWidget):
 		enter_last_name.setPlaceholderText("Enter Last Name")
 		enter_last_name.setMaxLength(32)
 
-		# TODO: Turn this into a drop-down box to select crew positions and ratings
-		global enter_crew_position
-		enter_crew_position = QLineEdit(self)
-		enter_crew_position.setPlaceholderText("Select Crew Position")
-		enter_crew_position.setMaxLength(16)
-
 		crew_positions = ['P', 'SO', 'IP', 'ISO', 'EP', 'ESO']
-
-
-		#TODO Replace enter_crew_position function
-		global crew_position_selector
-		crew_position_selector = QComboBox(self)
-		crew_position_selector.addItems(crew_positions)
+		global enter_crew_position
+		enter_crew_position = QComboBox(self)
+		enter_crew_position.addItems(crew_positions)
 
 		add_crew_btn = QPushButton("Add New Crew-member", self)
 		add_crew_btn.clicked.connect(self.add_crew_member)
@@ -68,22 +59,19 @@ class CrewEditWindow(QWidget):
 		grid.addWidget(enter_middle_name, 3, 0, 1, 3)
 		grid.addWidget(enter_last_name, 4, 0, 1, 3)
 		grid.addWidget(enter_crew_position, 5, 0, 1, 3)
-		grid.addWidget(crew_position_selector, 0, 0, 1, 3)
 		grid.addWidget(add_crew_btn, 6, 0)
 		grid.addWidget(edit_crew_btn, 6, 1)
 		grid.addWidget(remove_crew_btn, 6, 2)
 
-
-
 		self.setLayout(grid)
 
-	def add_crew_member():
+	def add_crew_member(self):
 		try:
 			emp = enter_employee_id.text()
 			eln = enter_last_name.text()
 			efn = enter_first_name.text()
 			emn = enter_middle_name.text()
-			ecp = enter_crew_position.text()
+			ecp = enter_crew_position.currentText()
 			add_new_crew = f"INSERT INTO crew_members VALUES ({emp}, '{eln}', '{efn}', '{emn}', '{ecp}');"
 			DB_connection.my_cursor.execute(add_new_crew)
 			DB_connection.db_connection.commit()
@@ -105,7 +93,7 @@ class CrewEditWindow(QWidget):
 		print(row_count)
 
 	def change_employee_details(self):
-		#TODO create new popup window for edit and removal of crewmembers
+		# TODO create new popup window for edit and removal of crew-members
 		set_first_name = alter_first_name.text()
 		set_middle_name = alter_middle_name.text()
 		set_last_name = alter_last_name.text()
@@ -113,23 +101,11 @@ class CrewEditWindow(QWidget):
 		# for reference
 		f"INSERT INTO crew_members VALUES ({emp}, '{eln}', '{efn}', '{emn}', '{ecp}');"
 
-		#TODO create a table selector
-		#TODO create databases for sights, aircraft, dynamic table for state/end dates for administrative usage
-
+		# TODO create a table selector
+		# TODO create databases for sights, aircraft, dynamic table for state/end dates for administrative usage
 
 		alter_employee_entry = f"UPDATE `flight_hours_db`.`crew_members` SET `last_name` = '{set_last_name}' WHERE(" \
 							   f"`employee_number` = '{emp}');"
-
-		#UPDATE `flight_hours_db`.`crew_members` SET `first_name` = 'Keisha'
-		#WHERE(`employee_number` = '12345678');
-
-		#UPDATE `flight_hours_db`.`crew_members` SET
-		#`last_name` = 'Player', `first_name` = 'The', `middle_name` = 'Best'
-		#WHERE(`employee_number` = '22222222');
-
-		#UPDATE `flight_hours_db`.`crew_members` SET `crew_position` = 'IP'
-		#WHERE(`employee_number` = '33333333');
-
 
 
 	def edit_crew_member():
