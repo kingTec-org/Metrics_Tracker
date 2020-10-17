@@ -2,7 +2,6 @@ import sys
 import DB_connection
 from PyQt5.QtWidgets import QApplication, QComboBox, QGridLayout, QMainWindow, QPushButton, QAction, QLineEdit, \
 	QWidget, QMessageBox, QLabel, QTableView
-from PyQt5 import QtCore, QtGui, QtSql
 
 
 class CrewEditWindow(QWidget):
@@ -74,7 +73,7 @@ class CrewEditWindow(QWidget):
 			ecp = enter_crew_position.currentText()
 			add_new_crew = f"INSERT INTO crew_members VALUES ({emp}, '{eln}', '{efn}', '{emn}', '{ecp}');"
 			DB_connection.my_cursor.execute(add_new_crew)
-			DB_connection.db_connection.commit()
+			DB_connection.conn.commit()
 			print(add_new_crew)
 		except:
 			print("Something is missing")
@@ -85,11 +84,8 @@ class CrewEditWindow(QWidget):
 		set_middle_name = alter_middle_name.text()
 		set_last_name = alter_last_name.text()
 
-		# for reference
-		f"INSERT INTO crew_members VALUES ({emp}, '{eln}', '{efn}', '{emn}', '{ecp}');"
-
 		# TODO create a table selector
-		# TODO create databases for sights, aircraft, dynamic table for state/end dates for administrative usage
+		# TODO create databases for sites, aircraft, dynamic table for state/end dates for administrative usage
 
 		alter_employee_entry = f"UPDATE `flight_hours_db`.`crew_members` SET `last_name` = '{set_last_name}' WHERE(" \
 							   f"`employee_number` = '{emp}');"
@@ -134,7 +130,7 @@ class Window(QMainWindow):
 		self.grid.addWidget(self.crew_tables, 7, 0)
 
 		crew_member_selector = QComboBox(self)
-		crew_member_selector.addItems(data[1])
+		crew_member_selector.addItems(list_of_names)
 		self.grid.addWidget(crew_member_selector, 6, 0)
 
 		quit_btn = QPushButton("Quit", self)
@@ -145,18 +141,21 @@ class Window(QMainWindow):
 
 	# TODO change this function to fill table
 	def view_employee_details():
-		view_details = "SELECT * FROM crew_members;"
-		DB_connection.my_cursor.execute(view_details)
-		crew_table_data = DB_connection.my_cursor.fetchall()
-		columns = DB_connection.my_cursor.column_names
-		column_count = len(DB_connection.my_cursor.column_names)
-		row_count = DB_connection.my_cursor.rowcount
-		global data
-		desc = DB_connection.my_cursor.description
-		data = [dict(zip(columns, row)) for row in crew_table_data]
 
-		for x in data:
-			print(x)
+		# MYSQL Commands
+		view_details = 'SELECT * FROM crew_members;'
+		get_names = "SELECT CONCAT(last_name, ' ', first_name) AS full_name FROM crew_members;"
+		query = DB_connection.my_cursor.execute
+		query(get_names)
+
+
+		names = DB_connection.my_cursor.fetchall()
+		global list_of_names
+		list_of_names = []
+		for name in names:
+			name = str(name)
+			name = name[2:-3]
+			list_of_names.append(name)
 
 	def show_crew_edit_window(self):
 		self.w = CrewEditWindow()
@@ -164,6 +163,7 @@ class Window(QMainWindow):
 
 	# noinspection PyMethodMayBeStatic
 	def close_application(self):
+		DB_connection.my_cursor.close()
 		sys.exit()
 
 
