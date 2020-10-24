@@ -1,7 +1,9 @@
 import sys
 import DB_connection
-from PyQt5.QtWidgets import QApplication, QComboBox, QGridLayout, QMainWindow, QPushButton, QAction, QLineEdit, \
-	QWidget, QMessageBox, QLabel, QTableView
+from PyQt5.QtWidgets import QApplication, QTableWidget, QComboBox, \
+	QGridLayout, QMainWindow, QPushButton, QAction, \
+	QLineEdit, QWidget, QMessageBox, QLabel, QTableView, QTableWidgetItem
+from PyQt5.QtSql import QSqlTableModel, QSqlQuery
 
 
 class CrewEditWindow(QWidget):
@@ -122,20 +124,30 @@ class Window(QMainWindow):
 		self.home()
 
 	def home(self):
-		crew_functions = QPushButton("Crew-member Functions", self)
-		self.grid.addWidget(crew_functions, 5, 0)
-		crew_functions.clicked.connect(self.show_crew_edit_window)
+		self.grid.columnStretch(2)
+		self.grid.rowStretch(1)
 
-		self.crew_tables = QTableView(self)
-		self.grid.addWidget(self.crew_tables, 7, 0)
+		self.crew_functions = QPushButton("Crew Profiles", self)
+		self.grid.addWidget(self.crew_functions, 5, 0, 1, 2)
+		self.crew_functions.clicked.connect(self.show_crew_edit_window)
 
-		crew_member_selector = QComboBox(self)
-		crew_member_selector.addItems(list_of_names)
-		self.grid.addWidget(crew_member_selector, 6, 0)
+		self.crew_tables = QTableWidget(self)
+		self.crew_tables.setRowCount(7)
+		self.crew_tables.setColumnCount(5)
+		self.grid.addWidget(self.crew_tables, 7, 0, 1, 2)
 
-		quit_btn = QPushButton("Quit", self)
-		self.grid.addWidget(quit_btn, 8, 0)
-		quit_btn.clicked.connect(self.close_application)
+		self.crew_member_selector = QComboBox(self)
+		self.crew_member_selector.addItems(list_of_names)
+
+		self.grid.addWidget(self.crew_member_selector, 6, 0, 1, 2)
+
+		self.load_btn = QPushButton("Load Data", self)
+		self.grid.addWidget(self.load_btn, 8, 0)
+		self.load_btn.clicked.connect(self.load_data)
+
+		self.quit_btn = QPushButton("Quit", self)
+		self.grid.addWidget(self.quit_btn, 8, 1)
+		self.quit_btn.clicked.connect(self.close_application)
 
 		self.show()
 
@@ -148,13 +160,13 @@ class Window(QMainWindow):
 		query = DB_connection.my_cursor.execute
 		query(get_names)
 
-
 		names = DB_connection.my_cursor.fetchall()
 		global list_of_names
 		list_of_names = []
 		for name in names:
 			name = str(name)
 			name = name[2:-3]
+			name = name.replace(" ", ", ")
 			list_of_names.append(name)
 
 	def show_crew_edit_window(self):
@@ -165,6 +177,17 @@ class Window(QMainWindow):
 	def close_application(self):
 		DB_connection.my_cursor.close()
 		sys.exit()
+
+	def load_data(self):
+		cursor = DB_connection.my_cursor
+		cursor.execute("SELECT * FROM crew_members")
+		result = cursor.fetchall()
+		self.crew_tables.setRowCount(0)
+
+		for row_number, row_data in enumerate(result):
+			self.crew_tables.insertRow(row_number)
+			for column_number, data in enumerate(row_data):
+				self.crew_tables.setItem(row_number, column_number, QTableWidgetItem(str(data)))
 
 
 Window.view_employee_details()
