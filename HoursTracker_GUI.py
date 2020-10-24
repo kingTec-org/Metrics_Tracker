@@ -124,17 +124,14 @@ class Window(QMainWindow):
 		self.home()
 
 	def home(self):
-		self.grid.columnStretch(2)
-		self.grid.rowStretch(1)
-
 		self.crew_functions = QPushButton("Crew Profiles", self)
 		self.grid.addWidget(self.crew_functions, 5, 0, 1, 2)
 		self.crew_functions.clicked.connect(self.show_crew_edit_window)
 
 		self.crew_tables = QTableWidget(self)
+		self.grid.addWidget(self.crew_tables, 7, 0, 1, 2)
 		self.crew_tables.setRowCount(7)
 		self.crew_tables.setColumnCount(5)
-		self.grid.addWidget(self.crew_tables, 7, 0, 1, 2)
 
 		self.crew_member_selector = QComboBox(self)
 		self.crew_member_selector.addItems(list_of_names)
@@ -148,6 +145,10 @@ class Window(QMainWindow):
 		self.quit_btn = QPushButton("Quit", self)
 		self.grid.addWidget(self.quit_btn, 8, 1)
 		self.quit_btn.clicked.connect(self.close_application)
+
+		self.new_site_btn = QPushButton("Add New Site", self)
+		self.grid.addWidget(self.new_site_btn, 9, 0, 1, 2)
+		self.new_site_btn.clicked.connect(self.create_new_site)
 
 		self.show()
 
@@ -178,10 +179,18 @@ class Window(QMainWindow):
 		DB_connection.my_cursor.close()
 		sys.exit()
 
+	def create_new_site(self):
+		new_site_dialog = QMessageBox(self)
+		new_site_dialog.setText("Enter Site Name")
+		self.show()
+
+		#self.cursor.execute("Create")
+
+
 	def load_data(self):
-		cursor = DB_connection.my_cursor
-		cursor.execute("SELECT * FROM crew_members")
-		result = cursor.fetchall()
+		self.cursor = DB_connection.my_cursor
+		self.cursor.execute("SELECT * FROM crew_members")
+		result = self.cursor.fetchall()
 		self.crew_tables.setRowCount(0)
 
 		for row_number, row_data in enumerate(result):
