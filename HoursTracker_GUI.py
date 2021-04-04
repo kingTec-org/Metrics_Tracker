@@ -21,7 +21,8 @@ class CrewEditWindow(QWidget):
 
 		global enter_employee_id
 		enter_employee_id = QLineEdit(self)
-		enter_employee_id.setPlaceholderText("Enter Employee ID#")
+		id_prompt = "Enter Employee ID#"
+		enter_employee_id.setPlaceholderText(id_prompt)
 		enter_employee_id.setMaxLength(8)
 
 		global enter_first_name
@@ -186,7 +187,6 @@ class Window(QMainWindow):
 
 		#self.cursor.execute("Create")
 
-
 	def load_data(self):
 		self.cursor = DB_connection.my_cursor
 		self.cursor.execute("SELECT * FROM crew_members")
@@ -198,7 +198,6 @@ class Window(QMainWindow):
 			for column_number, data in enumerate(row_data):
 				self.crew_tables.setItem(row_number, column_number, QTableWidgetItem(str(data)))
 
-
 Window.view_employee_details()
 
 
@@ -206,6 +205,5 @@ def run():
 	app = QApplication(sys.argv)
 	gui = Window()
 	sys.exit(app.exec_())
-
 
 run()
