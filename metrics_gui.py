@@ -3,41 +3,56 @@ import PySimpleGUI as sg
 sg.theme('DefaultNoMoreNagging')
 
 site_list = ['Item 1 on Site List']
+member_list = ['1st Crewmember']
+
+layout = [[sg.Ok(), sg.Cancel()]]  # ok and cancel buttons
 
 
 def main_window():
-	layout = [[sg.Text('Select Current Site')],
-			  [sg.Input(k='-IN-', enable_events=True)],
-			  [sg.Listbox(values=site_list,
-						  enable_events=True,
-						  size=(40, 20),
-						  key='-FILE LIST-')],
-			  [sg.Text(size=(20, 1), k='-OUTPUT-')],
-			  [sg.Button('Next >'), sg.Button('Exit')],
-			  [sg.Button('Add New Site'), sg.Button('Add New Crew')]]
+	layout = [[sg.Button('Edit Site', size=(7.5,1), key='edit_site_window'),
+			   sg.Button('Edit Crew', size=(7.5,1), key='edit_crew_window')],
+			  [sg.Button('Exit',size=(18,1))]]
 
-	return sg.Window('Proprietary Metrics Tracker', layout, finalize=True)
+	return sg.Window('Metrics', layout, finalize=True)
 
+def edit_crew_window():
+	pass
 
-def member_window():
-	layout = [[sg.Text('Crew')],
-			  [sg.Button('< Prev'), sg.Button('Next >')],
-			  [sg.Button('Add Member'), sg.Button('Close')]]
+def edit_site_window():
+	pass
 
-	return sg.Window('Crew Profiles', layout, finalize=True)
-
-
-def site_window():
+def add_site_window():
 	layout = [[sg.Text('Sites')],
 			  [sg.Text('State?')],
 			  [sg.Text('Country?')],
-			  [sg.Button('< Prev'), sg.Button('Exit')],
-			  [sg.Button('Add Site'), sg.Button('Close')]]
+			  [sg.Button('< Prev', size=(10,1)), sg.Button('Add Site', size=(10,1))],
+			  [sg.Button('Exit', size=(10,1)), sg.Button('Close', size=(10,1))]]
 
 	return sg.Window('Site Profiles', layout, finalize=True)
 
 
-window1, window2, window3 = main_window(), None, None
+def crew_window():
+	layout = [[sg.Text('Crew')],
+			  [sg.Button('< Prev', size=(10,1)), sg.Button('Next >', size=(10,1))],
+			  [sg.Button('Add Member', key='add_crew_main_btn', size=(10,1)), sg.Button('Close', size=(10,1))]]
+
+	return sg.Window('Crew Profiles', layout, finalize=True)
+
+
+def add_crew_window():
+	layout = [[sg.Text('Please enter your First Name, Last Name, E-Mail')],
+			  [sg.Text('First Name', size=(15, 1)), sg.InputText('First')],
+			  [sg.Text('Middle Name', size=(15, 1)), sg.InputText('Middle')],
+			  [sg.Text('Last Name', size=(15, 1)), sg.InputText('Last')],
+			  [sg.Text('Suffix', size=(15, 1)), sg.InputText('Suffix')],
+			  [sg.Text('Employee Number', size=(15, 1)), sg.InputText('Employee Number')],
+			  [sg.Text('Crew Position', size=(15, 1)), sg.InputText('Crew Position')],
+			  [sg.Submit(), sg.Cancel()]]
+
+	return sg.Window('Add New Crew Member', layout, finalize=True)
+
+
+window1, window2, window3, window4 = main_window(), None, None, None
 
 while True:
 	window, event, values = sg.read_all_windows()
@@ -47,17 +62,20 @@ while True:
 	if window == window1:
 		if event == 'Next >':
 			window1.hide()
-			window2 = member_window()
-		window1['-OUTPUT-'].update(values['-IN-'])
+			window2 = crew_window()
+		elif event == 'add_crew_main_btn':
+			window1.hide()
+			window4 = add_crew_window()
 
+	# window1['-OUTPUT-'].update(values['-IN-'])
 	if window == window2:
-		if event == 'Next >':
+		if event == ('Next >'):
 			window2.hide()
-			window3 = site_window()
-		elif event in (sg.WIN_CLOSED, '< Prev'):
+			window3 = add_site_window()
+		elif event in (sg.WINDOW_CLOSE_ATTEMPTED_EVENT, sg.WIN_CLOSED, '< Prev'):
 			window2.close()
 			window1.un_hide()
-		elif event in ('Close'):
+		elif event in (sg.WINDOW_CLOSE_ATTEMPTED_EVENT, sg.WIN_CLOSED, 'Close'):
 			window2.close()
 			window1.un_hide()
 
@@ -65,11 +83,21 @@ while True:
 		if event == ('< Prev'):
 			window3.close()
 			window2.un_hide()
-		elif event in ('Close'):
+		elif event in (sg.WINDOW_CLOSE_ATTEMPTED_EVENT, sg.WIN_CLOSED, 'Close'):
 			window3.close()
 			window1.un_hide()
 
+	if window == window4:
+		if event == ('Close'):
+			window4.close()
+			window2.un_hide()
+		elif event in (sg.WINDOW_CLOSE_ATTEMPTED_EVENT, sg.WIN_CLOSED, 'Close'):
+			window4.close()
+			window2.un_hide()
+
 window.close()
+# TODO Site and Crew DB, connection and inputs
 
 # TODO feed the MySQL tabular data to a real time DL model,
-# and learn a web framework to deploy the draft version for feedback.
+#  and learn a web framework to deploy the draft version for
+#  feedback.
