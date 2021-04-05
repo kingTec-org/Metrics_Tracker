@@ -15,26 +15,10 @@ def main_window():
 
 	return sg.Window('Metrics', layout, finalize=True)
 
+
 def edit_crew_window():
-	pass
-
-def edit_site_window():
-	pass
-
-def add_site_window():
-	layout = [[sg.Text('Sites')],
-			  [sg.Text('State?')],
-			  [sg.Text('Country?')],
-			  [sg.Button('< Prev', size=(10,1)), sg.Button('Add Site', size=(10,1))],
-			  [sg.Button('Exit', size=(10,1)), sg.Button('Close', size=(10,1))]]
-
-	return sg.Window('Site Profiles', layout, finalize=True)
-
-
-def crew_window():
-	layout = [[sg.Text('Crew')],
-			  [sg.Button('< Prev', size=(10,1)), sg.Button('Next >', size=(10,1))],
-			  [sg.Button('Add Member', key='add_crew_main_btn', size=(10,1)), sg.Button('Close', size=(10,1))]]
+	layout = [[sg.Text('Edit Crew')],
+			  [sg.Button('Add Crew', key='add_crew_main_btn', size=(10, 1)), sg.Button('Close', size=(10, 1))]]
 
 	return sg.Window('Crew Profiles', layout, finalize=True)
 
@@ -52,48 +36,62 @@ def add_crew_window():
 	return sg.Window('Add New Crew Member', layout, finalize=True)
 
 
-window1, window2, window3, window4 = main_window(), None, None, None
+def edit_site_window():
+	layout = [[sg.Text('Edit Site')],
+			  [sg.Button('Add New Site', key='add_site_main_btn', size=(10, 1)), sg.Button('Close', size=(10, 1))]]
+
+	return sg.Window('Site Profiles', layout, finalize=True)
+
+
+def add_site_window():
+	layout = [[sg.Text('Sites')],
+			  [sg.Text('State?')],
+			  [sg.Text('Country?')],
+			  [sg.Button('Add Site', size=(10,1))],
+			  [sg.Button('Exit', size=(10,1)), sg.Button('Close', size=(10,1))]]
+
+	return sg.Window('Site Profiles', layout, finalize=True)
+
+window1, window2, window3, window4, window5 = main_window(), None, None, None, None
 
 while True:
 	window, event, values = sg.read_all_windows()
 	if window == window1 and event in (sg.WIN_CLOSED, 'Exit'):
 		break
 
-	if window == window1:
-		if event == 'Next >':
+	if window == window1: # Main Window
+		if event == 'edit_crew_window':
 			window1.hide()
-			window2 = crew_window()
-		elif event == 'add_crew_main_btn':
+			window2 = edit_crew_window()
+		elif event == 'edit_site_window':
 			window1.hide()
+			window3 = edit_site_window()
+
+	if window == window2: # Edit Crew Window
+		if event in (sg.WINDOW_CLOSE_ATTEMPTED_EVENT, sg.WIN_CLOSED, 'Close'):
+			window2.close()
+			window1.un_hide()
+		elif event in ('add_crew_main_btn'):
+			window2.hide()
 			window4 = add_crew_window()
 
-	# window1['-OUTPUT-'].update(values['-IN-'])
-	if window == window2:
-		if event == ('Next >'):
-			window2.hide()
-			window3 = add_site_window()
-		elif event in (sg.WINDOW_CLOSE_ATTEMPTED_EVENT, sg.WIN_CLOSED, '< Prev'):
-			window2.close()
-			window1.un_hide()
-		elif event in (sg.WINDOW_CLOSE_ATTEMPTED_EVENT, sg.WIN_CLOSED, 'Close'):
-			window2.close()
-			window1.un_hide()
-
-	if window == window3:
-		if event == ('< Prev'):
-			window3.close()
-			window2.un_hide()
-		elif event in (sg.WINDOW_CLOSE_ATTEMPTED_EVENT, sg.WIN_CLOSED, 'Close'):
+	if window == window3: # Edit Site Window
+		if event in (sg.WINDOW_CLOSE_ATTEMPTED_EVENT, sg.WIN_CLOSED, 'Close'):
 			window3.close()
 			window1.un_hide()
+		elif event in ('add_site_main_btn'):
+			window3.hide()
+			window5 = add_site_window()
 
-	if window == window4:
-		if event == ('Close'):
+	if window == window4: # Add Crew Window
+		if event in (sg.WINDOW_CLOSE_ATTEMPTED_EVENT, sg.WIN_CLOSED, 'Close','Cancel'):
 			window4.close()
 			window2.un_hide()
-		elif event in (sg.WINDOW_CLOSE_ATTEMPTED_EVENT, sg.WIN_CLOSED, 'Close'):
-			window4.close()
-			window2.un_hide()
+
+	if window == window5: # Add Site Window
+		if event in (sg.WINDOW_CLOSE_ATTEMPTED_EVENT, sg.WIN_CLOSED, 'Close'):
+			window5.close()
+			window3.un_hide()
 
 window.close()
 # TODO Site and Crew DB, connection and inputs
