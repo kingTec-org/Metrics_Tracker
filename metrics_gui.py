@@ -26,7 +26,7 @@ def view_crew_window():
 			  [sg.Button('Close', size=(7, 1))],
 			  [sg.Text('Some text on Row 1'), sg.Text('Enter something on Row 2')],
 			  [sg.Table(values=get_crew_query(),
-						headings=get_column_names_query(),
+						headings=get_crew_column_query(),
 						auto_size_columns=True,
 						display_row_numbers=True,
 						justification="left",
