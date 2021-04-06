@@ -36,11 +36,13 @@ def get_crew_query():
 		curs.close()
 		conn.close()
 
+	print('Disconnected from Database')
+
 	return crew_member_list
 
 
 # get column_names from database
-def get_column_names():
+def get_column_names_query():
 	conn = mysql.connector.connect(
 		user='root',
 		password='3935GrayFuse',
@@ -62,13 +64,12 @@ def get_column_names():
 	column_name_list = []
 
 	for column in get_column_names:
-		header = {column}
-		column_name_list.append(header)
+		column_name = f'{column[0].replace("_", " ").title()}'
+		column_name_list.append(column_name)
 
 	curs.close()
 	conn.close()
 
+	print('Disconnected from Database')
+
 	return column_name_list
-
-
-print(get_column_names()[0])

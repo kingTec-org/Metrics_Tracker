@@ -26,18 +26,18 @@ def view_crew_window():
 			  [sg.Button('Close', size=(7, 1))],
 			  [sg.Text('Some text on Row 1'), sg.Text('Enter something on Row 2')],
 			  [sg.Table(values=get_crew_query(),
-						headings=headings,
+						headings=get_column_names_query(),
 						visible_column_map=None,
 						col_widths=None,
-						def_col_width=50,
+						def_col_width=10,
 						auto_size_columns=True,
-						max_col_width=50,
+						max_col_width=10,
 						select_mode=None,
 						display_row_numbers=False,
 						num_rows=None,
 						row_height=None,
 						font=None,
-						justification="right",
+						justification="left",
 						text_color=None,
 						background_color=None,
 						alternating_row_color=None,
@@ -179,7 +179,7 @@ while True:
 		if event in (sg.WINDOW_CLOSE_ATTEMPTED_EVENT, sg.WIN_CLOSED, 'Close'):
 			window7.close()
 			window5.un_hide()
-		elif event in (''):
+		elif event in '':
 			pass
 
 # end of program
