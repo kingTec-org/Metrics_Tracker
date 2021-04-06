@@ -27,11 +27,11 @@ def get_crew_query():
 		middle_name = str(crew[3])
 		crew_position = str(crew[4])
 		crew_member_list.append(
-			[f'{employee_id_number}',
-			 f'{last_name}',
-			 f'{first_name}',
-			 f'{middle_name}',
-			 f'{crew_position}'])
+			[[f'{employee_id_number}'],
+			 [f'{last_name}'],
+			 [f'{first_name}'],
+			 [f'{middle_name}'],
+			 [f'{crew_position}']])
 
 		curs.close()
 		conn.close()
@@ -40,7 +40,7 @@ def get_crew_query():
 
 
 # get column_names from database
-def column_names():
+def get_column_names():
 	conn = mysql.connector.connect(
 		user='root',
 		password='3935GrayFuse',
@@ -54,10 +54,7 @@ def column_names():
 
 	curs.execute(
 		'''
-		SELECT *
-		FROM INFORMATION_SCHEMA.COLUMNS 
-		WHERE TABLE_SCHEMA = 'flight_hours_db'
-    	AND TABLE_NAME = 'crew_members';
+		SHOW columns FROM crew_members;
 		'''
 	)
 	get_column_names = curs.fetchall()
@@ -74,4 +71,4 @@ def column_names():
 	return column_name_list
 
 
-print(column_names())
+print(get_column_names()[0])
