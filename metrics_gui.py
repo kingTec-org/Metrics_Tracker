@@ -16,15 +16,8 @@ def main_window():
 
 # will be the main crew window, leading to edit crew window
 def view_crew_window():
-	headings = ['Employee Number',
-				'Last Name',
-				'First Name',
-				'Middle Name',
-				'Crew Position']
-
 	layout = [[sg.Button('Edit Crew', size=(7, 1), key='edit_crew_window')],
-			  [sg.Button('Close', size=(7, 1))],
-			  [sg.Text('Some text on Row 1'), sg.Text('Enter something on Row 2')],
+			  [sg.Text('View Crew Here')],
 			  [sg.Table(values=get_crew_query(),
 						headings=get_crew_column_query(),
 						auto_size_columns=True,
@@ -38,14 +31,28 @@ def view_crew_window():
 						tooltip=None,
 						right_click_menu=None,
 						)],
-			  [sg.Button('Ok'), sg.Button('Cancel')]
-			  ]
+			  [sg.Button('Ok', size = (7, 1)), sg.Button('Close', size = (7, 1))]]
 
 	return sg.Window('View Crewmembers', layout, finalize=True)
 
 
 def view_site_window():
-	layout = [[sg.Button('Edit Site', size=(7, 1), key='edit_site_window')], [sg.Button('Close', size=(7, 1))]]
+	layout = [[sg.Button('Edit Site', size=(7, 1), key='edit_site_window')],
+			  [sg.Text('View Site Here')],
+			  [sg.Table(values=get_site_query(),
+								  headings=get_site_column_query(),
+								  auto_size_columns=True,
+								  display_row_numbers=True,
+								  justification="left",
+								  alternating_row_color='LightGray',
+								  selected_row_colors=(None, None),
+								  enable_events=False,
+								  bind_return_key=False,
+								  key=None,
+								  tooltip=None,
+								  right_click_menu=None,
+								  )],
+						[sg.Button('Ok', size=(7, 1)), sg.Button('Close', size=(7, 1))]]
 
 	return sg.Window('View Site', layout, finalize=True)
 

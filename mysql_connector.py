@@ -20,7 +20,6 @@ def add_fake_crew_members(num):
 
 	i = 1
 	for x in range(num):
-		yourstring = ''.join(('L', 'yourstring', 'LL'))
 		try:
 			employee_number = random.randint(13370000, 13380000)
 			first_name = names.get_first_name()
@@ -45,7 +44,49 @@ def add_fake_crew_members(num):
 	curs.close()
 	conn.close()
 
-	print('Disconnected from Database')#
+	print('Disconnected from Database')
+
+
+def add_fake_sites(num):
+	conn = mysql.connector.connect(
+		user='root',
+		password='3935GrayFuse',
+		host='localhost',
+		database='metrics_db'
+	)
+
+	curs = conn.cursor(buffered=True)
+
+	print('Connected to Database')
+
+	country_list = ['United States', 'Limnadia', 'Tatoooine', 'Hogwarts', 'Middle Earth', 'Westeros']
+
+	i = 1
+	for x in range(num):
+		try:
+			site_id = random.randint(11, 99)
+			country = random.choice(country_list)
+			country = ''.join(("'", country, "'"))
+			num_ac = random.randint(1, 5)
+			num_full_staff = num_ac * 10
+			num_curr_staff = random.randint(num_full_staff - random.randint(1, 6), num_full_staff)
+			query = f'INSERT INTO sites (site_id, country, num_ac, num_full_staff, num_curr_staff) ' \
+					f'VALUES ({site_id}, {country}, {num_ac}, {num_full_staff}, {num_curr_staff});'
+
+			curs.execute(query)
+			conn.commit()
+
+		except:
+			print(f'{i}. Fix Your Query')
+			i += 1
+			pass
+
+	curs.close()
+	conn.close()
+
+	print('Disconnected from Database')
+
+	return None
 
 
 # get crew member list from database
@@ -108,17 +149,17 @@ def get_site_query():
 	site_list = []
 
 	for site in get_site:
-		site_name = str([0])
-		country = str(crew[1])
-		city = str(crew[2])
-		state = str(crew[3])
-		total_ac = str(crew[4])
+		site_id = str(site[0])
+		country = str(site[1])
+		num_ac = str(site[2])
+		num_full_staff = str(site[3])
+		num_curr_staff = str(site[4])
 		site_list.append(
-			[[f'{site_name}'],
+			[[f'{site_id}'],
 			 [f'{country}'],
-			 [f'{city}'],
-			 [f'{state}'],
-			 [f'{total_ac}']])
+			 [f'{num_ac}'],
+			 [f'{num_full_staff}'],
+			 [f'{num_curr_staff}']])
 
 		curs.close()
 		conn.close()
@@ -148,19 +189,48 @@ def get_crew_column_query():
 	)
 	get_column_names = curs.fetchall()
 
-	column_name_list = []
+	crew_column_name_list = []
 
 	for column in get_column_names:
 		column_name = f'{column[0].replace("_", " ").title()}'
-		column_name_list.append(column_name)
+		crew_column_name_list.append(column_name)
 
 	curs.close()
 	conn.close()
 
 	print('Disconnected from Database')
 
-	return column_name_list
+	return crew_column_name_list
 
 
 def get_site_column_query():
-	pass
+	conn = mysql.connector.connect(
+		user='root',
+		password='3935GrayFuse',
+		host='localhost',
+		database='metrics_db'
+	)
+
+	curs = conn.cursor(buffered=True)
+
+	print('Connected to Database')
+
+	curs.execute(
+		'''
+		SHOW columns FROM sites;
+		'''
+	)
+	get_column_names = curs.fetchall()
+
+	site_column_name_list = []
+
+	for column in get_column_names:
+		column_name = f'{column[0].replace("_", " ").title()}'
+		site_column_name_list.append(column_name)
+
+	curs.close()
+	conn.close()
+
+	print('Disconnected from Database')
+
+	return site_column_name_list
