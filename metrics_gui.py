@@ -7,14 +7,14 @@ sg.theme('DefaultNoMoreNagging')
 # initial window on opening
 def main_window():
 	layout = [
-		[sg.Button('View Crew', size=(7, 1), key='view_crew_window'),
-		 sg.Button('View Site', size=(7, 1), key='view_site_window')],
-		[sg.Button('Exit', size=(18, 1))]]
+		[sg.Button('View Crew', size=(10, 1), key='view_crew_window'),
+		 sg.Button('View Site', size=(10, 1), key='view_site_window')],
+		[sg.Button('Exit', size=(24, 1))]]
 
 	return sg.Window('Metrics', layout, finalize=True)
 
 
-# will be the main crew window, leading to edit crew window
+# main crew window, leading to edit crew window
 def view_crew_window():
 	layout = [[sg.Button('Edit Crew', size=(7, 1), key='edit_crew_window')],
 			  [sg.Text('View Crew Here')],
@@ -24,48 +24,42 @@ def view_crew_window():
 						display_row_numbers=True,
 						justification="left",
 						alternating_row_color='LightGray',
-						selected_row_colors=(None, None),
 						enable_events=False,
 						bind_return_key=False,
-						key=None,
-						tooltip=None,
-						right_click_menu=None,
+						key=None
 						)],
-			  [sg.Button('Ok', size = (7, 1)), sg.Button('Close', size = (7, 1))]]
-
+			  [sg.Button('Ok', size=(7, 1)), sg.Button('Close', size=(7, 1))]]
 	return sg.Window('View Crewmembers', layout, finalize=True)
 
 
+# main site windows leads to edit site window
 def view_site_window():
 	layout = [[sg.Button('Edit Site', size=(7, 1), key='edit_site_window')],
 			  [sg.Text('View Site Here')],
 			  [sg.Table(values=get_site_query(),
-								  headings=get_site_column_query(),
-								  auto_size_columns=True,
-								  display_row_numbers=True,
-								  justification="left",
-								  alternating_row_color='LightGray',
-								  selected_row_colors=(None, None),
-								  enable_events=False,
-								  bind_return_key=False,
-								  key=None,
-								  tooltip=None,
-								  right_click_menu=None,
-								  )],
-						[sg.Button('Ok', size=(7, 1)), sg.Button('Close', size=(7, 1))]]
-
+						headings=get_site_column_query(),
+						auto_size_columns=True,
+						display_row_numbers=True,
+						justification="left",
+						alternating_row_color='LightGray',
+						enable_events=False,
+						bind_return_key=False,
+						key=None
+						)],
+			  [sg.Button('Ok', size=(7, 1)), sg.Button('Close', size=(7, 1))]]
 	return sg.Window('View Site', layout, finalize=True)
 
 
+# main crew edit window, leads to add/deletion/alter options
 def edit_crew_window():
 	layout = [
 		[sg.Text('Select crew member to edit')],
 		[sg.Button('Add Crew', key='add_crew_window', size=(10, 1))],
 		[sg.Button('Close', size=(10, 1))]]
-
 	return sg.Window('Crew Profiles', layout, finalize=True)
 
 
+# main add crew window
 def add_crew_window():
 	layout = [
 		[sg.Text('First Name', size=(15, 1)), sg.InputText('First')],
@@ -75,19 +69,19 @@ def add_crew_window():
 		[sg.Text('Employee Number', size=(15, 1)), sg.InputText('Employee Number')],
 		[sg.Text('Crew Position', size=(15, 1)), sg.InputText('Crew Position')],
 		[sg.Submit(size=(7, 1))], [sg.Button('Close', size=(7, 1))]]
-
 	return sg.Window('Add New Crew Member', layout, finalize=True)
 
 
+# main site edit window, leads to add/deletion/alter options
 def edit_site_window():
 	layout = [
 		[sg.Text('Select site to edit')],
 		[sg.Button('Add Site', key='add_site_main_btn', size=(10, 1)),
 		 sg.Button('Close', size=(10, 1))]]
-
 	return sg.Window('Site Profiles', layout, finalize=True)
 
 
+# main add site window
 def add_site_window():
 	layout = [
 		[sg.Text('Site Name')],
@@ -95,7 +89,6 @@ def add_site_window():
 		[sg.Text('State')],
 		[sg.Button('Add Site', size=(10, 1))],
 		[sg.Button('Exit', size=(10, 1)), sg.Button('Close', size=(10, 1))]]
-
 	return sg.Window('Site Profiles', layout, finalize=True)
 
 
