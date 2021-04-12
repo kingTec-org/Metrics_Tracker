@@ -1,15 +1,16 @@
 import PySimpleGUI as sg
-from main import *
+from mongo_funcs import *
 
 sg.theme('DefaultNoMoreNagging')
 
+label_size = (15, 1)
 
 # initial window on opening
 def main_window():
     layout = [
         [sg.Button('View Crew', size=(10, 1), key='view_crew_window'),
          sg.Button('View Site', size=(10, 1), key='view_site_window')],
-        [sg.Button('Exit', size=(24, 1))]]
+        [sg.Button('Exit', size=(22, 1))]]
 
     return sg.Window('Metrics', layout, finalize=True)
 
@@ -68,7 +69,7 @@ def add_crew_window():
         [sg.Text('Suffix', size=(15, 1)), sg.InputText('Suffix')],
         [sg.Text('Employee Number', size=(15, 1)), sg.InputText('Employee Number')],
         [sg.Text('Crew Position', size=(15, 1)), sg.InputText('Crew Position')],
-        [sg.Submit(size=(7, 1))], [sg.Button('Close', size=(7, 1))]]
+        [sg.Submit(size=(7, 1), key='--submit--')], [sg.Button('Close', size=(7, 1))]]
     return sg.Window('Add New Crew Member', layout, finalize=True)
 
 
@@ -84,10 +85,12 @@ def edit_site_window():
 # main add site window
 def add_site_window():
     layout = [
-        [sg.Text('Site Name')],
-        [sg.Text('Country')],
-        [sg.Text('State')],
-        [sg.Button('Add Site', size=(10, 1))],
+        [sg.Text('Site Name', size=label_size), sg.InputText('')],
+        [sg.Text('Country', size=label_size), sg.InputText('')],
+        [sg.Text('A/C', size=label_size), sg.InputText('')],
+        [sg.Text('Present Staff', size=label_size), sg.InputText('')],
+        [sg.Text('Required Staff', size=label_size), sg.InputText('')],
+        [sg.Button('Add Site', size=(10, 1), key='--submit--')],
         [sg.Button('Exit', size=(10, 1)), sg.Button('Close', size=(10, 1))]]
     return sg.Window('Site Profiles', layout, finalize=True)
 
@@ -143,7 +146,7 @@ while True:
         if event in (sg.WINDOW_CLOSE_ATTEMPTED_EVENT, sg.WIN_CLOSED, 'Close'):
             window5.close()
             window3.un_hide()
-        if event in ('add_site_window'):
+        if event in ('add_site_main_btn'):
             window5.hide()
             window7 = add_site_window()
 
@@ -151,14 +154,18 @@ while True:
         if event in (sg.WINDOW_CLOSE_ATTEMPTED_EVENT, sg.WIN_CLOSED, 'Close'):
             window6.close()
             window4.un_hide()
-        elif event in (''):
+        elif event in ('--submit--'):
+            add_crew_members(values)
+        elif event in ('--*--'):
             pass
+
 
     if window == window7:  # add_site_window
         if event in (sg.WINDOW_CLOSE_ATTEMPTED_EVENT, sg.WIN_CLOSED, 'Close'):
             window7.close()
             window5.un_hide()
-        elif event in '':
+        elif event in ('--submit--'):
+            add_sites(values)
             pass
 
 # end of program
