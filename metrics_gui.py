@@ -4,12 +4,12 @@ from mongo_funcs import *
 sg.theme('DefaultNoMoreNagging')
 
 label_size = (15, 1)
-
+default_button_layout = []
 # initial window on opening
 def main_window():
     layout = [
-        [sg.Button('View Crew', size=(10, 1), key='view_crew_window'),
-         sg.Button('View Site', size=(10, 1), key='view_site_window')],
+        [sg.Button('View Crew', size=(10, 1), key='--VIEW CREW WINDOW--'),
+         sg.Button('View Site', size=(10, 1), key='--VIEW SITE WINDOW--')],
         [sg.Button('Exit', size=(22, 1))]]
 
     return sg.Window('Metrics', layout, finalize=True)
@@ -17,25 +17,24 @@ def main_window():
 
 # main crew window, leading to edit crew window
 def view_crew_window():
-    layout = [[sg.Button('Edit Crew', size=(7, 1), key='edit_crew_window')],
-              [sg.Text('View Crew Here')],
+    layout = [[sg.Button('Edit Crew', size=(10, 1), key='edit_crew_window')],
               [sg.Table(values=get_crew_query(),
                         headings=get_crew_column_query(),
                         auto_size_columns=True,
                         display_row_numbers=True,
                         justification="left",
                         alternating_row_color='LightGray',
-                        enable_events=False,
+                        enable_events=True,
                         bind_return_key=False,
                         key=None
                         )],
-              [sg.Button('Ok', size=(7, 1)), sg.Button('Close', size=(7, 1))]]
+              [sg.Button('Back', size=(10, 1), key='--BACK--')]]
     return sg.Window('View Crewmembers', layout, finalize=True)
 
 
 # main site windows leads to edit site window
 def view_site_window():
-    layout = [[sg.Button('Edit Site', size=(7, 1), key='edit_site_window')],
+    layout = [[sg.Button('Edit Site', size=(10, 1), key='edit_site_window')],
               [sg.Text('View Site Here')],
               [sg.Table(values=get_site_query(),
                         headings=get_site_column_query(),
@@ -43,11 +42,11 @@ def view_site_window():
                         display_row_numbers=True,
                         justification="left",
                         alternating_row_color='LightGray',
-                        enable_events=False,
+                        enable_events=True,
                         bind_return_key=False,
                         key=None
                         )],
-              [sg.Button('Ok', size=(7, 1)), sg.Button('Close', size=(7, 1))]]
+              [sg.Button('Back', size=(10, 1), key='--BACK--')]]
     return sg.Window('View Site', layout, finalize=True)
 
 
@@ -70,7 +69,7 @@ def add_crew_window():
         [sg.Text('Employee Number', size=(15, 1)), sg.InputText('Employee Number')],
         [sg.Text('Crew Position', size=(15, 1)), sg.InputText('Crew Position')],
         [sg.Submit(size=(7, 1), key='--submit--')], [sg.Button('Close', size=(7, 1))]]
-    return sg.Window('Add New Crew Member', layout, finalize=True)
+    return sg.Window('Add New Crew Member', layout, finalize=True, right_click_menu=sg.)
 
 
 # main site edit window, leads to add/deletion/alter options
@@ -111,15 +110,15 @@ while True:
         break
 
     if window == window1:  # main_window
-        if event == 'view_crew_window':
+        if event == '--VIEW CREW WINDOW--':
             window1.hide()
             window2 = view_crew_window()
-        elif event == 'view_site_window':
+        elif event == '--VIEW SITE WINDOW--':
             window1.hide()
             window3 = view_site_window()
 
     if window == window2:  # view_crew_window
-        if event in (sg.WINDOW_CLOSE_ATTEMPTED_EVENT, sg.WIN_CLOSED, 'Close'):
+        if event in (sg.WINDOW_CLOSE_ATTEMPTED_EVENT, sg.WIN_CLOSED, '--BACK--'):
             window2.close()
             window1.un_hide()
         elif event in ('edit_crew_window'):
@@ -127,15 +126,15 @@ while True:
             window4 = edit_crew_window()
 
     if window == window3:  # view_site_window
-        if event in (sg.WINDOW_CLOSE_ATTEMPTED_EVENT, sg.WIN_CLOSED, 'Close'):
+        if event in (sg.WINDOW_CLOSE_ATTEMPTED_EVENT, sg.WIN_CLOSED, '--BACK--'):
             window3.close()
             window1.un_hide()
         elif event in ('edit_site_window'):
-            window3.hide()
+            window3.close()
             window5 = edit_site_window()
 
     if window == window4:  # edit_crew_window
-        if event in (sg.WINDOW_CLOSE_ATTEMPTED_EVENT, sg.WIN_CLOSED, 'Close', 'Cancel'):
+        if event in (sg.WINDOW_CLOSE_ATTEMPTED_EVENT, sg.WIN_CLOSED, '--BACK--'):
             window4.close()
             window2.un_hide()
         elif event in ('add_crew_window'):
@@ -143,29 +142,30 @@ while True:
             window6 = add_crew_window()
 
     if window == window5:  # edit_site_window
-        if event in (sg.WINDOW_CLOSE_ATTEMPTED_EVENT, sg.WIN_CLOSED, 'Close'):
+        if event in (sg.WINDOW_CLOSE_ATTEMPTED_EVENT, sg.WIN_CLOSED, '--BACK--'):
             window5.close()
-            window3.un_hide()
+            window3 = view_site_window()
         if event in ('add_site_main_btn'):
             window5.hide()
             window7 = add_site_window()
 
     if window == window6:  # add_crew_window
-        if event in (sg.WINDOW_CLOSE_ATTEMPTED_EVENT, sg.WIN_CLOSED, 'Close'):
+        if event in (sg.WINDOW_CLOSE_ATTEMPTED_EVENT, sg.WIN_CLOSED, '--BACK--'):
             window6.close()
             window4.un_hide()
         elif event in ('--submit--'):
             add_crew_members(values)
+            window2 = view_crew_window()
         elif event in ('--*--'):
             pass
 
-
     if window == window7:  # add_site_window
-        if event in (sg.WINDOW_CLOSE_ATTEMPTED_EVENT, sg.WIN_CLOSED, 'Close'):
+        if event in (sg.WINDOW_CLOSE_ATTEMPTED_EVENT, sg.WIN_CLOSED, '--BACK--'):
             window7.close()
             window5.un_hide()
         elif event in ('--submit--'):
             add_sites(values)
+            window
             pass
 
 # end of program
@@ -174,5 +174,5 @@ window.close()
 # TODO Site and Crew DB, connection and inputs
 
 # TODO feed the MySQL tabular data to a real time DL model,
-#  and learn a web framework to deploy the draft version for
-#  feedback.
+# and learn a web framework to deploy the draft version for
+# feedback.
