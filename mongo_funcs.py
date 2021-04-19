@@ -5,7 +5,6 @@ import random
 import urllib.parse
 import re
 
-
 me = urllib.parse.quote_plus('LarryDCJ')
 rd = urllib.parse.quote_plus('dismyside42')
 
@@ -70,13 +69,13 @@ def find_all_via_crew_pos():
 def add_crew_members(value):
     crew_pos_list = ['P', 'SO', 'IP', 'ISO', 'EP', 'ESO']
     crew_member_info = {
-            'employee_id': value[4],
-            'last_name': value[2],
-            'suffix': value[3],
-            'first_name': value[0],
-            'middle_name': value[1],
-            'crew_position': value[5],
-        }
+        'employee_id': value[4],
+        'last_name': value[2],
+        'suffix': value[3],
+        'first_name': value[0],
+        'middle_name': value[1],
+        'crew_position': value[5],
+    }
     crew_members.insert_one(crew_member_info)
     print('Done.')
 
@@ -93,5 +92,10 @@ def add_sites(value):
     sites.insert_one(site_info)
     print('Done.')
 
-# get site list from database
 
+# delete member
+def drop_crew_member(emp_num):
+
+    crew_member_id = {'employee_id': f'{emp_num}'}
+    crew_members.delete_one(crew_member_id)
+    print('Done')
