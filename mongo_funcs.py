@@ -11,9 +11,9 @@ rd = urllib.parse.quote_plus('dismyside42')
 client = MongoClient("mongodb+srv://%s:%s@cluster0.nhqsm.mongodb.net/metrics_tracker?retryWrites"
                      "=true&w=majority" % (me, rd), authSource='admin')
 
-db = client['metrics_tracker']
-crew_members = db['crew_members']
-sites = db['sites']
+db = client.metrics_tracker
+crew_members = db.crew_members
+sites = db.sites
 
 
 # get crew member list from database
@@ -65,7 +65,7 @@ def find_all_via_crew_pos():
     return result
 
 
-#
+# add crew member menu function
 def add_crew_members(value):
     crew_pos_list = ['P', 'SO', 'IP', 'ISO', 'EP', 'ESO']
     crew_member_info = {
@@ -94,8 +94,7 @@ def add_sites(value):
 
 
 # delete member
-def drop_crew_member(emp_num):
-
-    crew_member_id = {'employee_id': f'{emp_num}'}
+def delete_crew_member(emp_num):
+    crew_member_id = {'employee_id': emp_num}
     crew_members.delete_one(crew_member_id)
     print('Done')

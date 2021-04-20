@@ -1,10 +1,8 @@
 import PySimpleGUI as sg
 from mongo_funcs import *
-#from pymongo import MongoClient
 import os
 
 sg.theme('DefaultNoMoreNagging')
-os.system('mongo_funcs.py')
 label_size = (15, 1)
 default_button_layout = []
 
@@ -23,8 +21,9 @@ def main_window():
 def view_crew_window():
     crew_info_values = get_crew_query()
     headings = get_crew_column_query()
-    layout = [[sg.Button('Edit Crew', size=(10, 1), key='-EDIT CREW WINDOW-'),
-               sg.Button('Delete Crew', size=(10, 1), key='-DROP CREW-')],
+    layout = [[sg.Button('Edit Crew', size=(10, 1), key='-EDIT CREW-'),
+               sg.Button('Add Crew', size=(10, 1), key='-ADD CREW-'),
+               sg.Button('Delete Crew', size=(10, 1), key='-DELETE CREW-')],
               [sg.Table(values=crew_info_values,
                         headings=headings,
                         auto_size_columns=True,
@@ -126,19 +125,31 @@ while True:
 
     # view_crew_window
     if window == window2:
+        print(values['-READ TABLE-'])
         if event in (sg.WINDOW_CLOSE_ATTEMPTED_EVENT, sg.WIN_CLOSED, '-BACK-'):
             window2.close()
             window1.un_hide()
-        elif event in ('-DROP CREW-'):
-            crew_info = get_crew_query()
-            start = values['-READ TABLE-'][0]
-            end = start+1
-            employee_id = crew_info[start:end][0][0]
-            drop_crew_member(employee_id)
+        elif event in ('-ADD CREW-'):
+            window2.hide()
+            window6 = add_crew_window()
+
+        elif event in ('-DELETE CREW-'):
+            for idx in values['-READ TABLE-']:
+                crew_info = get_crew_query()
+
+                # identifies which crew to delete
+                start = values['-READ TABLE-'][0]
+                end = start + 1
+                employee_id = crew_info[start:end][0][0]
+
+                # actual mongo delete command
+                delete_crew_member(employee_id)
+
+            # refreshes the crew list
+
             window2.close()
-            print('Deleted. Refreshing')
-            window1.show()
-        elif event in ('-EDIT CREW WINDOW-'):
+            window2 = view_crew_window()
+        elif event in ('-EDIT CREW-'):
             window2.hide()
             window4 = edit_crew_window()
 
@@ -193,5 +204,5 @@ while True:
 # end of program
 window.close()
 
-# TODO: feed the Mongo tabular data to a real time DL model
-# TODO: web framework
+# TODO feed the Mongo tabular data to a real time DL model
+# TODO web framework
