@@ -1,9 +1,5 @@
 from pymongo import MongoClient
-from pprint import pprint
-import names
-import random
 import urllib.parse
-import re
 
 me = urllib.parse.quote_plus('LarryDCJ')
 rd = urllib.parse.quote_plus('dismyside42')
@@ -16,6 +12,7 @@ crew_members = db.crew_members
 sites = db.sites
 
 
+# get site list from database
 def get_site_query():
     site_list = []
 
@@ -37,14 +34,38 @@ def get_site_column_query():
     return site_list
 
 
-# generates fake sites, just enter how many
-def add_sites(value):
+# find site via user string
+def find_site(user_input):
+    result = db.site.find({'site_id': f'{user_input}'})
+    return result
+
+
+# #-----!!CRUD FUNCTIONS!!-----# #
+
+
+# edit existing site profile
+def edit_site():
+    # get site info
+    # present site info
+    # allow to be changed
+    # mongo update method
+    pass
+
+
+# add site based on user input
+def add_site(value):
     site_info = {
+        '_id': value[0],
         'site_id': value[0],
         'country': value[1],
         'num_ac': value[2],
-        'num_full_staff': value[4],
-        'num_curr_staff': value[3]
+        'num_curr_staff': value[3],
+        'num_full_staff': value[4]
     }
     sites.insert_one(site_info)
-    print('Done.')
+
+
+# delete site
+def delete_site(site_id):
+    site_id = {'_id': site_id}
+    sites.delete_one(site_id)

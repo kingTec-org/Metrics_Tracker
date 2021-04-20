@@ -1,9 +1,6 @@
 from pymongo import MongoClient
-from pprint import pprint
-import names
-import random
 import urllib.parse
-import re
+
 
 me = urllib.parse.quote_plus('LarryDCJ')
 rd = urllib.parse.quote_plus('dismyside42')
@@ -37,29 +34,38 @@ def get_crew_column_query():
     return column_list
 
 
-#
-def find_all_via_crew_pos():
-    result = db.crew_members.find({'crew_position': 'SO'})
+# find crew via user string
+def find_crew(user_input):
+    result = db.crew_members.find({'crew_position': f'{user_input}'})
     return result
 
+# #-----!!CRUD FUNCTIONS!!-----# #
 
-# add crew member menu function
+
+# edit existing crew profile
+def edit_crew_member():
+    # get crew info
+    # present crew info
+    # allow to be changed
+    # mongo update method
+    pass
+
+
+# add crew member based on user input
 def add_crew_members(value):
-    crew_pos_list = ['P', 'SO', 'IP', 'ISO', 'EP', 'ESO']
     crew_member_info = {
+        '_id': value[4],
         'employee_id': value[4],
         'last_name': value[2],
         'suffix': value[3],
         'first_name': value[0],
         'middle_name': value[1],
-        'crew_position': value[5],
+        'crew_position': value[5]
     }
     crew_members.insert_one(crew_member_info)
-    print('Done.')
 
 
 # delete member
 def delete_crew_member(emp_num):
-    crew_member_id = {'employee_id': emp_num}
+    crew_member_id = {'_id': emp_num}
     crew_members.delete_one(crew_member_id)
-    print('Done')
