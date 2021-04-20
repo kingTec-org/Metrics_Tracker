@@ -1,6 +1,8 @@
 import PySimpleGUI as sg
 from mongo_funcs import *
+from crew_funcs import *
 import os
+import names
 
 sg.theme('DefaultNoMoreNagging')
 label_size = (15, 1)
@@ -21,7 +23,8 @@ def main_window():
 def view_crew_window():
     crew_info_values = get_crew_query()
     headings = get_crew_column_query()
-    layout = [[sg.Button('Edit Crew', size=(10, 1), key='-EDIT CREW-'),
+    layout = [[sg.Button('View Crew', size=(10, 1), key='-VIEW CREW-'),
+               sg.Button('Edit Crew', size=(10, 1), key='-EDIT CREW-'),
                sg.Button('Add Crew', size=(10, 1), key='-ADD CREW-'),
                sg.Button('Delete Crew', size=(10, 1), key='-DELETE CREW-')],
               [sg.Table(values=crew_info_values,
@@ -35,7 +38,7 @@ def view_crew_window():
                         key='-READ TABLE-'
                         )],
               [sg.Button('Back', size=(10, 1), key='-BACK-')]]
-    return sg.Window('View Crewmembers', layout, finalize=True)
+    return sg.Window('Aircrew', layout, finalize=True)
 
 
 # main site windows leads to edit site window
@@ -65,15 +68,21 @@ def edit_crew_window():
     return sg.Window('Crew Profiles', layout, finalize=True)
 
 
+
 # main add crew window
 def add_crew_window():
+    print()
+    gender=['male','female']
+    suffix=['Jr.','Sr.','III','IV']
+    crew_pos=['SO', 'P', 'ESO', 'EP']
+    gender=random.choice(gender)
     layout = [
-        [sg.Text('First Name', size=(15, 1)), sg.InputText('FN')],
-        [sg.Text('Middle Name', size=(15, 1)), sg.InputText('MN')],
-        [sg.Text('Last Name', size=(15, 1)), sg.InputText('LN')],
-        [sg.Text('Suffix', size=(15, 1)), sg.InputText('III')],
-        [sg.Text('Employee Number', size=(15, 1)), sg.InputText('88888888')],
-        [sg.Text('Crew Position', size=(15, 1)), sg.InputText('SO')],
+        [sg.Text('First Name', size=(15, 1)), sg.InputText(f'{names.get_first_name(gender=gender)}')],
+        [sg.Text('Middle Name', size=(15, 1)), sg.InputText(f'{names.get_first_name(gender=gender)}')],
+        [sg.Text('Last Name', size=(15, 1)), sg.InputText(f'{names.get_last_name()}')],
+        [sg.Text('Suffix', size=(15, 1)), sg.InputText(f'{random.choice(suffix)}')],
+        [sg.Text('Employee Number', size=(15, 1)), sg.InputText(f'{random.randint(13370001, 13380000)}')],
+        [sg.Text('Crew Position', size=(15, 1)), sg.InputText(f'{random.choice(crew_pos)}')],
         [sg.Submit(size=(7, 1), key='-SUBMIT-')], [sg.Button('Close', size=(7, 1))]]
     return sg.Window('Add New Crew Member', layout, finalize=True)
 
