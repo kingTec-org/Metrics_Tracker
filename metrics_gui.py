@@ -51,18 +51,34 @@ def edit_crew_window():
 
 
 def add_crew_window():
-    gender = ['male', 'female']
-    suffix = ['Jr.', 'Sr.', 'III', 'IV']
-    crew_pos = ['SO', 'P', 'ESO', 'EP']
-    gender = random.choice(gender)
+    def gen_crew():
+        gender = random.choice(['male', 'female'])
+        first = names.get_first_name(gender=gender)
+        middle = names.get_first_name(gender=gender)
+        last = names.get_last_name()
+
+        emp = random.randint(13370001, 13380000)
+        crew_pos = random.choice(['SO', 'P', 'ESO', 'EP'])
+
+        if gender == 'male':
+            suf = random.choice(['Jr.', 'Sr.', 'III', 'IV', '', '', '', '', '', '', '', '', '', ''])
+        else:
+            suf = ''
+
+        return first, middle, last, suf, emp, crew_pos
+
+    first, middle, last, suf, emp, crew_pos = gen_crew()
+
     layout = [
-        [sg.Text('First Name', size=(15, 1)), sg.InputText(f'{names.get_first_name(gender=gender)}')],
-        [sg.Text('Middle Name', size=(15, 1)), sg.InputText(f'{names.get_first_name(gender=gender)}')],
-        [sg.Text('Last Name', size=(15, 1)), sg.InputText(f'{names.get_last_name()}')],
-        [sg.Text('Suffix', size=(15, 1)), sg.InputText(f'{random.choice(suffix)}')],
-        [sg.Text('Employee Number', size=(15, 1)), sg.InputText(f'{random.randint(13370001, 13380000)}')],
-        [sg.Text('Crew Position', size=(15, 1)), sg.InputText(f'{random.choice(crew_pos)}')],
-        [sg.Submit(size=(7, 1), key='-SUBMIT-'), sg.Button('Back', size=(7, 1), key='-BACK-')]]
+        [sg.Text('First Name', size=(15, 1)), sg.InputText(f'{first}')],
+        [sg.Text('Middle Name', size=(15, 1)), sg.InputText(f'{middle}')],
+        [sg.Text('Last Name', size=(15, 1)), sg.InputText(f'{last}')],
+        [sg.Text('Suffix', size=(15, 1)), sg.InputText(f'{suf}')],
+        [sg.Text('Employee Number', size=(15, 1)), sg.InputText(f'{emp}')],
+        [sg.Text('Crew Position', size=(15, 1)), sg.InputText(f'{crew_pos}')],
+        [sg.Submit(size=(7, 1), key='-SUBMIT-'),
+         sg.Button('Back', size=(7, 1), key='-BACK-'),
+         sg.Button('Randomize', size=(7, 1), key='-RANDOMIZE-')]]
     return sg.Window('Add Crew', layout, finalize=True)
 
 
@@ -160,7 +176,6 @@ while True:
 
     # main_window
     if window == display_main_window:
-
         if event in (sg.WIN_CLOSED, '-EXIT-'):
             break
         elif event == '-VIEW CREW WINDOW-':
@@ -175,7 +190,6 @@ while True:
     # main_view_crew_window
     if window == display_main_view_crew_window:
         if event in (sg.WIN_CLOSED, '-BACK-'):
-            display_main_view_crew_window.refresh()
             display_main_view_crew_window.close()
             display_main_window = main_window()
         elif event == '-VIEW CREW-':
@@ -197,9 +211,8 @@ while True:
 
                 # actual mongo delete command
                 delete_crew_member(employee_id)
-            display_main_view_crew_window.refresh()
             display_main_view_crew_window.close()
-            display_view_crew_window = main_view_crew_window()
+            display_main_view_crew_window = main_view_crew_window()
         elif event == '-EDIT CREW-':
             display_main_view_crew_window.refresh()
             display_main_view_crew_window.close()
@@ -211,9 +224,11 @@ while True:
             display_main_view_site_window.close()
             display_main_window = main_window()
         elif event == '-VIEW SITE-':
+            display_main_view_site_window.refresh()
             display_main_view_site_window.close()
             display_detail_site_window = site_details_window()
         elif event == '-ADD SITE-':
+            display_main_view_site_window.refresh()
             display_main_view_site_window.close()
             display_add_site_window = add_site_window()
         elif event == '-DELETE SITE-':
@@ -230,6 +245,7 @@ while True:
             display_main_view_site_window.close()
             display_main_view_site_window = main_view_site_window()
         elif event == '-EDIT SITE-':
+            display_main_view_site_window.refresh()
             display_main_view_site_window.close()
             display_edit_site_window = edit_site_window()
 
@@ -239,7 +255,7 @@ while True:
     if window == display_detail_crew_window:
         if event in (sg.WIN_CLOSED, '-BACK-'):
             display_detail_crew_window.close()
-            display_view_crew_window = main_view_crew_window()
+            display_main_view_crew_window = main_view_crew_window()
 
     # display_site_details_window
     if window == display_detail_site_window:
@@ -273,29 +289,35 @@ while True:
         elif event == '-SUBMIT-':
             display_add_crew_window.refresh()
             add_crew_members(values)
+        elif event == '-RANDOMIZE-':
+            display_add_crew_window.refresh()
             display_add_crew_window.close()
-            display_main_view_crew_window = main_view_crew_window()
+            display_add_crew_window = add_crew_window()
 
     # add_site_window
     if window == display_add_site_window:
         if event in (sg.WIN_CLOSED, '-BACK-'):
+            display_add_site_window.refresh()
             display_add_site_window.close()
             display_main_view_site_window = main_view_site_window()
         elif event == '-SUBMIT-':
+            display_add_site_window.refresh()
             add_site(values)
-            display_add_site_window.close()
-            display_main_view_site_window = main_view_site_window()
+        elif event == '-RANDOMIZE-':
+            pass
 
     ##------------VIEW SPECIFICS WINDOWS--------------##
 
     #
     if window == display_view_specific_site_window:
         if event in (sg.WIN_CLOSED, '-BACK-'):
+            display_view_specific_site_window.refresh()
             display_view_specific_site_window.close()
             display_main_view_site_window = main_view_site_window()
         elif event == '-EDIT SITE-':
-            display_main_view_site_window.close()
-            display_edit_site_window = edit_site_window()
+            display_view_specific_site_window.refresh()
+            #display_view_specific_site_window.close()
+            print('create individual edit site window')
 
     #
     if window == display_view_specific_crew_window:
@@ -304,7 +326,8 @@ while True:
             display_view_specific_crew_window.close()
         elif event == '-EDIT CREW-':
             display_edit_crew_window = edit_crew_window()
-            display_main_view_crew_window.close()
+            #display_view_specific_crew_window.close()
+            print('create individual edit crew window')
 
 # end of program
 window.close()
