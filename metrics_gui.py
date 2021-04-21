@@ -39,11 +39,13 @@ def main_view_crew_window():
 
 
 def crew_details_window(window_heading):
+    win_head = window_heading
 
     layout = [
+        [sg.Button('See It', size=(10, 1), key='-SEE-'), sg.Output(size=(20, 1))],
         [sg.Button('Back', size=(10, 1), key='-BACK-')]]
 
-    return sg.Window(f'{str(window_heading)}', layout, finalize=True)
+    return sg.Window(f'{str(win_head)}', layout, finalize=True)
 
 
 def edit_crew_window():
@@ -106,12 +108,13 @@ def main_view_site_window():
 
 
 def site_details_window(window_heading):
-    window_heading = window_heading
+    win_head = window_heading
 
     layout = [
+        [sg.Button('See It', size=(10, 1), key='-SEE-'), sg.Output(size=(20, 1))],
         [sg.Button('Back', size=(10, 1), key='-BACK-')]]
 
-    return sg.Window(f'{window_heading}', layout, finalize=True)
+    return sg.Window(f'{win_head}', layout, finalize=True)
 
 
 def edit_site_window():
@@ -137,13 +140,13 @@ display_main_view_crew_window = None
 display_detail_crew_window = None
 display_edit_crew_window = None
 display_add_crew_window = None
-display_view_specific_crew_window = None
+
 
 display_main_view_site_window = None
 display_detail_site_window = None
 display_edit_site_window = None
 display_add_site_window = None
-display_view_specific_site_window = None
+
 
 # window loop
 while True:
@@ -171,14 +174,12 @@ while True:
             display_main_window = main_window()
         elif event == '-VIEW CREW-':
             row = values['-READ TABLE-']
-            print(row)
             crew_list = get_crew_query()
             crew = crew_list[row[0]]
-            window_heading = f'{crew[1]}, {crew[3]} - {crew[5]}'
+            window_heading = str(f'{crew[1]}, {crew[3]} - {crew[5]}')
             display_detail_crew_window = crew_details_window(window_heading)
             display_main_view_crew_window.refresh()
             display_main_view_crew_window.close()
-            print(window_heading)
         elif event == '-ADD CREW-':
             display_main_view_crew_window.refresh()
             display_main_view_crew_window.close()
@@ -209,9 +210,14 @@ while True:
             display_main_view_site_window.close()
             display_main_window = main_window()
         elif event == '-VIEW SITE-':
+            row = values['-READ TABLE-']
+            site_list = get_site_query()
+            site = site_list[row[0]]
+            print(site)
+            window_heading = str(f'{site[1]} - {site[0]}')
+            display_detail_site_window = site_details_window(window_heading)
             display_main_view_site_window.refresh()
             display_main_view_site_window.close()
-            display_detail_site_window = site_details_window()
         elif event == '-ADD SITE-':
             display_main_view_site_window.refresh()
             display_main_view_site_window.close()
@@ -241,12 +247,16 @@ while True:
         if event in (sg.WIN_CLOSED, '-BACK-'):
             display_detail_crew_window.close()
             display_main_view_crew_window = main_view_crew_window()
+        elif event == '-SEE-':
+            print(window_heading)
 
     # display_site_details_window
     if window == display_detail_site_window:
         if event in (sg.WIN_CLOSED, '-BACK-'):
             display_detail_site_window.close()
             display_main_view_site_window = main_view_site_window()
+        elif event == '-SEE-':
+            print(window_heading)
 
     ##--------------EDIT WINDOWS---------------##
 
@@ -293,23 +303,12 @@ while True:
         elif event == '-RANDOMIZE-':
             pass
 
-    ##------------VIEW SPECIFICS WINDOWS--------------##
-
-    #
-    if window == display_view_specific_site_window:
-        if event in (sg.WIN_CLOSED, '-BACK-'):
-            display_main_view_site_window = main_view_site_window()
-            display_view_specific_site_window.close()
-
-    #
-    if window == display_view_specific_crew_window:
-        if event in (sg.WIN_CLOSED, '-BACK-'):
-            display_main_view_crew_window = main_view_crew_window()
-            display_view_specific_crew_window.close()
 
 
 # end of program
 window.close()
+
+
 
 # TODO dynamically building of site+crew db, based on specific site doc in site collection
 # TODO feed the Mongo tabular data to a real time DL model
