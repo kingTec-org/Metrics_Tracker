@@ -38,10 +38,12 @@ def main_view_crew_window():
     return sg.Window('Aircrew', layout, finalize=True)
 
 
-def crew_details_window():
+def crew_details_window(window_heading):
+
     layout = [
         [sg.Button('Back', size=(10, 1), key='-BACK-')]]
-    return sg.Window('Crew Details', layout, finalize=True)
+
+    return sg.Window(f'{str(window_heading)}', layout, finalize=True)
 
 
 def edit_crew_window():
@@ -103,10 +105,13 @@ def main_view_site_window():
     return sg.Window('Sites', layout, finalize=True)
 
 
-def site_details_window():
+def site_details_window(window_heading):
+    window_heading = window_heading
+
     layout = [
         [sg.Button('Back', size=(10, 1), key='-BACK-')]]
-    return sg.Window('Site Details', layout, finalize=True)
+
+    return sg.Window(f'{window_heading}', layout, finalize=True)
 
 
 def edit_site_window():
@@ -126,33 +131,6 @@ def add_site_window():
     return sg.Window('Add Site', layout, finalize=True)
 
 
-def view_specific_crew():
-    # get site name from table
-    window_heading = ''
-    site_info_values = get_site_query()
-    headings = get_site_column_query()
-    layout = [[sg.Button('View Site', size=(10, 1), key='-VIEW SITE-'),
-               sg.Button('Edit Site', size=(10, 1), key='-EDIT SITE-'),
-               sg.Button('Add Site', size=(10, 1), key='-ADD SITE-'),
-               sg.Button('Delete Site', size=(10, 1), key='-DELETE SITE-')],
-              [sg.Table(values=site_info_values,
-                        headings=headings,
-                        auto_size_columns=True,
-                        display_row_numbers=True,
-                        justification="left",
-                        alternating_row_color='LightGray',
-                        enable_events=True,
-                        bind_return_key=False,
-                        key='-READ TABLE-'
-                        )],
-              [sg.Button('Back', size=(10, 1), key='-BACK-')]]
-    return sg.Window(f'{window_heading}', layout, finalize=True)
-
-
-def view_specific_site():
-    pass
-
-
 display_main_window = main_window()
 
 display_main_view_crew_window = None
@@ -170,7 +148,6 @@ display_view_specific_site_window = None
 # window loop
 while True:
     window, event, values = sg.read_all_windows()
-    print(event, values)
 
     ##-----------------MAIN WINDOW------------------##
 
@@ -193,9 +170,15 @@ while True:
             display_main_view_crew_window.close()
             display_main_window = main_window()
         elif event == '-VIEW CREW-':
+            row = values['-READ TABLE-']
+            print(row)
+            crew_list = get_crew_query()
+            crew = crew_list[row[0]]
+            window_heading = f'{crew[1]}, {crew[3]} - {crew[5]}'
+            display_detail_crew_window = crew_details_window(window_heading)
             display_main_view_crew_window.refresh()
             display_main_view_crew_window.close()
-            display_detail_crew_window = crew_details_window()
+            print(window_heading)
         elif event == '-ADD CREW-':
             display_main_view_crew_window.refresh()
             display_main_view_crew_window.close()
@@ -217,6 +200,8 @@ while True:
             display_main_view_crew_window.refresh()
             display_main_view_crew_window.close()
             display_edit_crew_window = edit_crew_window()
+
+
 
     # main_view_site_window
     if window == display_main_view_site_window:
@@ -311,23 +296,15 @@ while True:
     #
     if window == display_view_specific_site_window:
         if event in (sg.WIN_CLOSED, '-BACK-'):
-            display_view_specific_site_window.refresh()
-            display_view_specific_site_window.close()
             display_main_view_site_window = main_view_site_window()
-        elif event == '-EDIT SITE-':
-            display_view_specific_site_window.refresh()
-            #display_view_specific_site_window.close()
-            print('create individual edit site window')
+            display_view_specific_site_window.close()
 
     #
     if window == display_view_specific_crew_window:
         if event in (sg.WIN_CLOSED, '-BACK-'):
             display_main_view_crew_window = main_view_crew_window()
             display_view_specific_crew_window.close()
-        elif event == '-EDIT CREW-':
-            display_edit_crew_window = edit_crew_window()
-            #display_view_specific_crew_window.close()
-            print('create individual edit crew window')
+
 
 # end of program
 window.close()
