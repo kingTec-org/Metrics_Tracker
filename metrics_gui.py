@@ -274,6 +274,8 @@ while True:
         elif event == '-SUBMIT-':
             display_add_crew_window.refresh()
             add_crew_members(values)
+            display_add_crew_window.close()
+            display_add_crew_window = add_crew_window()
         elif event == '-RANDOMIZE-':
             display_add_crew_window.refresh()
             display_add_crew_window.close()
