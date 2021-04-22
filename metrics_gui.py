@@ -143,6 +143,45 @@ def display_edit_site_window():
 
 ##------------ADD WINDOWS--------------##
 
+def display_site_add_window():
+    layout = [
+        [sg.Text('Site ID', size=(15, 1)), sg.InputText('')],
+        [sg.Text('Country', size=(15, 1)), sg.InputText('')],
+        [sg.Text('A/C', size=(15, 1)), sg.InputText('')],
+        [sg.Text('Present Staff', size=(15, 1)), sg.InputText('')],
+        [sg.Text('Required Staff', size=(15, 1)), sg.InputText('')],
+        [sg.Submit(size=(10, 1), key='-SUBMIT-'), sg.Button('Back', size=(10, 1), key='-BACK-')]]
+    return sg.Window('Add Site', layout, finalize=True)
+
+
+def display_flight_add_window():
+    def gen_flight():
+        flight_number = 'IBICF010112020000**Z'
+        aircraft_type = 'KCQ-9'
+        pilot_in_command = 'Larry D. Cawley Jr.'
+        sched_to = '0000'
+        act_to = '0000'
+        sched_lt = '0000'
+        act_lt = '0000'
+
+        return flight_number, aircraft_type, pilot_in_command, sched_to, act_to, sched_lt, act_lt
+
+    flight_number, aircraft_type, pilot_in_command, sched_to, act_to, sched_lt, act_lt = gen_flight()
+
+    layout = [
+        [sg.Text('Flight Number', size=(15, 1)), sg.InputText(f'{flight_number}')],
+        [sg.Text('Aircraft Type', size=(15, 1)), sg.InputText(f'{aircraft_type}')],
+        [sg.Text('Pilot in Command', size=(15, 1)), sg.InputText(f'{pilot_in_command}')],
+        [sg.Text('Scheduled T/O', size=(15, 1)), sg.InputText(f'{sched_to}')],
+        [sg.Text('Actual T/O', size=(15, 1)), sg.InputText(f'{act_to}')],
+        [sg.Text('Scheduled L/T', size=(15, 1)), sg.InputText(f'{sched_lt}')],
+        [sg.Text('Actual L/T', size=(15, 1)), sg.InputText(f'{act_lt}')],
+        [sg.Submit(size=(7, 1), key='-SUBMIT-'),
+        sg.Button('Back', size=(7, 1), key='-BACK-'),
+        sg.Button('Randomize', size=(7, 1), key='-RANDOMIZE-')]]
+    return sg.Window('Add Flight', layout, finalize=True)
+
+
 def display_add_crew_window():
     def gen_crew():
         gender = random.choice(['male', 'female'])
@@ -172,18 +211,8 @@ def display_add_crew_window():
         [sg.Submit(size=(7, 1), key='-SUBMIT-'),
          sg.Button('Back', size=(7, 1), key='-BACK-'),
          sg.Button('Randomize', size=(7, 1), key='-RANDOMIZE-')]]
+
     return sg.Window('Add Crew', layout, finalize=True)
-
-
-def display_site_add_window():
-    layout = [
-        [sg.Text('Site ID', size=(15, 1)), sg.InputText('')],
-        [sg.Text('Country', size=(15, 1)), sg.InputText('')],
-        [sg.Text('A/C', size=(15, 1)), sg.InputText('')],
-        [sg.Text('Present Staff', size=(15, 1)), sg.InputText('')],
-        [sg.Text('Required Staff', size=(15, 1)), sg.InputText('')],
-        [sg.Submit(size=(10, 1), key='-SUBMIT-'), sg.Button('Back', size=(10, 1), key='-BACK-')]]
-    return sg.Window('Add Site', layout, finalize=True)
 
 
 initial_window = display_initial_window()
@@ -383,6 +412,29 @@ while True:
 
     ##------------ADD WINDOWS---------------##
 
+    # add_site_window
+    if window == site_add_window:
+        if event in (sg.WIN_CLOSED, '-BACK-'):
+            site_add_window.refresh()
+            site_add_window.close()
+            site_main_window = display_site_main_window()
+        elif event == '-SUBMIT-':
+            site_add_window.refresh()
+            add_site(values)
+        elif event == '-RANDOMIZE-':
+            pass
+
+    if window == flight_add_window:
+        if event in (sg.WIN_CLOSED, '-BACK-'):
+            flight_add_window.refresh()
+            flight_add_window.close()
+            site_main_window = display_site_main_window()
+        elif event == '-SUBMIT-':
+            flight_add_window.refresh()
+            add_flight(values)
+        elif event == '-RANDOMIZE-':
+            pass
+
     # add_crew_window
     if window == crew_add_window:
         if event in (sg.WIN_CLOSED, '-BACK-'):
@@ -399,17 +451,6 @@ while True:
             crew_add_window.close()
             crew_add_window = display_add_crew_window()
 
-    # add_site_window
-    if window == site_add_window:
-        if event in (sg.WIN_CLOSED, '-BACK-'):
-            site_add_window.refresh()
-            site_add_window.close()
-            site_main_window = display_site_main_window()
-        elif event == '-SUBMIT-':
-            site_add_window.refresh()
-            add_site(values)
-        elif event == '-RANDOMIZE-':
-            pass
 
 # end of program
 window.close()

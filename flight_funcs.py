@@ -57,14 +57,13 @@ def edit_flight():
 def add_flight(value):
     flight_info = {
         '_id': value[0],
-        'flight_number': value[1],
-        'aircraft_type': value[2],
-        'pilot_in_command': value[3],
-        'crew_members': value[4],
-        'scheduled_takeoff': value[5],
-        'actual_takeoff': value[6],
-        'scheduled_land': value[7],
-        'actual_land': value[8]
+        'flight_number': value[0],
+        'aircraft_type': value[1],
+        'pilot_in_command': value[2],
+        'scheduled_takeoff': value[3],
+        'actual_takeoff': value[4],
+        'scheduled_land': value[5],
+        'actual_land': value[6]
     }
     flights.insert_one(flight_info)
 
