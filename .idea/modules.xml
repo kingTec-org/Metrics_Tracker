@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/../FlightHoursTracker/.idea/FlightHoursTracker.iml" filepath="$PROJECT_DIR$/../FlightHoursTracker/.idea/FlightHoursTracker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../FlightHoursTracker/.idea/Metrics_Tracker.iml" filepath="$PROJECT_DIR$/../FlightHoursTracker/.idea/Metrics_Tracker.iml" />
     </modules>
   </component>
 </project>

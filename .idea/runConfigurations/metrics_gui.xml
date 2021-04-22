@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="metrics_gui" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
-    <module name="FlightHoursTracker" />
+    <module name="Metrics_Tracker" />
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />
     <envs>

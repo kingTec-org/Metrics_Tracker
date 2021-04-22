@@ -8,7 +8,6 @@ client = MongoClient("mongodb+srv://%s:%s@cluster0.nhqsm.mongodb.net/metrics_tra
                      "=true&w=majority" % (me, rd), authSource='admin')
 
 db = client.metrics_tracker
-crew_members = db.crew_members
 sites = db.sites
 
 
