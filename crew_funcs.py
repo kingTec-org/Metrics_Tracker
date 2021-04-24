@@ -15,22 +15,14 @@ crew_members = db.crew_members
 
 # get crew member list from database
 def get_crew_query():
-    crew_list = []
-    for crew in crew_members.find():
-        crew = crew.values()
-        crew = list(crew)[1:]
-        crew_list.append(crew)
+    crew_list = [list(crew.values())[1:] for crew in crew_members.find()]
     return crew_list
-
 
 # get crew member columns from db
 def get_crew_column_query():
-    column_list = []
-    for col in crew_members.find():
-        col = list(col.keys())[1:]
-        for column_header in col:
-            column_list.append(column_header.title().replace('_', ' '))
-        break
+    column_list = [column_header.title().replace('_', ' ')
+                   for col in crew_members.find()
+                   for column_header in list(col.keys())[1:]]
     return column_list
 
 

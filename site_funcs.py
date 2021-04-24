@@ -10,26 +10,16 @@ client = MongoClient("mongodb+srv://%s:%s@cluster0.nhqsm.mongodb.net/metrics_tra
 db = client.metrics_tracker
 sites = db.sites
 
-
-# get site list from database
-def get_site_query():
-    site_list = []
-
-    for site in sites.find():
-        site = site.values()
-        site = list(site)[1:]
-        site_list.append(site)
+# get entire site list from database
+def get_site_query(excluded_fields=None):
+    site_list = [list(site.values())[1:] for site in sites.find({})]
     return site_list
-
 
 # get site columns from db
 def get_site_column_query():
-    site_list = []
-    for site in sites.find():
-        site = list(site.keys())[1:]
-        for column_header in site:
-            site_list.append(column_header.title().replace('_', ' '))
-        break
+    site_list = [column_header.title().replace('_', ' ')
+                 for col in sites.find()
+                 for column_header in list(col.keys())[1:]]
     return site_list
 
 
