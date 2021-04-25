@@ -50,11 +50,15 @@ def add_site(value):
         '_id': value[0],
         'site_id': value[0],
         'country': value[1],
-        'num_ac': value[2],
-        'num_curr_staff': value[3],
-        'num_full_staff': value[4]
+        'aircraft_type': value[2],
+        'number_aircraft_assigned': value[3],
+        'present_staff': value[4],
+        'required_staff': value[5]
     }
-    sites.insert_one(site_info)
+    try:
+        sites.insert_one(site_info)
+    except:
+        print('try again')
 
 
 # delete site
@@ -71,7 +75,7 @@ def gen_random_site():
 
     country = random.choice(countries.name)
     aircraft_type = random.choice(['KCQ-9', 'MQ-135', 'MC-46', 'KC-1', 'RQ-42'])
-    aircraft_assigned = str(random.randint(1,5))
+    aircraft_assigned = str(random.randint(1, 5))
     required_staff = str(int(aircraft_assigned) * 10)
     present_staff = str(int(aircraft_assigned) * random.choice([7, 8, 9, 10]))
 

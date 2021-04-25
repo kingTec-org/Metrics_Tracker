@@ -3,7 +3,6 @@ from site_funcs import *
 from crew_funcs import *
 from flight_funcs import *
 
-
 sg.theme('DefaultNoMoreNagging')
 
 
@@ -37,10 +36,11 @@ def display_site_main_window():
 
 
 def display_flight_main_window():
+    excluded_fields = ['_id', 'crew_on_flight', 'pilot_in_command']
     layout = [[sg.Button('View Flight', size=(10, 1), key='-VIEW FLIGHT-'),
                sg.Button('Add Flight', size=(10, 1), key='-ADD FLIGHT-')],
-              [sg.Table(values=get_flight_query(),
-                        headings=get_flight_column_query(),
+              [sg.Table(values=get_flight_query(excluded_fields=excluded_fields),
+                        headings=get_flight_column_query(excluded_fields=excluded_fields),
                         auto_size_columns=True,
                         display_row_numbers=True,
                         justification="left",
@@ -90,6 +90,7 @@ def display_site_expand_window():
 
 def display_flight_expand_window():
     flight = get_flight_query()[values['-READ TABLE-'][0]]
+    flight_number = (get_flight_query()[values['-READ TABLE-'][0]][0])
 
     column_list = get_flight_column_query()
 
@@ -102,7 +103,7 @@ def display_flight_expand_window():
                 sg.Button('Delete Flight', size=(10, 1), key='-DELETE FLIGHT-')
                 ]]
 
-    return sg.Window(f'Flight Number: {flight[1]} - {flight[0]}', layout, finalize=True)
+    return sg.Window(f'Flight Number: {flight[1]} - {flight[0]}', layout, finalize=True), flight_number
 
 
 def display_crew_expand_window():
@@ -161,11 +162,8 @@ def display_flight_add_window():
     layout = [
         [sg.Text('Flight Number', size=(15, 1)), sg.InputText(f'{random_flight[0]}')],
         [sg.Text('Aircraft Type', size=(15, 1)), sg.InputText(f'{random_flight[1]}')],
-        [sg.Text('Pilot in Command', size=(15, 1)), sg.InputText(f'{random_flight[2]}')],
-        [sg.Text('Scheduled T/O', size=(15, 1)), sg.InputText(f'{random_flight[3]}')],
-        [sg.Text('Actual T/O', size=(15, 1)), sg.InputText(f'{random_flight[4]}')],
-        [sg.Text('Scheduled L/T', size=(15, 1)), sg.InputText(f'{random_flight[5]}')],
-        [sg.Text('Actual L/T', size=(15, 1)), sg.InputText(f'{random_flight[6]}')],
+        [sg.Text('Scheduled T/O', size=(15, 1)), sg.InputText(f'{random_flight[2]}')],
+        [sg.Text('Scheduled L/T', size=(15, 1)), sg.InputText(f'{random_flight[3]}')],
         [sg.Submit(size=(7, 1), key='-SUBMIT-'),
          sg.Button('Back', size=(7, 1), key='-BACK-'),
          sg.Button('Randomize', size=(7, 1), key='-RANDOMIZE-')]]
@@ -208,8 +206,7 @@ crew_add_window = None
 # window loop
 while True:
     window, event, values = sg.read_all_windows()
-
-    ##-----------INITIAL WINDOW------------##
+    print(values)
 
     # initial_window
     if window == initial_window:
@@ -225,124 +222,129 @@ while True:
             crew_main_window = display_crew_main_window()
             initial_window.hide()
 
-    ##-----------MAIN VIEW WINDOWS---------------##
     # site_main
     if window == site_main_window:
-        if event in (sg.WIN_CLOSED, '-BACK-'):
+        if event == sg.WIN_CLOSED:
+            break
+        elif event in ('-BACK-'):
             initial_window.un_hide()
             site_main_window.hide()
-        elif event == '-VIEW SITE-':
+        elif event in ('-VIEW SITE-'):
             try:
                 site_expand_window = display_site_expand_window()
-                site_main_window.refresh()
-                site_main_window.close()
+                site_main_window.hide()
             except IndexError:
+                # TODO make popup
                 print('Select A Site')
-        elif event == '-ADD SITE-':
-            site_main_window.refresh()
-            site_main_window.close()
+        elif event in ('-ADD SITE-'):
             site_add_window = display_site_add_window()
-
+            site_main_window.close()
 
     # flight_main
     if window == flight_main_window:
-        if event in (sg.WIN_CLOSED, '-BACK-'):
+        if event == sg.WIN_CLOSED:
+            break
+        elif event in ('-BACK-'):
             initial_window.un_hide()
             flight_main_window.hide()
-        elif event == '-VIEW FLIGHT-':
+        elif event in ('-VIEW FLIGHT-'):
             try:
-                flight_expand_window = display_flight_expand_window()
-                flight_main_window.refresh()
-                flight_main_window.close()
+                flight_expand_window = display_flight_expand_window()[0]
+                flight_main_window.hide()
             except IndexError:
+                # TODO make popup
                 print('Select A Flight')
-        elif event == '-ADD FLIGHT-':
-            flight_main_window.refresh()
-            flight_main_window.close()
+        elif event in ('-ADD FLIGHT-'):
             flight_add_window = display_flight_add_window()
+            flight_main_window.close()
+        elif event in ('-READ TABLE-'):
+            pass
 
     # crew_main
     if window == crew_main_window:
-        if event in (sg.WIN_CLOSED, '-BACK-'):
+        if event == sg.WIN_CLOSED:
+            break
+        elif event in ('-BACK-'):
             initial_window.un_hide()
             crew_main_window.hide()
-        elif event == '-VIEW CREW-':
+        elif event in ('-VIEW CREW-'):
             try:
                 crew_expand_window = display_crew_expand_window()
-                crew_main_window.refresh()
-                crew_main_window.close()
+                crew_main_window.hide()
             except IndexError:
+                # TODO make popup
                 print('Select A Crewmember')
-        elif event == '-ADD CREW-':
-            crew_main_window.refresh()
-            crew_main_window.close()
+        elif event in ('-ADD CREW-'):
             crew_add_window = display_crew_add_window()
-
-    ##----------DETAIL WINDOWS------------##
+            crew_main_window.close()
 
     # site_expand
     if window == site_expand_window:
-        if event in (sg.WIN_CLOSED, '-BACK-'):
-            site_main_window = display_site_main_window()
-            site_expand_window.close()
-        elif event in  ('-DELETE SITE-'):
+        if event == sg.WIN_CLOSED:
+            break
+        elif event in ('-BACK-'):
+            site_main_window.un_hide()
+            site_expand_window.hide()
+        elif event in ('-DELETE SITE-'):
             site_expand_window.refresh()
-            #site_info = get_site_query()
-            #delete_site()
+            # site_info = get_site_query()
+            # delete_site()
         elif event in ('-EDIT SITE-'):
-            site_expand_window.refresh()
-        elif event in ('-SEE-'):
-            site_expand_window.refresh()
+            site_expand_window.hide()
+            site_edit_window = display_site_edit_window()
 
     # flight_expand
     if window == flight_expand_window:
-        if event in (sg.WIN_CLOSED, '-BACK-'):
-            flight_main_window = display_flight_main_window()
-            flight_expand_window.close()
+        if event == sg.WIN_CLOSED:
+            break
+        elif event in ('-BACK-'):
+            flight_main_window.un_hide()
+            flight_expand_window.hide()
         elif event in ('-DELETE FLIGHT-'):
-            flight_expand_window.refresh()
-            # flight_info = get_flight_query()
-            # delete_flight()
+            print(window[1])
+            # delete_flight(f'{flight_number}')
         elif event in ('-EDIT FLIGHT-'):
-            flight_expand_window.refresh()
-        elif event in ('-SEE-'):
-            flight_expand_window.refresh()
+            flight_expand_window.hide()
+            flight_edit_window = display_flight_edit_window()
 
     # crew_expand
     if window == crew_expand_window:
-        if event in (sg.WIN_CLOSED, '-BACK-'):
-            crew_main_window = display_crew_main_window()
-            crew_expand_window.close()
+        if event == sg.WIN_CLOSED:
+            break
+        elif event in ('-BACK-'):
+            crew_main_window.un_hide()
+            crew_expand_window.hide()
         elif event in ('-DELETE CREW-'):
             crew_expand_window.refresh()
             # crew_info = get_flight_query()
             # delete_crew()
         elif event in ('-EDIT CREW-'):
-            crew_expand_window.refresh()
-        elif event in ('-SEE-'):
-            crew_expand_window.refresh()
-
-    ##--------------EDIT WINDOWS---------------##
+            crew_expand_window.hide()
+            crew_edit_window = display_crew_edit_window()
 
     # site_edit
     if window == site_edit_window:
-        if event in (sg.WIN_CLOSED, '-BACK-'):
+        if event == sg.WIN_CLOSED:
+            break
+        elif event in ('-BACK-'):
+            site_expand_window.un_hide()
             site_edit_window.close()
-            site_main_window = display_site_main_window()
 
     # flight_edit
     if window == flight_edit_window:
-        if event in (sg.WIN_CLOSED, '-BACK-'):
+        if event == sg.WIN_CLOSED:
+            break
+        elif event in ('-BACK-'):
+            flight_expand_window.un_hide()
             flight_edit_window.close()
-            flight_main_window = display_flight_main_window()
 
     # crew_edit
     if window == crew_edit_window:
-        if event in (sg.WIN_CLOSED, '-BACK-'):
+        if event == sg.WIN_CLOSED:
+            break
+        elif event in ('-BACK-'):
+            crew_expand_window.un_hide()
             crew_edit_window.close()
-            crew_main_window = display_crew_main_window()
-
-    ##------------ADD WINDOWS---------------##
 
     # site_add
     if window == site_add_window:
@@ -351,8 +353,9 @@ while True:
             site_add_window.close()
             site_main_window = display_site_main_window()
         elif event == '-SUBMIT-':
-            site_add_window.refresh()
             add_site(values)
+            site_add_window.close()
+            site_add_window = display_site_add_window()
         elif event == '-RANDOMIZE-':
             site_add_window.close()
             site_add_window = display_site_add_window()
@@ -364,8 +367,9 @@ while True:
             flight_add_window.close()
             site_main_window = display_site_main_window()
         elif event == '-SUBMIT-':
-            flight_add_window.refresh()
             add_flight(values)
+            flight_add_window.close()
+            flight_add_window = display_flight_add_window()
         elif event == '-RANDOMIZE-':
             flight_add_window.close()
             flight_add_window = display_flight_add_window()
@@ -377,7 +381,6 @@ while True:
             crew_add_window.close()
             crew_main_window = display_crew_main_window()
         elif event == '-SUBMIT-':
-            crew_add_window.refresh()
             add_crew_members(values)
             crew_add_window.close()
             crew_add_window = display_crew_add_window()
@@ -388,7 +391,6 @@ while True:
 # end of program
 window.close()
 
-# TODO Add Site, Flight, Crew options via buttonmenu element "Options" -> "Edit, Add, Delete"
 # TODO add engineering photo view for mx uploads
 # TODO Change close to unhides to keep window persistent but refresh when needed, change 'x window' to break the loop...back is back, not x
 # TODO dynamically building of site+crew db, based on specific site doc in site collection

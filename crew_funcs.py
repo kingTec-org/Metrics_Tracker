@@ -2,6 +2,7 @@ from pymongo import MongoClient
 import urllib.parse
 import random
 import names
+
 me = urllib.parse.quote_plus('LarryDCJ')
 rd = urllib.parse.quote_plus('dismyside42')
 
@@ -53,8 +54,10 @@ def add_crew_members(value):
         'middle_name': value[1],
         'crew_position': value[5]
     }
-    crews.insert_one(crew_member_info)
-
+    try:
+        crews.insert_one(crew_member_info)
+    except:
+        print('try again')
 
 # delete member
 def delete_crew_member(emp_num):

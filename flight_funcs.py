@@ -11,18 +11,38 @@ client = MongoClient("mongodb+srv://%s:%s@cluster0.nhqsm.mongodb.net/metrics_tra
 db = client.metrics_tracker
 flights = db.flights
 
+def get_single_flight():
+    flight = [list(flight.values()) for flight in flights.find_one()]
+    print(flight)
+
 
 # get entire flight list from database
-def get_flight_query(excluded_fields=['_id', 'crew_on_flight']):
-    flight_list = [list(flight.values())
-                   for flight in flights.find({}, {f'{excluded_fields[0]}': False, f'{excluded_fields[1]}': False})]
+def get_flight_query(excluded_fields=None):
+    if excluded_fields == None:
+        flight_list = [list(flight.values()) for flight in flights.find()]
+    else:
+        flight_list = [list(flight.values())
+                    for flight in flights.find({},
+                                               {
+                                                   f'{excluded_fields[0]}': False,
+                                                   f'{excluded_fields[1]}': False,
+                                                   f'{excluded_fields[2]}': False
+                                               })]
     return flight_list
 
 
 # get flight columns from db
-def get_flight_column_query(excluded_fields=['_id', 'crew_on_flight']):
-    column_list = [key.title().replace('_', ' ')
-                   for key in flights.find_one({}, {f'{excluded_fields[0]}': False, f'{excluded_fields[1]}': False})]
+def get_flight_column_query(excluded_fields=None):
+    if excluded_fields == None:
+        column_list = [key.title().replace('_', ' ') for key in flights.find_one()]
+    else:
+        column_list = [key.title().replace('_', ' ')
+                    for key in flights.find_one({},
+                                              {
+                                                  f'{excluded_fields[0]}': False,
+                                                  f'{excluded_fields[1]}': False,
+                                                  f'{excluded_fields[2]}': False
+                                              })]
     return column_list
 
 
@@ -50,18 +70,19 @@ def add_flight(value):
         '_id': value[0],
         'flight_number': value[0],
         'aircraft_type': value[1],
-        'pilot_in_command': value[2],
-        'scheduled_takeoff': value[3],
-        'actual_takeoff': value[4],
-        'scheduled_land': value[5],
-        'actual_land': value[6]
+        'crew_on_flight': [],
+        'pilot_in_command': '',
+        'scheduled_takeoff': value[2],
+        'scheduled_land': value[3]
     }
-    flights.insert_one(flight_info)
-
+    try:
+        flights.insert_one(flight_info)
+    except:
+        print('try again')
 
 # delete flight
 def delete_flight(flight_number):
-    flight_id = {'_id': flight_number}
+    flight_id = {'_id': f'{flight_number}'}
     flights.delete_one(flight_id)
 
 
@@ -83,10 +104,7 @@ def gen_random_flight():
     else:
         scheduled_land = f'{land}00z'
 
-    flight_number = 'IBICF010112020000**Z'
+    flight_number = f'SOSD{random.randint(10000,100000)}LEET'
     aircraft_type = random.choice(['KCQ-9', 'MQ-135', 'MC-46', 'KC-1', 'RQ-42'])
-    pilot_in_command = ''
-    actual_takeoff = ''
-    actual_land = ''
-    return flight_number, aircraft_type, pilot_in_command, \
-           scheduled_takeoff, actual_takeoff, scheduled_land, actual_land
+
+    return flight_number, aircraft_type, scheduled_takeoff, scheduled_land
