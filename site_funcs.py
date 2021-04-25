@@ -1,5 +1,8 @@
 from pymongo import MongoClient
 import urllib.parse
+import random
+import countries
+
 
 me = urllib.parse.quote_plus('LarryDCJ')
 rd = urllib.parse.quote_plus('dismyside42')
@@ -11,16 +14,16 @@ db = client.metrics_tracker
 sites = db.sites
 
 # get entire site list from database
-def get_site_query(excluded_fields=None):
-    site_list = [list(site.values())[1:] for site in sites.find({})]
+def get_site_query(excluded_fields=['_id']):
+    site_list = [list(site.values())
+                 for site in sites.find({}, {f'{excluded_fields[0]}': False})]
     return site_list
 
 # get site columns from db
-def get_site_column_query():
-    site_list = [column_header.title().replace('_', ' ')
-                 for col in sites.find()
-                 for column_header in list(col.keys())[1:]]
-    return site_list
+def get_site_column_query(excluded_fields=['_id']):
+    column_list = [key.title().replace('_', ' ')
+                   for key in sites.find_one({}, {f'{excluded_fields[0]}': False})]
+    return column_list
 
 
 # find site via user string
@@ -58,3 +61,19 @@ def add_site(value):
 def delete_site(site_id):
     site_id = {'_id': site_id}
     sites.delete_one(site_id)
+
+
+def gen_random_site():
+    try:
+        site_id = f'Location 0{random.randint(1,15)}'
+    except:
+        site_id = f'Location 0{random.randint(1, 15)}'
+
+    country = random.choice(countries.name)
+    aircraft_type = random.choice(['KCQ-9', 'MQ-135', 'MC-46', 'KC-1', 'RQ-42'])
+    aircraft_assigned = str(random.randint(1,5))
+    required_staff = str(int(aircraft_assigned) * 10)
+    present_staff = str(int(aircraft_assigned) * random.choice([7, 8, 9, 10]))
+
+
+    return site_id, country, aircraft_type, aircraft_assigned, present_staff, required_staff
