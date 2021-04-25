@@ -75,12 +75,11 @@ def display_crew_main_window():
 ##----------DETAIL WINDOWS------------##
 def display_site_expand_window():
     site = get_site_query()[values['-READ TABLE-'][0]]
-
+    global site_id
+    site_id = get_site_query()[values['-READ TABLE-'][0]][0]
     column_list = get_site_column_query()
-
     layout = [[sg.Text(f'{column_list[i]}', size=(15, 1)),
                sg.Text(f'{site[i]}', justification='right')] for i in range(len(column_list))]
-
     layout += [[sg.Button('Back', size=(10, 1), key='-BACK-'),
                 sg.Button('Edit Site', size=(10, 1), key='-EDIT SITE-'),
                 sg.Button('Delete Site', size=(10, 1), key='-DELETE SITE-')]]
@@ -90,25 +89,23 @@ def display_site_expand_window():
 
 def display_flight_expand_window():
     flight = get_flight_query()[values['-READ TABLE-'][0]]
+    global flight_number
     flight_number = (get_flight_query()[values['-READ TABLE-'][0]][0])
-
     column_list = get_flight_column_query()
-
     layout = [[sg.Text(f'{column_list[i]}', size=(15, 1)),
                sg.Text(f'{flight[i]}', justification='right')] for i in range(len(column_list))]
-
     layout += [[sg.Button('Back', size=(10, 1), key='-BACK-'),
                 sg.Button('Add Crew To Flight', size=(10, 1), key='-ADD CREW-'),
                 sg.Button('Edit Flight', size=(10, 1), key='-EDIT FLIGHT-'),
                 sg.Button('Delete Flight', size=(10, 1), key='-DELETE FLIGHT-')
                 ]]
 
-    return sg.Window(f'Flight Number: {flight[1]} - {flight[0]}', layout, finalize=True), flight_number
-
+    return sg.Window(f'Flight Number: {flight[1]} - {flight[0]}', layout, finalize=True)
 
 def display_crew_expand_window():
     crew = get_crew_query()[values['-READ TABLE-'][0]]
-
+    global employee_id
+    employee_id = (get_crew_query()[values['-READ TABLE-'][0]][0])
     column_list = get_crew_column_query()
 
     layout = [[sg.Text(f'{column_list[i]}', size=(15, 1)),
@@ -249,7 +246,7 @@ while True:
             flight_main_window.hide()
         elif event in ('-VIEW FLIGHT-'):
             try:
-                flight_expand_window = display_flight_expand_window()[0]
+                flight_expand_window = display_flight_expand_window()
                 flight_main_window.hide()
             except IndexError:
                 # TODO make popup
@@ -257,8 +254,6 @@ while True:
         elif event in ('-ADD FLIGHT-'):
             flight_add_window = display_flight_add_window()
             flight_main_window.close()
-        elif event in ('-READ TABLE-'):
-            pass
 
     # crew_main
     if window == crew_main_window:
@@ -286,9 +281,14 @@ while True:
             site_main_window.un_hide()
             site_expand_window.hide()
         elif event in ('-DELETE SITE-'):
-            site_expand_window.refresh()
-            # site_info = get_site_query()
-            # delete_site()
+            answer = sg.PopupYesNo(f'Are you sure you want to delete {site_id}?')
+            if answer == 'No':
+                answer.close()
+            if answer == 'Yes':
+                delete_site(site_id=site_id)
+                site_expand_window.close()
+                site_main_window.close()
+                site_main_window = display_site_main_window()
         elif event in ('-EDIT SITE-'):
             site_expand_window.hide()
             site_edit_window = display_site_edit_window()
@@ -301,8 +301,14 @@ while True:
             flight_main_window.un_hide()
             flight_expand_window.hide()
         elif event in ('-DELETE FLIGHT-'):
-            print(window[1])
-            # delete_flight(f'{flight_number}')
+            answer = sg.PopupYesNo(f'Are you sure you want to delete {flight_number}?')
+            if answer == 'No':
+                answer.close()
+            if answer == 'Yes':
+                delete_flight(flight_number=flight_number)
+                flight_expand_window.close()
+                flight_main_window.close()
+                flight_main_window = display_flight_main_window()
         elif event in ('-EDIT FLIGHT-'):
             flight_expand_window.hide()
             flight_edit_window = display_flight_edit_window()
@@ -315,9 +321,14 @@ while True:
             crew_main_window.un_hide()
             crew_expand_window.hide()
         elif event in ('-DELETE CREW-'):
-            crew_expand_window.refresh()
-            # crew_info = get_flight_query()
-            # delete_crew()
+            answer = sg.PopupYesNo(f'Are you sure you want to delete {employee_id}?')
+            if answer == 'No':
+                answer.close()
+            if answer == 'Yes':
+                delete_crew(employee_id=employee_id)
+                crew_expand_window.close()
+                crew_main_window.close()
+                crew_main_window = display_crew_main_window()
         elif event in ('-EDIT CREW-'):
             crew_expand_window.hide()
             crew_edit_window = display_crew_edit_window()
@@ -363,9 +374,8 @@ while True:
     # flight_add
     if window == flight_add_window:
         if event in (sg.WIN_CLOSED, '-BACK-'):
-            flight_add_window.refresh()
             flight_add_window.close()
-            site_main_window = display_site_main_window()
+            flight_main_window = display_flight_main_window()
         elif event == '-SUBMIT-':
             add_flight(values)
             flight_add_window.close()

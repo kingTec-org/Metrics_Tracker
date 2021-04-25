@@ -60,9 +60,9 @@ def add_crew_members(value):
         print('try again')
 
 # delete member
-def delete_crew_member(emp_num):
-    crew_member_id = {'_id': emp_num}
-    crews.delete_one(crew_member_id)
+def delete_crew(employee_id):
+    employee_id = {'_id': employee_id}
+    crews.delete_one(employee_id)
 
 def gen_random_crew():
     gender = random.choice(['male', 'female'])
