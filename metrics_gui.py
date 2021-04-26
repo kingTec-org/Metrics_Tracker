@@ -81,6 +81,7 @@ def display_site_expand_window():
     layout = [[sg.Text(f'{column_list[i]}', size=(15, 1)),
                sg.Text(f'{site[i]}', justification='right')] for i in range(len(column_list))]
     layout += [[sg.Button('Back', size=(10, 1), key='-BACK-'),
+                sg.Button('Add Flight to Site', size=(10, 1), key='-ADD FLIGHT-'),
                 sg.Button('Edit Site', size=(10, 1), key='-EDIT SITE-'),
                 sg.Button('Delete Site', size=(10, 1), key='-DELETE SITE-')]]
 
@@ -88,19 +89,21 @@ def display_site_expand_window():
 
 
 def display_flight_expand_window():
-    flight = get_flight_query()[values['-READ TABLE-'][0]]
     global flight_number
+    excluded_fields = ['_id'] # add database fields to exclude here #TODO convert to dropdown selector list
     flight_number = (get_flight_query()[values['-READ TABLE-'][0]][0])
-    column_list = get_flight_column_query()
+    flight_list = get_flight_query(excluded_fields=excluded_fields)[values['-READ TABLE-'][0]]
+    column_list = get_flight_column_query(excluded_fields=excluded_fields)
     layout = [[sg.Text(f'{column_list[i]}', size=(15, 1)),
-               sg.Text(f'{flight[i]}', justification='right')] for i in range(len(column_list))]
+               sg.Text(f'{flight_list[i]}', justification='right')] for i in range(len(column_list))]
     layout += [[sg.Button('Back', size=(10, 1), key='-BACK-'),
                 sg.Button('Add Crew To Flight', size=(10, 1), key='-ADD CREW-'),
                 sg.Button('Edit Flight', size=(10, 1), key='-EDIT FLIGHT-'),
                 sg.Button('Delete Flight', size=(10, 1), key='-DELETE FLIGHT-')
                 ]]
 
-    return sg.Window(f'Flight Number: {flight[1]} - {flight[0]}', layout, finalize=True)
+    return sg.Window(f'Flight Number: {flight_list[1]} - {flight_list[0]}', layout, finalize=True)
+
 
 def display_crew_expand_window():
     crew = get_crew_query()[values['-READ TABLE-'][0]]
@@ -182,6 +185,20 @@ def display_crew_add_window():
 
     return sg.Window('Add Crew', layout, finalize=True)
 
+##---------ADD CREW FLIGHTS TO FLIGHTS SITES-------##
+def display_flight_crew_add_window():
+    layout = [
+        [sg.Table(values=['Test1', 'Test2'], headings=['Test Column1']),
+         sg.Submit(size=(7, 1), key='-SUBMIT-'), sg.Button('Back', size=(7, 1), key='-BACK-')]]
+
+    return sg.Window('Populate Flight', layout, finalize=True)
+
+def display_site_flight_add_window():
+    layout = [
+        [sg.Table(values=['Test3', 'Test4'], headings=['Test Column2']),
+         sg.Submit(size=(7, 1), key='-SUBMIT-'), sg.Button('Back', size=(7, 1), key='-BACK-')]]
+
+    return sg.Window('Populate Site', layout, finalize=True)
 
 initial_window = display_initial_window()
 
@@ -189,11 +206,13 @@ site_main_window = None
 site_expand_window = None
 site_edit_window = None
 site_add_window = None
+site_flight_add_window = None
 
 flight_main_window = None
 flight_expand_window = None
 flight_edit_window = None
 flight_add_window = None
+flight_crew_add_window = None
 
 crew_main_window = None
 crew_expand_window = None
@@ -292,6 +311,28 @@ while True:
         elif event in ('-EDIT SITE-'):
             site_expand_window.hide()
             site_edit_window = display_site_edit_window()
+        elif event in ('-ADD FLIGHT-'):
+            site_expand_window.hide()
+            site_flight_add_window = display_site_flight_add_window()
+
+    if window == site_flight_add_window:
+        if event == sg.WIN_CLOSED:
+            break
+        elif event in ('--BACK--'):
+            site_expand_window.un_hide()
+            site_flight_add_window.close()
+        elif event in ('--SUBMIT--'):
+            print('Pass')
+
+
+    if window == flight_crew_add_window:
+        if event == sg.WIN_CLOSED:
+            break
+        elif event in ('--BACK--'):
+            flight_expand_window.un_hide()
+            flight_crew_add_window.close()
+        elif event in ('--SUBMIT--'):
+            print('Pass')
 
     # flight_expand
     if window == flight_expand_window:
@@ -312,6 +353,10 @@ while True:
         elif event in ('-EDIT FLIGHT-'):
             flight_expand_window.hide()
             flight_edit_window = display_flight_edit_window()
+        elif event in ('-ADD CREW-'):
+            flight_expand_window.hide()
+            flight_crew_add_window = display_flight_crew_add_window()
+
 
     # crew_expand
     if window == crew_expand_window:

@@ -10,7 +10,6 @@ client = MongoClient("mongodb+srv://%s:%s@cluster0.nhqsm.mongodb.net/metrics_tra
                      "=true&w=majority" % (me, rd), authSource='admin')
 
 db = client.metrics_tracker
-
 crews = db.crews
 
 # get crew member list from database
@@ -25,14 +24,10 @@ def get_crew_column_query(excluded_fields=['_id']):
                    for key in crews.find_one({}, {f'{excluded_fields[0]}': False})]
     return column_list
 
-
 # find crew via user string
 def find_crew(user_input):
     result = db.crews.find({'crew_position': f'{user_input}'})
     return result
-
-# #-----!!CRUD FUNCTIONS!!-----# #
-
 
 # edit existing crew profile
 def edit_crew_member():
@@ -41,7 +36,6 @@ def edit_crew_member():
     # allow to be changed
     # mongo update method
     pass
-
 
 # add crew member based on user input
 def add_crew_members(value):
@@ -64,6 +58,7 @@ def delete_crew(employee_id):
     employee_id = {'_id': employee_id}
     crews.delete_one(employee_id)
 
+# generate random crew_member when you add a new one
 def gen_random_crew():
     gender = random.choice(['male', 'female'])
     first_name = names.get_first_name(gender=gender)
