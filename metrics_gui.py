@@ -19,10 +19,11 @@ def display_initial_window():
 
 ##-----------MAIN VIEW WINDOWS---------##
 def display_site_main_window():
+    excluded_fields = ['_id']
     layout = [[sg.Button('View Site', size=(10, 1), key='-VIEW SITE-'),
                sg.Button('Add Site', size=(10, 1), key='-ADD SITE-')],
-              [sg.Table(values=get_site_query(),
-                        headings=get_site_column_query(),
+              [sg.Table(values=get_site_query(excluded_fields),
+                        headings=get_site_column_query(excluded_fields),
                         auto_size_columns=True,
                         display_row_numbers=True,
                         justification="left",
@@ -39,8 +40,8 @@ def display_flight_main_window():
     excluded_fields = ['_id', 'crew_on_flight', 'pilot_in_command']
     layout = [[sg.Button('View Flight', size=(10, 1), key='-VIEW FLIGHT-'),
                sg.Button('Add Flight', size=(10, 1), key='-ADD FLIGHT-')],
-              [sg.Table(values=get_flight_query(excluded_fields=excluded_fields),
-                        headings=get_flight_column_query(excluded_fields=excluded_fields),
+              [sg.Table(values=get_flight_query(excluded_fields),
+                        headings=get_flight_column_query(excluded_fields),
                         auto_size_columns=True,
                         display_row_numbers=True,
                         justification="left",
@@ -55,10 +56,11 @@ def display_flight_main_window():
 
 
 def display_crew_main_window():
+    excluded_fields = ['_id', 'suffix']
     layout = [[sg.Button('View Crew', size=(10, 1), key='-VIEW CREW-'),
                sg.Button('Add Crew', size=(10, 1), key='-ADD CREW-')],
-              [sg.Table(values=get_crew_query(),
-                        headings=get_crew_column_query(),
+              [sg.Table(values=get_crew_query(excluded_fields),
+                        headings=get_crew_column_query(excluded_fields),
                         auto_size_columns=True,
                         display_row_numbers=True,
                         justification="left",
@@ -90,10 +92,12 @@ def display_site_expand_window():
 
 def display_flight_expand_window():
     global flight_number
-    excluded_fields = ['_id'] # add database fields to exclude here #TODO convert to dropdown selector list
     flight_number = (get_flight_query()[values['-READ TABLE-'][0]][0])
-    flight_list = get_flight_query(excluded_fields=excluded_fields)[values['-READ TABLE-'][0]]
-    column_list = get_flight_column_query(excluded_fields=excluded_fields)
+
+    # add database fields to exclude here #TODO convert to dropdown selector list
+    excluded_fields = ['_id']
+    flight_list = get_flight_query(excluded_fields)[values['-READ TABLE-'][0]]
+    column_list = get_flight_column_query(excluded_fields)
     layout = [[sg.Text(f'{column_list[i]}', size=(15, 1)),
                sg.Text(f'{flight_list[i]}', justification='right')] for i in range(len(column_list))]
     layout += [[sg.Button('Back', size=(10, 1), key='-BACK-'),
@@ -185,13 +189,36 @@ def display_crew_add_window():
 
     return sg.Window('Add Crew', layout, finalize=True)
 
+
 ##---------ADD CREW FLIGHTS TO FLIGHTS SITES-------##
-def display_flight_crew_add_window():
-    layout = [
-        [sg.Table(values=['Test1', 'Test2'], headings=['Test Column1']),
-         sg.Submit(size=(7, 1), key='-SUBMIT-'), sg.Button('Back', size=(7, 1), key='-BACK-')]]
+def display_flight_crew_add_window(flight_number):
+
+
+    excluded_fields = ['_id', 'suffix']
+    layout = [[
+        sg.Table(values=get_crew_query(excluded_fields),
+                 headings=get_crew_column_query(excluded_fields),
+                 auto_size_columns=True,
+                 display_row_numbers=True,
+                 justification="left",
+                 alternating_row_color='LightGray',
+                 enable_events=True,
+                 bind_return_key=False,
+                 key='-READ TABLE-'),
+        sg.Table(values=get_crew_from_flight(excluded_fields),
+                 headings=get_crew_column_query(excluded_fields),
+                 auto_size_columns=True,
+                 display_row_numbers=True,
+                 justification="left",
+                 alternating_row_color='LightGray',
+                 enable_events=True,
+                 bind_return_key=False,
+                 key='-READ TABLE2-')],
+        [sg.Submit(size=(7, 1), key='-SUBMIT-'),sg.Button('Remove', size=(7, 1), key='-REMOVE-'), sg.Button('Back', size=(7, 1), key='-BACK-')
+         ]]
 
     return sg.Window('Populate Flight', layout, finalize=True)
+
 
 def display_site_flight_add_window():
     layout = [
@@ -199,6 +226,7 @@ def display_site_flight_add_window():
          sg.Submit(size=(7, 1), key='-SUBMIT-'), sg.Button('Back', size=(7, 1), key='-BACK-')]]
 
     return sg.Window('Populate Site', layout, finalize=True)
+
 
 initial_window = display_initial_window()
 
@@ -222,7 +250,7 @@ crew_add_window = None
 # window loop
 while True:
     window, event, values = sg.read_all_windows()
-    print(values)
+    print(event, values)
 
     # initial_window
     if window == initial_window:
@@ -315,25 +343,6 @@ while True:
             site_expand_window.hide()
             site_flight_add_window = display_site_flight_add_window()
 
-    if window == site_flight_add_window:
-        if event == sg.WIN_CLOSED:
-            break
-        elif event in ('--BACK--'):
-            site_expand_window.un_hide()
-            site_flight_add_window.close()
-        elif event in ('--SUBMIT--'):
-            print('Pass')
-
-
-    if window == flight_crew_add_window:
-        if event == sg.WIN_CLOSED:
-            break
-        elif event in ('--BACK--'):
-            flight_expand_window.un_hide()
-            flight_crew_add_window.close()
-        elif event in ('--SUBMIT--'):
-            print('Pass')
-
     # flight_expand
     if window == flight_expand_window:
         if event == sg.WIN_CLOSED:
@@ -346,7 +355,7 @@ while True:
             if answer == 'No':
                 answer.close()
             if answer == 'Yes':
-                delete_flight(flight_number=flight_number)
+                delete_flight(flight_number)
                 flight_expand_window.close()
                 flight_main_window.close()
                 flight_main_window = display_flight_main_window()
@@ -355,8 +364,7 @@ while True:
             flight_edit_window = display_flight_edit_window()
         elif event in ('-ADD CREW-'):
             flight_expand_window.hide()
-            flight_crew_add_window = display_flight_crew_add_window()
-
+            flight_crew_add_window = display_flight_crew_add_window(flight_number)
 
     # crew_expand
     if window == crew_expand_window:
@@ -442,6 +450,36 @@ while True:
         elif event == '-RANDOMIZE-':
             crew_add_window.close()
             crew_add_window = display_crew_add_window()
+
+    # site_flight_add
+    if window == site_flight_add_window:
+        if event == sg.WIN_CLOSED:
+            break
+        elif event in ('-BACK-'):
+            site_expand_window.un_hide()
+            site_flight_add_window.close()
+        elif event in ('-SUBMIT-'):
+            print('Pass')
+
+    # flight_crew_add
+    if window == flight_crew_add_window:
+        if event == sg.WIN_CLOSED:
+            break
+        elif event in ('-BACK-'):
+            flight_expand_window.un_hide()
+            flight_crew_add_window.close()
+        elif event in ('-REMOVE-'):
+            employee_id2 = (get_crew_query()[values['-READ TABLE2-'][0]][0])
+            flight_number = flight_number
+            remove_crew_from_flight(flight_number, employee_id2)
+            flight_crew_add_window.close()
+            flight_crew_add_window = display_flight_crew_add_window(flight_number)
+        elif event in ('-SUBMIT-'):
+            employee_id = (get_crew_query()[values['-READ TABLE-'][0]][0])
+            flight_number = flight_number
+            add_crew_to_flight(flight_number, employee_id)
+            flight_crew_add_window.close()
+            flight_crew_add_window = display_flight_crew_add_window(flight_number)
 
 # end of program
 window.close()

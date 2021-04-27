@@ -1,6 +1,7 @@
 from pymongo import MongoClient
 import urllib.parse
 import random
+from crew_funcs import *
 
 me = urllib.parse.quote_plus('LarryDCJ')
 rd = urllib.parse.quote_plus('dismyside42')
@@ -16,18 +17,14 @@ def get_single_flight():
     flight = [list(flight.values()) for flight in flights.find_one()]
     print(flight)
 
+
 # get entire flight list from database
 def get_flight_query(excluded_fields=None):
-    if excluded_fields == None:
+    if excluded_fields is None:
         flight_list = [list(flight.values()) for flight in flights.find()]
     else:
-        flight_list = [list(flight.values())
-                    for flight in flights.find({},
-                                               {
-                                                   f'{excluded_fields[0]}': False,
-                                                   f'{excluded_fields[1]}': False,
-                                                   f'{excluded_fields[2]}': False
-                                               })]
+        excluded_fields_pass = dict.fromkeys(excluded_fields, False)
+        flight_list = [list(flight.values()) for flight in flights.find({}, excluded_fields_pass)]
     return flight_list
 
 # get flight columns from db
@@ -35,13 +32,9 @@ def get_flight_column_query(excluded_fields=None):
     if excluded_fields is None:
         column_list = [key.title().replace('_', ' ') for key in flights.find_one()]
     else:
-        column_list = [key.title().replace('_', ' ')
-                    for key in flights.find_one({},
-                                              {
-                                                  f'{excluded_fields[0]}': False,
-                                                  f'{excluded_fields[1]}': False,
-                                                  f'{excluded_fields[2]}': False
-                                              })]
+        excluded_fields_pass = dict.fromkeys(excluded_fields, False)
+        column_list = [key.title().replace('_', ' ') for key in flights.find_one({}, excluded_fields_pass)]
+
     return column_list
 
 # find flight via user string
@@ -75,7 +68,7 @@ def add_flight(value):
 
 # delete flight
 def delete_flight(flight_number):
-    flight_id = {'_id': f'{flight_number}'}
+    flight_id = {'_id': flight_number}
     flights.delete_one(flight_id)
 
 # generates a random flight when added
@@ -104,3 +97,20 @@ def gen_random_flight():
 
 def add_crew_to_flight(flight_number, employee_id):
     flights.update({'flight_number': flight_number}, {'$push': {'crew_on_flight': employee_id}})
+
+
+def remove_crew_from_flight(flight_number, employee_id):
+    flights.update({'flight_number': flight_number}, {'$pull': {'crew_on_flight': employee_id}})
+
+def get_crew_from_flight(excluded_fields=None):
+    employee_ids = flights.distinct('crew_on_flight')
+
+    if excluded_fields is None:
+        crew_list = [crews.find_one({'employee_id': employee_id}) for employee_id in employee_ids]
+    else:
+        excluded_fields_pass = dict.fromkeys(excluded_fields, False)
+        crew_list = [list(crews.find_one({'employee_id': employee_id}, excluded_fields_pass).values()) for employee_id in employee_ids]
+    for crew in crew_list:
+        print(crew)
+
+    return crew_list

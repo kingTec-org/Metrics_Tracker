@@ -14,15 +14,21 @@ db = client.metrics_tracker
 sites = db.sites
 
 # get entire site list from database
-def get_site_query(excluded_fields=['_id']):
-    site_list = [list(site.values())
-                 for site in sites.find({}, {f'{excluded_fields[0]}': False})]
+def get_site_query(excluded_fields=None):
+    if excluded_fields is None:
+        site_list = [list(site.values()) for site in sites.find()]
+    else:
+        excluded_fields_pass = dict.fromkeys(excluded_fields, False)
+        site_list = [list(site.values()) for site in sites.find({}, excluded_fields_pass)]
     return site_list
 
 # get site columns from db
-def get_site_column_query(excluded_fields=['_id']):
-    column_list = [key.title().replace('_', ' ')
-                   for key in sites.find_one({}, {f'{excluded_fields[0]}': False})]
+def get_site_column_query(excluded_fields=None):
+    if excluded_fields is None:
+        column_list = [key.title().replace('_', ' ') for key in sites.find_one()]
+    else:
+        excluded_fields_pass = dict.fromkeys(excluded_fields, False)
+        column_list = [key.title().replace('_', ' ') for key in sites.find_one({}, excluded_fields_pass)]
     return column_list
 
 
