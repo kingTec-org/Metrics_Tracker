@@ -2,6 +2,7 @@ import PySimpleGUI as sg
 from site_funcs import *
 from crew_funcs import *
 from flight_funcs import *
+from connection import *
 
 sg.theme('DefaultNoMoreNagging')
 
@@ -77,8 +78,6 @@ def display_crew_main_window():
 ##----------DETAIL WINDOWS------------##
 def display_site_expand_window():
     site = get_site_query()[values['-READ TABLE-'][0]]
-    #global site_id
-    site_id = get_site_query()[values['-READ TABLE-'][0]][0]
     column_list = get_site_column_query()
     layout = [[sg.Text(f'{column_list[i]}', size=(15, 1)),
                sg.Text(f'{site[i]}', justification='right')] for i in range(len(column_list))]
@@ -87,15 +86,22 @@ def display_site_expand_window():
                 sg.Button('Edit Site', size=(10, 1), key='-EDIT SITE-'),
                 sg.Button('Delete Site', size=(10, 1), key='-DELETE SITE-')]]
 
-    return sg.Window(f'Site ID: {site[0]}', layout, finalize=True), site_id
+    return sg.Window(f'Site ID: {site[0]}', layout, finalize=True)
 
 
 def display_flight_expand_window():
-    excluded_fields = ['_id']
+    excluded_fields = ['_id','crew_on_flight']
     flight_list = get_flight_query(excluded_fields)[values['-READ TABLE-'][0]]
     column_list = get_flight_column_query(excluded_fields)
+
+    crew_on_flight = get_flight_query()[values['-READ TABLE-'][0]][3]
+    print(crew_on_flight-)
+
+
     layout = [[sg.Text(f'{column_list[i]}', size=(15, 1)),
                sg.Text(f'{flight_list[i]}', justification='right')] for i in range(len(column_list))]
+    layout += [[sg.Combo(values=crew_on_flight)
+                ]]
     layout += [[sg.Button('Back', size=(10, 1), key='-BACK-'),
                 sg.Button('Add Crew To Flight', size=(10, 1), key='-ADD CREW-'),
                 sg.Button('Edit Flight', size=(10, 1), key='-EDIT FLIGHT-'),

@@ -2,7 +2,7 @@ from pymongo import MongoClient
 import urllib.parse
 import random
 import countries
-
+from connection import *
 
 me = urllib.parse.quote_plus('LarryDCJ')
 rd = urllib.parse.quote_plus('dismyside42')
