@@ -77,7 +77,7 @@ def display_crew_main_window():
 ##----------DETAIL WINDOWS------------##
 def display_site_expand_window():
     site = get_site_query()[values['-READ TABLE-'][0]]
-    global site_id
+    #global site_id
     site_id = get_site_query()[values['-READ TABLE-'][0]][0]
     column_list = get_site_column_query()
     layout = [[sg.Text(f'{column_list[i]}', size=(15, 1)),
@@ -87,14 +87,10 @@ def display_site_expand_window():
                 sg.Button('Edit Site', size=(10, 1), key='-EDIT SITE-'),
                 sg.Button('Delete Site', size=(10, 1), key='-DELETE SITE-')]]
 
-    return sg.Window(f'Site ID: {site[0]}', layout, finalize=True)
+    return sg.Window(f'Site ID: {site[0]}', layout, finalize=True), site_id
 
 
 def display_flight_expand_window():
-    global flight_number
-    flight_number = (get_flight_query()[values['-READ TABLE-'][0]][0])
-
-    # add database fields to exclude here #TODO convert to dropdown selector list
     excluded_fields = ['_id']
     flight_list = get_flight_query(excluded_fields)[values['-READ TABLE-'][0]]
     column_list = get_flight_column_query(excluded_fields)
@@ -111,7 +107,6 @@ def display_flight_expand_window():
 
 def display_crew_expand_window():
     crew = get_crew_query()[values['-READ TABLE-'][0]]
-    global employee_id
     employee_id = (get_crew_query()[values['-READ TABLE-'][0]][0])
     column_list = get_crew_column_query()
 
@@ -192,8 +187,6 @@ def display_crew_add_window():
 
 ##---------ADD CREW FLIGHTS TO FLIGHTS SITES-------##
 def display_flight_crew_add_window(flight_number):
-
-
     excluded_fields = ['_id', 'suffix']
     layout = [[
         sg.Table(values=get_crew_query(excluded_fields),
@@ -205,7 +198,7 @@ def display_flight_crew_add_window(flight_number):
                  enable_events=True,
                  bind_return_key=False,
                  key='-READ TABLE-'),
-        sg.Table(values=get_crew_from_flight(excluded_fields),
+        sg.Table(values=get_crew_from_flight(flight_number, excluded_fields),
                  headings=get_crew_column_query(excluded_fields),
                  auto_size_columns=True,
                  display_row_numbers=True,
@@ -214,9 +207,10 @@ def display_flight_crew_add_window(flight_number):
                  enable_events=True,
                  bind_return_key=False,
                  key='-READ TABLE2-')],
-        [sg.Submit(size=(7, 1), key='-SUBMIT-'),sg.Button('Remove', size=(7, 1), key='-REMOVE-'), sg.Button('Back', size=(7, 1), key='-BACK-')
+        [sg.Button('Submit', size=(7, 1), key='-SUBMIT-'),
+         sg.Button('Remove', size=(7, 1), key='-REMOVE-'),
+         sg.Button('Back'  , size=(7, 1), key='-BACK-')
          ]]
-
     return sg.Window('Populate Flight', layout, finalize=True)
 
 
@@ -250,7 +244,7 @@ crew_add_window = None
 # window loop
 while True:
     window, event, values = sg.read_all_windows()
-    print(event, values)
+
 
     # initial_window
     if window == initial_window:
@@ -275,7 +269,7 @@ while True:
             site_main_window.hide()
         elif event in ('-VIEW SITE-'):
             try:
-                site_expand_window = display_site_expand_window()
+                site_expand_window = display_site_expand_window()[0]
                 site_main_window.hide()
             except IndexError:
                 # TODO make popup
@@ -293,6 +287,7 @@ while True:
             flight_main_window.hide()
         elif event in ('-VIEW FLIGHT-'):
             try:
+                flight_number = get_flight_query()[values['-READ TABLE-'][0]][0]
                 flight_expand_window = display_flight_expand_window()
                 flight_main_window.hide()
             except IndexError:
@@ -322,6 +317,7 @@ while True:
 
     # site_expand
     if window == site_expand_window:
+        site_id = get_site_query()[values['-READ TABLE-'][0]][0]
         if event == sg.WIN_CLOSED:
             break
         elif event in ('-BACK-'):
@@ -332,7 +328,7 @@ while True:
             if answer == 'No':
                 answer.close()
             if answer == 'Yes':
-                delete_site(site_id=site_id)
+                delete_site(site_id)
                 site_expand_window.close()
                 site_main_window.close()
                 site_main_window = display_site_main_window()
@@ -356,6 +352,7 @@ while True:
                 answer.close()
             if answer == 'Yes':
                 delete_flight(flight_number)
+                del flight_number
                 flight_expand_window.close()
                 flight_main_window.close()
                 flight_main_window = display_flight_main_window()
@@ -378,7 +375,7 @@ while True:
             if answer == 'No':
                 answer.close()
             if answer == 'Yes':
-                delete_crew(employee_id=employee_id)
+                delete_crew(employee_id)
                 crew_expand_window.close()
                 crew_main_window.close()
                 crew_main_window = display_crew_main_window()
@@ -469,15 +466,15 @@ while True:
             flight_expand_window.un_hide()
             flight_crew_add_window.close()
         elif event in ('-REMOVE-'):
-            employee_id2 = (get_crew_query()[values['-READ TABLE2-'][0]][0])
-            flight_number = flight_number
+            employee_id2 = get_crew_from_flight(flight_number)[values['-READ TABLE2-'][0]]['employee_id']
             remove_crew_from_flight(flight_number, employee_id2)
+            del employee_id2
             flight_crew_add_window.close()
             flight_crew_add_window = display_flight_crew_add_window(flight_number)
         elif event in ('-SUBMIT-'):
-            employee_id = (get_crew_query()[values['-READ TABLE-'][0]][0])
-            flight_number = flight_number
+            employee_id = get_crew_query()[values['-READ TABLE-'][0]][0]
             add_crew_to_flight(flight_number, employee_id)
+            del employee_id
             flight_crew_add_window.close()
             flight_crew_add_window = display_flight_crew_add_window(flight_number)
 

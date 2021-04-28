@@ -13,7 +13,6 @@ db = client.metrics_tracker
 crews = db.crews
 
 
-# get crew member list from database
 def get_crew_query(excluded_fields=None):
     if excluded_fields is None:
         crew_list = [list(crew.values()) for crew in crews.find()]
@@ -22,8 +21,6 @@ def get_crew_query(excluded_fields=None):
         crew_list = [list(crew.values()) for crew in crews.find({}, excluded_fields_pass)]
     return crew_list
 
-
-# get crew member columns from db
 def get_crew_column_query(excluded_fields=None):
     if excluded_fields is None:
         column_list = [key.title().replace('_', ' ') for key in crews.find_one()]
@@ -32,14 +29,10 @@ def get_crew_column_query(excluded_fields=None):
         column_list = [key.title().replace('_', ' ') for key in crews.find_one({}, excluded_fields_pass)]
     return column_list
 
-
-# find crew via user string
 def find_crew(user_input):
     result = db.crews.find({'crew_position': f'{user_input}'})
     return result
 
-
-# edit existing crew profile
 def edit_crew_member():
     # get crew info
     # present crew info
@@ -47,8 +40,6 @@ def edit_crew_member():
     # mongo update method
     pass
 
-
-# add crew member based on user input
 def add_crew_members(value):
     crew_member_info = {
         '_id': value[4],
@@ -64,14 +55,10 @@ def add_crew_members(value):
     except:
         print('try again')
 
-
-# delete member
 def delete_crew(employee_id):
-    employee_id = {'_id': employee_id}
+    employee_id = {'employee_id': employee_id}
     crews.delete_one(employee_id)
 
-
-# generate random crew_member when you add a new one
 def gen_random_crew():
     gender = random.choice(['male', 'female'])
     first_name = names.get_first_name(gender=gender)

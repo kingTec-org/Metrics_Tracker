@@ -13,7 +13,6 @@ client = MongoClient("mongodb+srv://%s:%s@cluster0.nhqsm.mongodb.net/metrics_tra
 db = client.metrics_tracker
 sites = db.sites
 
-# get entire site list from database
 def get_site_query(excluded_fields=None):
     if excluded_fields is None:
         site_list = [list(site.values()) for site in sites.find()]
@@ -22,7 +21,6 @@ def get_site_query(excluded_fields=None):
         site_list = [list(site.values()) for site in sites.find({}, excluded_fields_pass)]
     return site_list
 
-# get site columns from db
 def get_site_column_query(excluded_fields=None):
     if excluded_fields is None:
         column_list = [key.title().replace('_', ' ') for key in sites.find_one()]
@@ -31,17 +29,6 @@ def get_site_column_query(excluded_fields=None):
         column_list = [key.title().replace('_', ' ') for key in sites.find_one({}, excluded_fields_pass)]
     return column_list
 
-
-# find site via user string
-def find_site(user_input):
-    result = db.site.find({'site_id': f'{user_input}'})
-    return result
-
-
-# #-----!!CRUD FUNCTIONS!!-----# #
-
-
-# edit existing site profile
 def edit_site():
     # get site info
     # present site info
@@ -49,8 +36,6 @@ def edit_site():
     # mongo update method
     pass
 
-
-# add site based on user input
 def add_site(value):
     site_info = {
         '_id': value[0],
@@ -66,12 +51,9 @@ def add_site(value):
     except:
         print('try again')
 
-
-# delete site
 def delete_site(site_id):
     site_id = {'_id': site_id}
     sites.delete_one(site_id)
-
 
 def gen_random_site():
     try:
