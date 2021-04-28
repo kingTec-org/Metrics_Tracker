@@ -95,7 +95,7 @@ def display_flight_expand_window():
     column_list = get_flight_column_query(excluded_fields)
 
     crew_on_flight = get_flight_query()[values['-READ TABLE-'][0]][3]
-    print(crew_on_flight-)
+    print(crew_on_flight)
 
 
     layout = [[sg.Text(f'{column_list[i]}', size=(15, 1)),
