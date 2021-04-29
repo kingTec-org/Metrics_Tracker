@@ -1,7 +1,7 @@
 import random
 
 import countries
-from connection import *
+from upconn import *
 
 db = client.metrics_tracker
 sites = db.sites

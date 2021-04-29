@@ -1,5 +1,6 @@
 import PySimpleGUI as sg
 
+from crew_funcs import *
 from flight_funcs import *
 from site_funcs import *
 
@@ -201,6 +202,14 @@ def display_crew_add_window():
 
 
 ##---------ADD CREW FLIGHTS TO FLIGHTS SITES-------##
+def display_site_flight_add_window():
+    layout = [
+        [sg.Table(values=['Test3', 'Test4'], headings=['Test Column2']),
+         sg.Submit(size=(7, 1), key='-SUBMIT-'), sg.Button('Back', size=(7, 1), key='-BACK-')]]
+
+    return sg.Window('Populate Site', layout, finalize=True)
+
+
 def display_flight_crew_add_window(flight_number):
     excluded_fields = ['_id', 'suffix']
     layout = [[
@@ -228,13 +237,8 @@ def display_flight_crew_add_window(flight_number):
          ]]
     return sg.Window('Populate Flight', layout, finalize=True)
 
-
-def display_site_flight_add_window():
-    layout = [
-        [sg.Table(values=['Test3', 'Test4'], headings=['Test Column2']),
-         sg.Submit(size=(7, 1), key='-SUBMIT-'), sg.Button('Back', size=(7, 1), key='-BACK-')]]
-
-    return sg.Window('Populate Site', layout, finalize=True)
+def crew_currency_add_window():
+    pass
 
 
 initial_window = display_initial_window()

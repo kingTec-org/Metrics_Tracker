@@ -1,4 +1,5 @@
 from crew_funcs import *
+from upconn import *
 
 db = client.metrics_tracker
 flights = db.flights
