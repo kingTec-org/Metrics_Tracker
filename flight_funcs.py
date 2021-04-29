@@ -1,11 +1,7 @@
-from pymongo import MongoClient
-import random
 from crew_funcs import *
-from connection import *
 
 db = client.metrics_tracker
 flights = db.flights
-
 
 def gen_random_flight():
     takeoff = random.randint(0, 24)
@@ -80,6 +76,7 @@ def delete_flight(flight_number):
 
 
 def add_crew_to_flight(flight_number, employee_id):
+
     flights.update({'flight_number': flight_number}, {'$push': {'crew_on_flight': employee_id}})
 
 
@@ -97,7 +94,7 @@ def get_crew_from_flight(flight_number, excluded_fields=None):
                      in employee_ids]
 
     if not crew_list:
-        crew_list = [['nil', 'nil', 'nil', 'nil', 'nil', 'nil']]
+        crew_list = [['' for row in range(1) for col in range(6)]]
     else:
         pass
 

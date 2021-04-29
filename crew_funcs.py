@@ -1,13 +1,11 @@
-from pymongo import MongoClient
-import urllib.parse
 import random
-import names
-from connection import *
 
+import names
+
+from connection import *
 
 db = client.metrics_tracker
 crews = db.crews
-
 
 def get_crew_query(excluded_fields=None):
     if excluded_fields is None:

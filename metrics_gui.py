@@ -1,8 +1,7 @@
 import PySimpleGUI as sg
-from site_funcs import *
-from crew_funcs import *
+
 from flight_funcs import *
-from connection import *
+from site_funcs import *
 
 sg.theme('DefaultNoMoreNagging')
 
@@ -97,11 +96,21 @@ def display_flight_expand_window():
     crew_on_flight = get_flight_query()[values['-READ TABLE-'][0]][3]
     print(crew_on_flight)
 
+    layout = [[[sg.Text(f'{column_list[i]}', size=(15, 1)),
+               sg.Text(f'{flight_list[i]}', justification='right')] for i in range(len(column_list))]]
 
-    layout = [[sg.Text(f'{column_list[i]}', size=(15, 1)),
-               sg.Text(f'{flight_list[i]}', justification='right')] for i in range(len(column_list))]
-    layout += [[sg.Combo(values=crew_on_flight)
-                ]]
+    layout += [[sg.Text('Crew Something')]]
+
+    layout += [[sg.Table(values=get_crew_from_flight(flight_number, excluded_fields),
+                         headings=get_crew_column_query(excluded_fields),
+                         auto_size_columns=True,
+                         display_row_numbers=True,
+                         justification="left",
+                         alternating_row_color='LightGray',
+                         enable_events=True,
+                         bind_return_key=False,
+                         key='-READ TABLE2-')]]
+
     layout += [[sg.Button('Back', size=(10, 1), key='-BACK-'),
                 sg.Button('Add Crew To Flight', size=(10, 1), key='-ADD CREW-'),
                 sg.Button('Edit Flight', size=(10, 1), key='-EDIT FLIGHT-'),
@@ -355,7 +364,7 @@ while True:
         elif event in ('-DELETE FLIGHT-'):
             answer = sg.PopupYesNo(f'Are you sure you want to delete {flight_number}?')
             if answer == 'No':
-                answer.close()
+                answer.close
             if answer == 'Yes':
                 delete_flight(flight_number)
                 del flight_number
@@ -366,7 +375,8 @@ while True:
             flight_expand_window.hide()
             flight_edit_window = display_flight_edit_window()
         elif event in ('-ADD CREW-'):
-            flight_expand_window.hide()
+            flight_expand_window.close()
+            #flight_expand_window.hide()
             flight_crew_add_window = display_flight_crew_add_window(flight_number)
 
     # crew_expand
@@ -487,8 +497,4 @@ while True:
 # end of program
 window.close()
 
-# TODO add engineering photo view for mx uploads
-# TODO Change close to unhides to keep window persistent but refresh when needed, change 'x window' to break the loop...back is back, not x
-# TODO dynamically building of site+crew db, based on specific site doc in site collection
-# TODO feed the Mongo tabular data to a real time DL model
-# TODO web framework
+# TODO add flights to sites
