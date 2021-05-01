@@ -6,7 +6,7 @@ from site_funcs import *
 sg.theme('DefaultNoMoreNagging')
 
 
-##-----------INITIAL WINDOW------------##
+# -----------INITIAL WINDOW------------
 def display_initial_window():
     layout = [
         [sg.Button('Sites', size=(10, 1), key='-VIEW SITE WINDOW-'),
@@ -17,7 +17,7 @@ def display_initial_window():
     return sg.Window('Metrics', layout, finalize=True)
 
 
-##-----------MAIN VIEW WINDOWS---------##
+# -----------MAIN VIEW WINDOWS---------
 def display_site_main_window():
     excluded_fields = ['_id']
     layout = [[sg.Button('View Site', size=(10, 1), key='-VIEW SITE-'),
@@ -74,7 +74,7 @@ def display_crew_main_window():
     return sg.Window('Aircrew', layout, finalize=True)
 
 
-##----------DETAIL WINDOWS------------##
+# ----------DETAIL WINDOWS------------
 def display_site_expand_window():
     site = get_site_query()[values['-READ TABLE-'][0]]
     column_list = get_site_column_query()
@@ -139,7 +139,7 @@ def display_crew_expand_window():
     return sg.Window(f'{crew[0]}', layout, finalize=True)
 
 
-##------------EDIT WINDOWS-------------##
+# ------------EDIT WINDOWS-------------
 def display_site_edit_window():
     layout = [
         [sg.Button('Back', size=(10, 1), key='-BACK-')]]
@@ -157,8 +157,7 @@ def display_crew_edit_window():
         [sg.Button('Back', size=(10, 1), key='-BACK-')]]
     return sg.Window('Edit Crew', layout, finalize=True)
 
-
-##------------ADD NEW--------------##
+# ------------ADD NEW--------------
 def display_site_add_window():
     random_site = gen_random_site()
     layout = [
@@ -202,8 +201,7 @@ def display_crew_add_window():
 
     return sg.Window('Add Crew', layout, finalize=True)
 
-
-##---------ADD TO-------##
+# -------- ADD TO-------
 def display_site_flight_add_window():
     layout = [
         [sg.Table(values=['Test3', 'Test4'], headings=['Test Column2']),
