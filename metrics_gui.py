@@ -1,6 +1,5 @@
 import PySimpleGUI as sg
 
-from crew_funcs import *
 from flight_funcs import *
 from site_funcs import *
 
@@ -97,10 +96,13 @@ def display_flight_expand_window():
     crew_on_flight = get_flight_query()[values['-READ TABLE-'][0]][3]
     print(crew_on_flight)
 
-    layout = [[[sg.Text(f'{column_list[i]}', size=(15, 1)),
-               sg.Text(f'{flight_list[i]}', justification='right')] for i in range(len(column_list))]]
+    #layout = [[sg.Text(f'{column_list[i]}', size=(15, 1)), sg.Text(f'{flight_list[i]}', justification='right')] for i in range(len(column_list))]
 
-    layout += [[sg.Text('Crew Something')]]
+    layout = [[sg.Text(f'{column_list[0]}'), sg.Text(f'{flight_list[0]}')],
+              [sg.Text(f'{column_list[1]}'), sg.Text(f'{flight_list[1]}')]
+              ]
+
+    layout += [[sg.Text('Crew Something'), sg.Button('Add Crew', size=(10, 1), key='-ADD CREW-')]]
 
     layout += [[sg.Table(values=get_crew_from_flight(flight_number, excluded_fields),
                          headings=get_crew_column_query(excluded_fields),
@@ -110,14 +112,14 @@ def display_flight_expand_window():
                          alternating_row_color='LightGray',
                          enable_events=True,
                          bind_return_key=False,
-                         key='-READ TABLE2-')]]
+                         key='-READ TABLE2-'),
+                sg.Button('Remove Crew', size=(10, 1), key='-REMOVE CREW-'),
+                ]]
 
     layout += [[sg.Button('Back', size=(10, 1), key='-BACK-'),
-                sg.Button('Add Crew To Flight', size=(10, 1), key='-ADD CREW-'),
                 sg.Button('Edit Flight', size=(10, 1), key='-EDIT FLIGHT-'),
                 sg.Button('Delete Flight', size=(10, 1), key='-DELETE FLIGHT-')
                 ]]
-
     return sg.Window(f'Flight Number: {flight_list[1]} - {flight_list[0]}', layout, finalize=True)
 
 
@@ -156,7 +158,7 @@ def display_crew_edit_window():
     return sg.Window('Edit Crew', layout, finalize=True)
 
 
-##------------ADD WINDOWS--------------##
+##------------ADD NEW--------------##
 def display_site_add_window():
     random_site = gen_random_site()
     layout = [
@@ -201,7 +203,7 @@ def display_crew_add_window():
     return sg.Window('Add Crew', layout, finalize=True)
 
 
-##---------ADD CREW FLIGHTS TO FLIGHTS SITES-------##
+##---------ADD TO-------##
 def display_site_flight_add_window():
     layout = [
         [sg.Table(values=['Test3', 'Test4'], headings=['Test Column2']),
@@ -233,11 +235,12 @@ def display_flight_crew_add_window(flight_number):
                  key='-READ TABLE2-')],
         [sg.Button('Submit', size=(7, 1), key='-SUBMIT-'),
          sg.Button('Remove', size=(7, 1), key='-REMOVE-'),
-         sg.Button('Back'  , size=(7, 1), key='-BACK-')
+         sg.Button('Back', size=(7, 1), key='-BACK-')
          ]]
     return sg.Window('Populate Flight', layout, finalize=True)
 
-def crew_currency_add_window():
+
+def display_crew_currency_add_window():
     pass
 
 
@@ -379,8 +382,7 @@ while True:
             flight_expand_window.hide()
             flight_edit_window = display_flight_edit_window()
         elif event in ('-ADD CREW-'):
-            flight_expand_window.close()
-            #flight_expand_window.hide()
+            flight_expand_window.hide()
             flight_crew_add_window = display_flight_crew_add_window(flight_number)
 
     # crew_expand
