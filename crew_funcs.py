@@ -7,24 +7,16 @@ from upconn import *
 db = client.metrics_tracker
 crews = db.crews
 
-def get_crew_query(excluded_fields=None):
-    if excluded_fields is None:
-        crew_list = [list(crew.values()) for crew in crews.find()]
-    else:
-        excluded_fields_pass = dict.fromkeys(excluded_fields, False)
-        crew_list = [list(crew.values()) for crew in crews.find({}, excluded_fields_pass)]
+def get_crew_query():
+    crew_list = [list(crew.values()) for crew in crews.find()]
     return crew_list
 
-def get_crew_column_query(excluded_fields=None):
-    if excluded_fields is None:
-        column_list = [key.title().replace('_', ' ') for key in crews.find_one()]
-    else:
-        excluded_fields_pass = dict.fromkeys(excluded_fields, False)
-        column_list = [key.title().replace('_', ' ') for key in crews.find_one({}, excluded_fields_pass)]
+def get_crew_column_query():
+    column_list = [key.title().replace('_', ' ') for key in crews.find_one()]
     return column_list
 
-def find_crew(user_input):
-    result = db.crews.find({'crew_position': f'{user_input}'})
+def find_crew(_id):
+    result = db.crews.find({'_id': f'{_id}'})
     return result
 
 def edit_crew_member():
@@ -46,12 +38,13 @@ def add_crew_members(value):
     }
     try:
         crews.insert_one(crew_member_info)
-    except:
+    except IndexError:
         print('try again')
 
-def delete_crew(employee_id):
-    employee_id = {'employee_id': employee_id}
-    crews.delete_one(employee_id)
+def delete_crew(_id):
+    result = {'_id': _id}
+    del_crew = crews.delete_one(result)
+    return del_crew
 
 def gen_random_crew():
     gender = random.choice(['male', 'female'])
@@ -61,7 +54,7 @@ def gen_random_crew():
 
     try:
         employee_id = random.randint(13370001, 13380000)
-    except:
+    except IndexError:
         employee_id = random.randint(13370001, 13380000)
 
     crew_position = random.choices(['SO', 'P', 'ESO', 'EP'], weights=(45, 40, 10, 5), k=1)[0]
