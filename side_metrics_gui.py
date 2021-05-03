@@ -5,11 +5,10 @@ from PySide6 import QtCore, QtGui
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import \
     QMainWindow, QVBoxLayout, \
-    QHBoxLayout, QApplication, \
+    QApplication, \
     QWidget, QPushButton, \
     QTableView, QGridLayout
 
-from crew_funcs import *
 from flight_funcs import *
 from site_funcs import *
 
@@ -31,24 +30,25 @@ class crew_expand_window(QWidget):
         self.setGeometry(400, 200, 700, 450)
         self.setWindowTitle('Personnel Information')
 
-        excluded_fields = '_id'
-        crew_headers = get_crew_column_query(excluded_fields)
-        crew_data = get_crew_query(excluded_fields)
-        crew_table = TableModel(self, crew_data, crew_headers)
-
-        table_view = QTableView()
-        table_view.setModel(crew_table)
-        font = QtGui.QFont("Courier New", 14)
-        table_view.setFont(font)
-        table_view.resizeColumnsToContents()
-        table_view.setSortingEnabled(True)
-
         back_button = QPushButton('Back')
-        back_button.clicked.connect(lambda checked: self.display_main_window(main_window))
+        back_button.clicked.connect(lambda: self.display_crew_main_window(main_window.crew_main_window))
 
-        grid.addWidget(back_button, 2, 0)
+        print_button = QPushButton('Print')
+        print_button.clicked.connect(self.crew_expand_label)
+
+        grid.addWidget(back_button, 0, 0)
+        grid.addWidget(print_button, 1, 0)
 
         self.setLayout(grid)
+
+    @Slot()
+    def crew_expand_label(self):
+        print()
+
+    @Slot()
+    def display_crew_main_window(self, window):
+        window.show()
+        self.hide()
 
 
 # --------------------------------
@@ -162,6 +162,8 @@ class flight_main_window(QWidget):
 class crew_main_window(QWidget):
     def __init__(self):
         QWidget.__init__(self)
+        self.crew_expand_window = crew_expand_window()
+        self.crew_add_window = crew_add_window()
 
         grid = QGridLayout()
         grid.setSpacing(10)
@@ -172,34 +174,36 @@ class crew_main_window(QWidget):
         crew_data = get_crew_query()
         crew_table = TableModel(self, crew_data, crew_headers)
 
-        font = QtGui.QFont("Courier New", 14)
         table_view = QTableView()
         table_view.setSelectionBehavior(table_view.SelectRows)
         table_view.setSelectionMode(table_view.ContiguousSelection)
+        font = QtGui.QFont("Courier New", 14)
         table_view.setFont(font)
         table_view.setModel(crew_table)
         table_view.resizeColumnsToContents()
         table_view.setSortingEnabled(True)
         table_view.hideColumn(0)
         table_view.hideColumn(3)
+        table_view.adjustSize()
 
         view_crew_button = QPushButton('View Crew')
-        view_crew_button.clicked.connect(lambda checked: self.display_crew_expand_window(crew_expand_window))
+        view_crew_button.clicked.connect(lambda: self.display_crew_expand_window(self.crew_expand_window))
+
 
         add_crew_button = QPushButton('Add Crew')
-        add_crew_button.clicked.connect(lambda checked: self.display_crew_add_window(crew_add_window))
+        add_crew_button.clicked.connect(lambda: self.display_crew_add_window(self.crew_add_window))
 
         back_button = QPushButton('Back')
-        back_button.clicked.connect(lambda checked: self.display_main_window(main_window))
+        back_button.clicked.connect(lambda: self.display_main_window(main_window))
 
         test_button = QPushButton('Test')
-        test_button.clicked.connect(lambda checked: print(crew_table.crew_data[table_view.currentIndex().row()]))
+        test_button.clicked.connect(lambda: print(crew_table.crew_data[table_view.currentIndex().row()]))
+        grid.addWidget(test_button, 4, 1, 1, 2)
 
         grid.addWidget(view_crew_button, 1, 1, 1, 1)
         grid.addWidget(add_crew_button, 1, 2, 1, 1)
         grid.addWidget(table_view, 2, 1, 1, 2)
         grid.addWidget(back_button, 3, 1, 1, 2)
-        grid.addWidget(test_button, 4, 1, 1, 2)
 
         self.setLayout(grid)
 
@@ -260,39 +264,45 @@ class InitialWindow(QMainWindow):
         self.flight_main_window = flight_main_window()
         self.crew_main_window = crew_main_window()
 
-        layout = QHBoxLayout()
+        grid = QGridLayout()
+        grid.setSpacing(10)
+        self.setWindowTitle('Metrics Tracker')
 
         main_site_button = QPushButton('Sites')
-        main_site_button.clicked.connect(lambda checked: self.display_site_main_window(self.site_main_window))
-        layout.addWidget(main_site_button)
+        main_site_button.clicked.connect(lambda: self.display_site_main_window(self.site_main_window))
 
         main_flight_button = QPushButton('Flights')
-        main_flight_button.clicked.connect(lambda checked: self.display_flight_main_window(self.flight_main_window))
-        layout.addWidget(main_flight_button)
+        main_flight_button.clicked.connect(lambda: self.display_flight_main_window(self.flight_main_window))
 
         main_crew_button = QPushButton('Crews')
-        main_crew_button.clicked.connect(lambda checked: self.display_crew_main_window(self.crew_main_window))
-        layout.addWidget(main_crew_button)
+        main_crew_button.clicked.connect(lambda: self.display_crew_main_window(self.crew_main_window))
 
-        button4 = QPushButton('Quit')
-        layout.addWidget(button4)
+        quit_button = QPushButton('Quit')
+
+        grid.addWidget(main_site_button, 1, 1)
+        grid.addWidget(main_flight_button, 1, 2)
+        grid.addWidget(main_crew_button, 1, 3)
+        grid.addWidget(quit_button, 2, 1, 1, 3)
 
         main_frame = QWidget()
-        main_frame.setLayout(layout)
+
+        main_frame.setLayout(grid)
         self.setCentralWidget(main_frame)
 
-    # display_anything gets defined in the class that class it
+    @Slot()
     def display_site_main_window(self, window):
         window.show()
-        main_window.hide()
+        self.hide()
 
+    @Slot()
     def display_flight_main_window(self, window):
         window.show()
-        main_window.hide()
+        self.hide()
 
+    @Slot()
     def display_crew_main_window(self, window):
         window.show()
-        main_window.hide()
+        self.hide()
 
 
 if __name__ == '__main__':
