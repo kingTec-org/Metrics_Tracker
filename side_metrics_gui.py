@@ -23,18 +23,18 @@ class flight_expand_window(QWidget):
 
 
 class crew_expand_window(QWidget):
-    def __init__(self):
+    def __init__(self, crew_member=None):
         QWidget.__init__(self)
+        self.crew_member = crew_member
 
         grid = QGridLayout()
-        self.setGeometry(400, 200, 700, 450)
         self.setWindowTitle('Personnel Information')
 
         back_button = QPushButton('Back')
         back_button.clicked.connect(lambda: self.display_crew_main_window(main_window.crew_main_window))
 
         print_button = QPushButton('Print')
-        print_button.clicked.connect(self.crew_expand_label)
+        print_button.clicked.connect(lambda: print(self.crew_member))
 
         grid.addWidget(back_button, 0, 0)
         grid.addWidget(print_button, 1, 0)
@@ -43,7 +43,7 @@ class crew_expand_window(QWidget):
 
     @Slot()
     def crew_expand_label(self):
-        print()
+        pass
 
     @Slot()
     def display_crew_main_window(self, window):
@@ -162,7 +162,6 @@ class flight_main_window(QWidget):
 class crew_main_window(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.crew_expand_window = crew_expand_window()
         self.crew_add_window = crew_add_window()
 
         grid = QGridLayout()
@@ -185,10 +184,23 @@ class crew_main_window(QWidget):
         table_view.hideColumn(0)
         table_view.hideColumn(3)
         table_view.adjustSize()
+        table_view.sizeAdjustPolicy()
+
+
+        #
+        #
+        #
+        #
+        #
+        # issue is that idx is running when the instance is created, being assinged -1 and passing that to the expand window instead of actual idx
+        self.idx = table_view.currentIndex().row()
+        self.crew = crew_table.crew_data[self.idx]
+
+        self.crew_expand_window = crew_expand_window(self.crew)
 
         view_crew_button = QPushButton('View Crew')
+        view_crew_button.clicked.connect(lambda: print(self.idx))
         view_crew_button.clicked.connect(lambda: self.display_crew_expand_window(self.crew_expand_window))
-
 
         add_crew_button = QPushButton('Add Crew')
         add_crew_button.clicked.connect(lambda: self.display_crew_add_window(self.crew_add_window))
@@ -198,6 +210,7 @@ class crew_main_window(QWidget):
 
         test_button = QPushButton('Test')
         test_button.clicked.connect(lambda: print(crew_table.crew_data[table_view.currentIndex().row()]))
+
         grid.addWidget(test_button, 4, 1, 1, 2)
 
         grid.addWidget(view_crew_button, 1, 1, 1, 1)
