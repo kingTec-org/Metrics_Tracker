@@ -59,8 +59,8 @@ def display_crew_main_window():
     excluded_fields = ['_id', 'suffix']
     layout = [[sg.Button('View Crew', size=(10, 1), key='-VIEW CREW-'),
                sg.Button('Add Crew', size=(10, 1), key='-ADD CREW-')],
-              [sg.Table(values=get_crew_query(excluded_fields),
-                        headings=get_crew_column_query(excluded_fields),
+              [sg.Table(values=get_crew_query(),
+                        headings=get_crew_column_query(),
                         auto_size_columns=True,
                         display_row_numbers=True,
                         justification="left",

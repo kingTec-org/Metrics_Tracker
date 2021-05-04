@@ -2,7 +2,7 @@ import operator
 import sys
 
 from PySide6 import QtCore, QtGui
-from PySide6.QtCore import Slot
+from PySide6.QtCore import Slot, Signal
 from PySide6.QtWidgets import \
     QMainWindow, QVBoxLayout, \
     QApplication, \
@@ -23,27 +23,25 @@ class flight_expand_window(QWidget):
 
 
 class crew_expand_window(QWidget):
-    def __init__(self, crew_member=None):
+    def __init__(self):
         QWidget.__init__(self)
-        self.crew_member = crew_member
 
         grid = QGridLayout()
         self.setWindowTitle('Personnel Information')
+
 
         back_button = QPushButton('Back')
         back_button.clicked.connect(lambda: self.display_crew_main_window(main_window.crew_main_window))
 
         print_button = QPushButton('Print')
-        print_button.clicked.connect(lambda: print(self.crew_member))
+        print_button.clicked.connect(lambda: print(main_window.crew_main_window.crew_table.crew_data
+                                                   [main_window.crew_main_window.table_view.currentIndex().row()]
+                                                   ))
 
         grid.addWidget(back_button, 0, 0)
         grid.addWidget(print_button, 1, 0)
 
         self.setLayout(grid)
-
-    @Slot()
-    def crew_expand_label(self):
-        pass
 
     @Slot()
     def display_crew_main_window(self, window):
@@ -160,9 +158,12 @@ class flight_main_window(QWidget):
 
 
 class crew_main_window(QWidget):
+    send_crew = Signal(list)
+
     def __init__(self):
         QWidget.__init__(self)
         self.crew_add_window = crew_add_window()
+        self.crew_expand_window = crew_expand_window()
 
         grid = QGridLayout()
         grid.setSpacing(10)
@@ -171,35 +172,24 @@ class crew_main_window(QWidget):
 
         crew_headers = get_crew_column_query()
         crew_data = get_crew_query()
-        crew_table = TableModel(self, crew_data, crew_headers)
+        self.crew_table = TableModel(self, crew_data, crew_headers)
 
-        table_view = QTableView()
-        table_view.setSelectionBehavior(table_view.SelectRows)
-        table_view.setSelectionMode(table_view.ContiguousSelection)
+        self.table_view = QTableView()
+        self.table_view = QTableView()
+        self.table_view = QTableView()
+        self.table_view.setSelectionBehavior(self.table_view.SelectRows)
+        self.table_view.setSelectionMode(self.table_view.ContiguousSelection)
         font = QtGui.QFont("Courier New", 14)
-        table_view.setFont(font)
-        table_view.setModel(crew_table)
-        table_view.resizeColumnsToContents()
-        table_view.setSortingEnabled(True)
-        table_view.hideColumn(0)
-        table_view.hideColumn(3)
-        table_view.adjustSize()
-        table_view.sizeAdjustPolicy()
-
-
-        #
-        #
-        #
-        #
-        #
-        # issue is that idx is running when the instance is created, being assinged -1 and passing that to the expand window instead of actual idx
-        self.idx = table_view.currentIndex().row()
-        self.crew = crew_table.crew_data[self.idx]
-
-        self.crew_expand_window = crew_expand_window(self.crew)
+        self.table_view.setFont(font)
+        self.table_view.setModel(self.crew_table)
+        self.table_view.resizeColumnsToContents()
+        self.table_view.setSortingEnabled(True)
+        self.table_view.hideColumn(0)
+        self.table_view.hideColumn(3)
+        self.table_view.adjustSize()
+        self.table_view.sizeAdjustPolicy()
 
         view_crew_button = QPushButton('View Crew')
-        view_crew_button.clicked.connect(lambda: print(self.idx))
         view_crew_button.clicked.connect(lambda: self.display_crew_expand_window(self.crew_expand_window))
 
         add_crew_button = QPushButton('Add Crew')
@@ -209,16 +199,21 @@ class crew_main_window(QWidget):
         back_button.clicked.connect(lambda: self.display_main_window(main_window))
 
         test_button = QPushButton('Test')
-        test_button.clicked.connect(lambda: print(crew_table.crew_data[table_view.currentIndex().row()]))
+        test_button.clicked.connect(lambda: print(self.crew_table.crew_data[self.table_view.currentIndex().row()]))
 
         grid.addWidget(test_button, 4, 1, 1, 2)
 
         grid.addWidget(view_crew_button, 1, 1, 1, 1)
         grid.addWidget(add_crew_button, 1, 2, 1, 1)
-        grid.addWidget(table_view, 2, 1, 1, 2)
+        grid.addWidget(self.table_view, 2, 1, 1, 2)
         grid.addWidget(back_button, 3, 1, 1, 2)
 
         self.setLayout(grid)
+
+    @staticmethod
+    def send_crew(self):
+        idx = self.table_view.currentIndex().row()
+        return idx
 
     @Slot()
     def display_main_window(self, window):
