@@ -6,9 +6,8 @@ from PySide6.QtCore import Slot
 from PySide6.QtWidgets import \
     QMainWindow, QApplication, \
     QWidget, QPushButton, \
-    QTableView, QGridLayout, QLabel
+    QTableView, QGridLayout, QLabel, QFormLayout, QLineEdit
 
-from crew_funcs import *
 from flight_funcs import *
 from site_funcs import *
 
@@ -52,7 +51,7 @@ class flight_expand_window(QWidget):
         QWidget.__init__(self)
         grid = QGridLayout()
         grid.setSpacing(12)
-        self.setGeometry(400, 200, 700, 450)
+        #self.setGeometry(400, 200, 700, 450)
 
         id_label = QLabel(f'Flight Number: {flight[0]}')
         crew_added = QLabel(f'Aircraft Type: {flight[2]}')
@@ -74,12 +73,13 @@ class flight_expand_window(QWidget):
         self.table_view.setSortingEnabled(True)
         self.table_view.hideColumn(0)
         self.table_view.hideColumn(3)
+        self.table_view.sizeAdjustPolicy().AdjustToContents
 
         back_button = QPushButton('Back')
         back_button.clicked.connect(lambda: self.display_flight_main_window(main_window.flight_main_window))
 
         grid.addWidget(id_label, 0, 0, 1, 1)
-        grid.addWidget(self.table_view, 0, 1, 1, 5)
+        grid.addWidget(self.table_view, 0, 1, 5, 5)
         grid.addWidget(take_off, 1, 0, 1, 1)
         grid.addWidget(land, 2, 0, 1, 1)
         grid.addWidget(pilot_in_command, 3, 0, 1, 1)
@@ -160,7 +160,36 @@ class flight_add_window(QWidget):
 
 
 class crew_add_window(QWidget):
-    pass
+    def __init__(self):
+        QWidget.__init__(self)
+        #success popup
+
+        grid = QGridLayout()
+
+        crew_value1 = QLineEdit()
+        self.crew_add_form = QFormLayout()
+        self.crew_add_form.addRow(QLabel('Test', crew_value1))
+
+        back_button = QPushButton('Back')
+        back_button.clicked.connect(lambda: self.display_crew_main_window(main_window.crew_main_window))
+
+        submit_button = QPushButton('Submit')
+        submit_button.clicked.connect(lambda: self.add_crew())
+
+        grid.addWidget(self.crew_add_form, 1, 0, 0, 0)
+        grid.addWidget(back_button, 2, 0, 0, 0)
+        grid.addWidget(submit_button, 2, 1, 0, 0)
+
+        self.setWindowTitle('Add New Crewmember')
+        self.setLayout(grid)
+
+    def add_crew(self):
+        pass
+
+    def display_crew_main_window(self, window):
+        window.show()
+        self.close()
+
 
 
 # --------------------------------
@@ -293,7 +322,6 @@ class flight_main_window(QWidget):
 class crew_main_window(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.crew_add_window = crew_add_window()
 
         grid = QGridLayout()
         grid.setSpacing(12)
@@ -319,7 +347,7 @@ class crew_main_window(QWidget):
         view_crew_button.clicked.connect(lambda: self.display_crew_expand_window())
 
         add_crew_button = QPushButton('Add Crew')
-        add_crew_button.clicked.connect(lambda: self.display_crew_add_window(self.crew_add_window))
+        add_crew_button.clicked.connect(lambda: self.display_crew_add_window())
 
         back_button = QPushButton('Back')
         back_button.clicked.connect(lambda: self.display_main_window(main_window))
@@ -348,8 +376,9 @@ class crew_main_window(QWidget):
         self.hide()
 
     @Slot()
-    def display_crew_add_window(self, window):
-        window.show()
+    def display_crew_add_window(self):
+        self.crew_add_window = crew_add_window()
+        crew_add_window.show()
         self.hide()
 
 
