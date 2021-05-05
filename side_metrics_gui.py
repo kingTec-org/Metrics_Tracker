@@ -2,12 +2,11 @@ import operator
 import sys
 
 from PySide6 import QtCore, QtGui
-from PySide6.QtCore import Slot, Signal
+from PySide6.QtCore import Slot
 from PySide6.QtWidgets import \
-    QMainWindow, QVBoxLayout, \
-    QApplication, \
+    QMainWindow, QApplication, \
     QWidget, QPushButton, \
-    QTableView, QGridLayout
+    QTableView, QGridLayout, QLabel
 
 from flight_funcs import *
 from site_funcs import *
@@ -15,38 +14,94 @@ from site_funcs import *
 
 # --------------------------------
 class site_expand_window(QWidget):
-    pass
+    def __init__(self, site):
+        QWidget.__init__(self)
+        grid = QGridLayout()
+
+        back_button = QPushButton('Back')
+        back_button.clicked.connect(lambda: self.display_site_main_window(main_window.site_main_window))
+
+        id_label = QLabel(f'Site: {site[0]}')
+        num_ac = QLabel(f'Number of Aircraft: {site[4]} ')
+        crew_assigned = QLabel(f'Crew Assigned: {site[5]}')
+        country = QLabel(f'Country: {site[2]}')
+        aircraft_type = QLabel(f'Aircraft Type: {site[3]}')
+        crew_required = QLabel(f'Crew Required: {site[6]}')
+
+        grid.addWidget(id_label, 0, 0)
+        grid.addWidget(country, 1, 0)
+        grid.addWidget(num_ac, 2, 0)
+        grid.addWidget(crew_assigned, 3, 0)
+        grid.addWidget(crew_required, 4, 0)
+        grid.addWidget(aircraft_type, 5, 0)
+        grid.addWidget(back_button, 6, 0)
+
+        self.setWindowTitle(f'Site: {site[0]}')
+        self.setLayout(grid)
+
+    @Slot()
+    def display_site_main_window(self, window):
+        window.show()
+        # self.hide()
+        self.close()
 
 
 class flight_expand_window(QWidget):
-    pass
+    def __init__(self, flight):
+        QWidget.__init__(self)
+        grid = QGridLayout()
+
+        back_button = QPushButton('Back')
+        back_button.clicked.connect(lambda: self.display_flight_main_window(main_window.flight_main_window))
+
+        id_label = QLabel(f'Flight Number: {flight[0]}')
+        take_off = QLabel(f'Takeoff: {flight[5]}')
+        land = QLabel(f'Land: {flight[2]}')
+        pilot_in_command = QLabel(f'Pilot in Command: {flight[4]}')
+        crew_added = QLabel(f'Crew Added: {flight[6]}')
+
+        grid.addWidget(id_label, 0, 0)
+        grid.addWidget(take_off, 1, 0)
+        grid.addWidget(land, 2, 0)
+        grid.addWidget(pilot_in_command, 3, 0)
+        grid.addWidget(crew_added, 4, 0)
+        grid.addWidget(back_button, 5, 0)
+
+        self.setWindowTitle(f'Flight Number: {flight[0]}')
+        self.setLayout(grid)
+
+    @Slot()
+    def display_flight_main_window(self, window):
+        window.show()
+        # self.hide()
+        self.close()
 
 
 class crew_expand_window(QWidget):
-    def __init__(self):
+    def __init__(self, crew):
         QWidget.__init__(self)
-
         grid = QGridLayout()
-        self.setWindowTitle('Personnel Information')
-
 
         back_button = QPushButton('Back')
         back_button.clicked.connect(lambda: self.display_crew_main_window(main_window.crew_main_window))
 
-        print_button = QPushButton('Print')
-        print_button.clicked.connect(lambda: print(main_window.crew_main_window.crew_table.crew_data
-                                                   [main_window.crew_main_window.table_view.currentIndex().row()]
-                                                   ))
+        name_label = QLabel(f'Name: {crew[4]} {crew[5]} {crew[2]} {crew[3]}')
+        id_label = QLabel(f'Employee Number: {crew[0]}')
+        crew_pos_label = QLabel(f'Crew Position: {crew[6]}')
 
-        grid.addWidget(back_button, 0, 0)
-        grid.addWidget(print_button, 1, 0)
+        grid.addWidget(id_label, 0, 0)
+        grid.addWidget(name_label, 1, 0)
+        grid.addWidget(crew_pos_label, 2, 0)
+        grid.addWidget(back_button, 3, 0)
 
+        self.setWindowTitle(f'{crew[0]} {crew[6]}: {crew[4]} {crew[5]} {crew[2]} {crew[3]}')
         self.setLayout(grid)
 
     @Slot()
     def display_crew_main_window(self, window):
         window.show()
-        self.hide()
+        # self.hide()
+        self.close()
 
 
 # --------------------------------
@@ -80,7 +135,7 @@ class site_add_window(QWidget):
     pass
 
 
-class fight_add_window(QWidget):
+class flight_add_window(QWidget):
     pass
 
 
@@ -92,33 +147,61 @@ class crew_add_window(QWidget):
 class site_main_window(QWidget):
     def __init__(self):
         QWidget.__init__(self)
+        self.site_add_window = site_add_window()
 
+        grid = QGridLayout()
+        grid.setSpacing(12)
         self.setGeometry(400, 200, 700, 450)
         self.setWindowTitle('Sites')
 
-        excluded_fields = None
-        site_headers = get_site_column_query(excluded_fields)
-        site_data = get_site_query(excluded_fields)
+        self.site_headers = get_site_column_query()
+        self.site_data = get_site_query()
+        self.site_table = TableModel(self, self.site_data, self.site_headers)
+
+        self.table_view = QTableView()
+        self.table_view.setSelectionBehavior(self.table_view.SelectRows)
+        self.table_view.setSelectionMode(self.table_view.ContiguousSelection)
+        font = QtGui.QFont("Courier New", 12)
+        self.table_view.setFont(font)
+        self.table_view.setModel(self.site_table)
+        self.table_view.resizeColumnsToContents()
+        self.table_view.setSortingEnabled(True)
+
+
+        view_site_button = QPushButton('View Site')
+        view_site_button.clicked.connect(lambda: self.display_site_expand_window())
+
+        add_site_button = QPushButton('Add Site')
+        add_site_button.clicked.connect(lambda: self.display_site_add_window(self.site_add_window))
 
         back_button = QPushButton('Back')
         back_button.clicked.connect(lambda checked: self.display_main_window(main_window))
 
-        site_table = TableModel(self, site_data, site_headers)
-        table_view = QTableView()
-        table_view.setModel(site_table)
+        test_button = QPushButton('Test')
+        test_button.clicked.connect(lambda: print(self.site_data[self.table_view.currentIndex().row()]))
+        grid.addWidget(test_button, 4, 1, 1, 2)
 
-        font = QtGui.QFont("Courier New", 14)
-        table_view.setFont(font)
+        grid.addWidget(view_site_button, 1, 1, 1, 1)
+        grid.addWidget(add_site_button, 1, 2, 1, 1)
+        grid.addWidget(self.table_view, 2, 1, 1, 2)
+        grid.addWidget(back_button, 3, 1, 1, 2)
 
-        table_view.resizeColumnsToContents()
+        self.setLayout(grid)
 
-        table_view.setSortingEnabled(True)
-        layout = QVBoxLayout(self)
-        layout.addWidget(table_view)
-        layout.addWidget(back_button)
-        self.setLayout(layout)
-
+    @Slot()
     def display_main_window(self, window):
+        window.show()
+        self.hide()
+
+    @Slot()
+    def display_site_expand_window(self):
+        self.site = self.site_table.the_data[self.table_view.currentIndex().row()]
+        self.site_expand_window = site_expand_window(self.site)
+        self.site_expand_window.show()
+        self.hide()
+
+    @Slot()
+    def display_site_add_window(self, window):
         window.show()
         self.hide()
 
@@ -126,71 +209,94 @@ class site_main_window(QWidget):
 class flight_main_window(QWidget):
     def __init__(self):
         QWidget.__init__(self)
+        self.flight_add_window = flight_add_window()
 
-        self.setGeometry(400, 200, 900, 450)
+        grid = QGridLayout()
+        grid.setSpacing(12)
+        self.setGeometry(400, 200, 700, 450)
         self.setWindowTitle('Flights')
 
-        excluded_fields = '_id', 'crew_on_flight'
-        flight_headers = get_flight_column_query(excluded_fields)
-        flight_data = get_flight_query(excluded_fields)
+        self.flight_headers = get_flight_column_query()
+        self.flight_data = get_flight_query()
+        self.flight_table = TableModel(self, self.flight_data, self.flight_headers)
+
+        self.table_view = QTableView()
+        self.table_view.setSelectionBehavior(self.table_view.SelectRows)
+        self.table_view.setSelectionMode(self.table_view.ContiguousSelection)
+        font = QtGui.QFont("Courier New", 12)
+        self.table_view.setFont(font)
+        self.table_view.setModel(self.flight_table)
+        self.table_view.resizeColumnsToContents()
+        self.table_view.setSortingEnabled(True)
+        self.table_view.hideColumn(0)
+        self.table_view.hideColumn(3)
+        self.table_view.hideColumn(4)
+
+        view_flight_button = QPushButton('View Flight')
+        view_flight_button.clicked.connect(lambda: self.display_flight_expand_window())
+
+        add_flight_button = QPushButton('Add Flight')
+        add_flight_button.clicked.connect(lambda: self.display_flight_add_window(self.flight_add_window))
 
         back_button = QPushButton('Back')
-        back_button.clicked.connect(lambda checked: self.display_main_window(main_window))
+        back_button.clicked.connect(lambda: self.display_main_window(main_window))
 
-        flight_table = TableModel(self, flight_data, flight_headers)
-        table_view = QTableView()
-        table_view.setModel(flight_table)
+        test_button = QPushButton('Test')
+        test_button.clicked.connect(lambda: print(self.flight_data[self.table_view.currentIndex().row()]))
+        grid.addWidget(test_button, 4, 1, 1, 2)
 
-        font = QtGui.QFont("Courier New", 14)
-        table_view.setFont(font)
+        grid.addWidget(view_flight_button, 1, 1, 1, 1)
+        grid.addWidget(add_flight_button, 1, 2, 1, 1)
+        grid.addWidget(self.table_view, 2, 1, 1, 2)
+        grid.addWidget(back_button, 3, 1, 1, 2)
 
-        table_view.resizeColumnsToContents()
+        self.setLayout(grid)
 
-        table_view.setSortingEnabled(True)
-        layout = QVBoxLayout(self)
-        layout.addWidget(table_view)
-        layout.addWidget(back_button)
-        self.setLayout(layout)
-
+    @Slot()
     def display_main_window(self, window):
+        window.show()
+        self.hide()
+
+    @Slot()
+    def display_flight_expand_window(self):
+        self.flight = self.flight_table.the_data[self.table_view.currentIndex().row()]
+        self.flight_expand_window = flight_expand_window(self.flight)
+        self.flight_expand_window.show()
+        self.hide()
+
+    @Slot()
+    def display_flight_add_window(self, window):
         window.show()
         self.hide()
 
 
 class crew_main_window(QWidget):
-    send_crew = Signal(list)
-
     def __init__(self):
         QWidget.__init__(self)
         self.crew_add_window = crew_add_window()
-        self.crew_expand_window = crew_expand_window()
 
         grid = QGridLayout()
-        grid.setSpacing(10)
+        grid.setSpacing(12)
         self.setGeometry(400, 200, 700, 450)
         self.setWindowTitle('Crews')
 
-        crew_headers = get_crew_column_query()
-        crew_data = get_crew_query()
-        self.crew_table = TableModel(self, crew_data, crew_headers)
+        self.crew_headers = get_crew_column_query()
+        self.crew_data = get_crew_query()
+        self.crew_table = TableModel(self, self.crew_data, self.crew_headers)
 
-        self.table_view = QTableView()
-        self.table_view = QTableView()
         self.table_view = QTableView()
         self.table_view.setSelectionBehavior(self.table_view.SelectRows)
         self.table_view.setSelectionMode(self.table_view.ContiguousSelection)
-        font = QtGui.QFont("Courier New", 14)
+        font = QtGui.QFont("Courier New", 12)
         self.table_view.setFont(font)
         self.table_view.setModel(self.crew_table)
         self.table_view.resizeColumnsToContents()
         self.table_view.setSortingEnabled(True)
         self.table_view.hideColumn(0)
         self.table_view.hideColumn(3)
-        self.table_view.adjustSize()
-        self.table_view.sizeAdjustPolicy()
 
         view_crew_button = QPushButton('View Crew')
-        view_crew_button.clicked.connect(lambda: self.display_crew_expand_window(self.crew_expand_window))
+        view_crew_button.clicked.connect(lambda: self.display_crew_expand_window())
 
         add_crew_button = QPushButton('Add Crew')
         add_crew_button.clicked.connect(lambda: self.display_crew_add_window(self.crew_add_window))
@@ -199,8 +305,7 @@ class crew_main_window(QWidget):
         back_button.clicked.connect(lambda: self.display_main_window(main_window))
 
         test_button = QPushButton('Test')
-        test_button.clicked.connect(lambda: print(self.crew_table.crew_data[self.table_view.currentIndex().row()]))
-
+        test_button.clicked.connect(lambda: print(self.crew_data[self.table_view.currentIndex().row()]))
         grid.addWidget(test_button, 4, 1, 1, 2)
 
         grid.addWidget(view_crew_button, 1, 1, 1, 1)
@@ -210,19 +315,16 @@ class crew_main_window(QWidget):
 
         self.setLayout(grid)
 
-    @staticmethod
-    def send_crew(self):
-        idx = self.table_view.currentIndex().row()
-        return idx
-
     @Slot()
     def display_main_window(self, window):
         window.show()
         self.hide()
 
     @Slot()
-    def display_crew_expand_window(self, window):
-        window.show()
+    def display_crew_expand_window(self):
+        self.crew = self.crew_table.the_data[self.table_view.currentIndex().row()]
+        self.crew_expand_window = crew_expand_window(self.crew)
+        self.crew_expand_window.show()
         self.hide()
 
     @Slot()
@@ -232,35 +334,35 @@ class crew_main_window(QWidget):
 
 
 class TableModel(QtCore.QAbstractTableModel):
-    def __init__(self, parent, crew_data, crew_headers):
+    def __init__(self, parent, the_data, the_headers):
         QtCore.QAbstractTableModel.__init__(self, parent)
-        self.crew_data = crew_data
-        self.crew_headers = crew_headers
+        self.the_data = the_data
+        self.the_headers = the_headers
 
     def data(self, index, role):
         if not index.isValid():
             return None
         elif role != QtCore.Qt.DisplayRole:
             return None
-        return self.crew_data[index.row()][index.column()]
+        return self.the_data[index.row()][index.column()]
 
     def rowCount(self, parent):
-        return len(self.crew_data)
+        return len(self.the_data)
 
     def columnCount(self, parent):
-        return len(self.crew_headers)
+        return len(self.the_headers)
 
     def headerData(self, col, orientation, role):
         if orientation == QtCore.Qt.Horizontal and role == QtCore.Qt.DisplayRole:
-            return self.crew_headers[col]
+            return self.the_headers[col]
         return None
 
     def sort(self, col, order):
         """sort table by given column number col"""
         self.emit(QtCore.SIGNAL("layoutAboutToBeChanged()"))
-        self.crew_data = sorted(self.crew_data, key=operator.itemgetter(col))
+        self.the_data = sorted(self.the_data, key=operator.itemgetter(col))
         if order == QtCore.Qt.DescendingOrder:
-            self.crew_data.reverse()
+            self.the_data.reverse()
         self.emit(QtCore.SIGNAL("layoutChanged()"))
 
 
