@@ -7,17 +7,20 @@ from upconn import *
 db = client.metrics_tracker
 crews = db.crews
 
-def get_crew_query():
-    crew_list = [list(crew.values()) for crew in crews.find()]
+def get_crew_query(query=None):
+    print(query)
+    crew_list = [list(crew.values()) for crew in crews.find(query)]
+    print(crew_list)
     return crew_list
 
-def get_crew_column_query():
+def get_crew_column_query(query=None):
     column_list = [key.title().replace('_', ' ') for key in crews.find_one()]
     return column_list
 
-def find_crew(_id):
-    result = db.crews.find({'_id': f'{_id}'})
-    return result
+def find_crew(employee_ids):
+    crew_on_flight = [crews.find({'_id': employee_id})[0].values() for employee_id in employee_ids]
+    print(crew_on_flight)
+    return crew_on_flight
 
 def edit_crew_member():
     # get crew info

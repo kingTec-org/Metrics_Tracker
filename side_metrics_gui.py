@@ -8,6 +8,7 @@ from PySide6.QtWidgets import \
     QWidget, QPushButton, \
     QTableView, QGridLayout, QLabel
 
+from crew_funcs import *
 from flight_funcs import *
 from site_funcs import *
 
@@ -50,22 +51,41 @@ class flight_expand_window(QWidget):
     def __init__(self, flight):
         QWidget.__init__(self)
         grid = QGridLayout()
+        grid.setSpacing(12)
+        self.setGeometry(400, 200, 700, 450)
+
+        id_label = QLabel(f'Flight Number: {flight[0]}')
+        crew_added = QLabel(f'Aircraft Type: {flight[2]}')
+        pilot_in_command = QLabel(f'Pilot in Command: {flight[4]}')
+        take_off = QLabel(f'Takeoff: {flight[5]}')
+        land = QLabel(f'Land: {flight[6]}')
+
+        self.crew_headers = get_crew_column_query()
+        self.crew_data = get_crew_query({'_id': {'$in': flight[3]}})
+        self.crew_table = TableModel(self, self.crew_data, self.crew_headers)
+
+        self.table_view = QTableView()
+        self.table_view.setSelectionBehavior(self.table_view.SelectRows)
+        self.table_view.setSelectionMode(self.table_view.ContiguousSelection)
+        font = QtGui.QFont("Courier New", 12)
+        self.table_view.setFont(font)
+        self.table_view.setModel(self.crew_table)
+        self.table_view.resizeColumnsToContents()
+        self.table_view.setSortingEnabled(True)
+        self.table_view.hideColumn(0)
+        self.table_view.hideColumn(3)
 
         back_button = QPushButton('Back')
         back_button.clicked.connect(lambda: self.display_flight_main_window(main_window.flight_main_window))
 
-        id_label = QLabel(f'Flight Number: {flight[0]}')
-        take_off = QLabel(f'Takeoff: {flight[5]}')
-        land = QLabel(f'Land: {flight[2]}')
-        pilot_in_command = QLabel(f'Pilot in Command: {flight[4]}')
-        crew_added = QLabel(f'Crew Added: {flight[6]}')
+        grid.addWidget(id_label, 0, 0, 1, 1)
+        grid.addWidget(self.table_view, 0, 1, 1, 5)
+        grid.addWidget(take_off, 1, 0, 1, 1)
+        grid.addWidget(land, 2, 0, 1, 1)
+        grid.addWidget(pilot_in_command, 3, 0, 1, 1)
+        grid.addWidget(crew_added, 4, 0, 1, 1)
+        grid.addWidget(back_button, 5, 0, 1, 1)
 
-        grid.addWidget(id_label, 0, 0)
-        grid.addWidget(take_off, 1, 0)
-        grid.addWidget(land, 2, 0)
-        grid.addWidget(pilot_in_command, 3, 0)
-        grid.addWidget(crew_added, 4, 0)
-        grid.addWidget(back_button, 5, 0)
 
         self.setWindowTitle(f'Flight Number: {flight[0]}')
         self.setLayout(grid)
@@ -178,7 +198,7 @@ class site_main_window(QWidget):
         back_button.clicked.connect(lambda checked: self.display_main_window(main_window))
 
         test_button = QPushButton('Test')
-        test_button.clicked.connect(lambda: print(self.site_data[self.table_view.currentIndex().row()]))
+        test_button.clicked.connect(lambda: print(self.site_table.the_data[self.table_view.currentIndex().row()]))
         grid.addWidget(test_button, 4, 1, 1, 2)
 
         grid.addWidget(view_site_button, 1, 1, 1, 1)
@@ -242,7 +262,7 @@ class flight_main_window(QWidget):
         back_button.clicked.connect(lambda: self.display_main_window(main_window))
 
         test_button = QPushButton('Test')
-        test_button.clicked.connect(lambda: print(self.flight_data[self.table_view.currentIndex().row()]))
+        test_button.clicked.connect(lambda: print(self.flight_table.the_data[self.table_view.currentIndex().row()]))
         grid.addWidget(test_button, 4, 1, 1, 2)
 
         grid.addWidget(view_flight_button, 1, 1, 1, 1)
@@ -305,7 +325,7 @@ class crew_main_window(QWidget):
         back_button.clicked.connect(lambda: self.display_main_window(main_window))
 
         test_button = QPushButton('Test')
-        test_button.clicked.connect(lambda: print(self.crew_data[self.table_view.currentIndex().row()]))
+        test_button.clicked.connect(lambda: print(self.crew_table.the_data[self.table_view.currentIndex().row()]))
         grid.addWidget(test_button, 4, 1, 1, 2)
 
         grid.addWidget(view_crew_button, 1, 1, 1, 1)

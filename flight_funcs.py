@@ -28,7 +28,6 @@ def gen_random_flight():
 
     return flight_number, aircraft_type, scheduled_takeoff, scheduled_land
 
-
 def get_flight_query():
     flight_list = [list(flight.values()) for flight in flights.find()]
     return flight_list
@@ -43,7 +42,6 @@ def edit_flight():
     # allow to be changed
     # mongo update method
     pass
-
 
 def add_flight(value):
     flight_info = {
@@ -60,19 +58,15 @@ def add_flight(value):
     except:
         print('try again')
 
-
 def delete_flight(flight_number):
     flight_id = {'_id': flight_number}
     flights.delete_one(flight_id)
 
-
 def add_crew_to_flight(flight_number, employee_id):
     flights.update({'flight_number': flight_number}, {'$push': {'crew_on_flight': employee_id}})
 
-
 def remove_crew_from_flight(flight_number, employee_id):
     flights.update({'flight_number': flight_number}, {'$pull': {'crew_on_flight': employee_id}})
-
 
 def get_crew_from_flight(flight_number, excluded_fields=None):
     employee_ids = flights.distinct('crew_on_flight', {'flight_number': flight_number})
