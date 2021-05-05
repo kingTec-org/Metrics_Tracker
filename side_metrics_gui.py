@@ -6,7 +6,7 @@ from PySide6.QtCore import Slot
 from PySide6.QtWidgets import \
     QMainWindow, QApplication, \
     QWidget, QPushButton, \
-    QTableView, QGridLayout, QLabel, QFormLayout, QLineEdit
+    QTableView, QGridLayout, QLabel, QFormLayout, QLineEdit, QComboBox
 
 from flight_funcs import *
 from site_funcs import *
@@ -166,9 +166,23 @@ class crew_add_window(QWidget):
 
         grid = QGridLayout()
 
-        crew_value1 = QLineEdit()
-        self.crew_add_form = QFormLayout()
-        self.crew_add_form.addRow(QLabel('Test', crew_value1))
+        values = []
+
+        emp_id = QLineEdit()
+        last_name = QLineEdit()
+        first_name = QLineEdit()
+        middle_name = QLineEdit()
+        suffix = QLineEdit()
+        crew_pos_list = ['P', 'SO', 'IP', 'ISO', 'EP', 'ESO']
+        crew_position = QComboBox()
+
+        crew_add_form = QFormLayout()
+        crew_add_form.addRow(self.tr('Employee Number:'), emp_id)
+        crew_add_form.addRow(self.tr('&First Name:'), first_name)
+        crew_add_form.addRow(self.tr('&Last Name:'), last_name)
+        crew_add_form.addRow(self.tr('&Suffix:'), suffix)
+        crew_add_form.addRow(self.tr('&Middle Name:'), middle_name)
+        crew_add_form.addRow(self.tr('&Crew Position:'), crew_position)
 
         back_button = QPushButton('Back')
         back_button.clicked.connect(lambda: self.display_crew_main_window(main_window.crew_main_window))
@@ -176,7 +190,7 @@ class crew_add_window(QWidget):
         submit_button = QPushButton('Submit')
         submit_button.clicked.connect(lambda: self.add_crew())
 
-        grid.addWidget(self.crew_add_form, 1, 0, 0, 0)
+        grid.addLayout(crew_add_form, 1, 1)
         grid.addWidget(back_button, 2, 0, 0, 0)
         grid.addWidget(submit_button, 2, 1, 0, 0)
 
@@ -378,7 +392,7 @@ class crew_main_window(QWidget):
     @Slot()
     def display_crew_add_window(self):
         self.crew_add_window = crew_add_window()
-        crew_add_window.show()
+        self.crew_add_window.show()
         self.hide()
 
 
