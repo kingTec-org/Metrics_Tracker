@@ -51,17 +51,18 @@ class flight_expand_window(QWidget):
         QWidget.__init__(self)
         grid = QGridLayout()
         grid.setSpacing(12)
-        #self.setGeometry(400, 200, 700, 450)
+        # self.setGeometry(400, 200, 700, 450)
 
-        id_label = QLabel(f'Flight Number: {flight[0]}')
+        id_label = QLabel(f'Flight Number: {flight[1]}')
         crew_added = QLabel(f'Aircraft Type: {flight[2]}')
         pilot_in_command = QLabel(f'Pilot in Command: {flight[4]}')
         take_off = QLabel(f'Takeoff: {flight[5]}')
         land = QLabel(f'Land: {flight[6]}')
 
         self.crew_headers = get_crew_column_query()
-        self.crew_data = get_crew_query({'_id': {'$in': flight[3]}})
-        self.crew_table = TableModel(self, self.crew_data, self.crew_headers)
+        crew_on_flight = flight[3]
+        self.crew_data = get_crew_query({'employee_id': {'$in': crew_on_flight}}, {'currencies': 0})
+        self.crew_table = TableModelCurrencies(self, self.crew_data, self.crew_headers)
 
         self.table_view = QTableView()
         self.table_view.setSelectionBehavior(self.table_view.SelectRows)
@@ -73,19 +74,19 @@ class flight_expand_window(QWidget):
         self.table_view.setSortingEnabled(True)
         self.table_view.hideColumn(0)
         self.table_view.hideColumn(3)
+        self.table_view.hideColumn(7)
         self.table_view.sizeAdjustPolicy().AdjustToContents
 
         back_button = QPushButton('Back')
         back_button.clicked.connect(lambda: self.display_flight_main_window(main_window.flight_main_window))
 
-        grid.addWidget(id_label, 0, 0, 1, 1)
         grid.addWidget(self.table_view, 0, 1, 5, 5)
+        grid.addWidget(id_label, 0, 0, 1, 1)
         grid.addWidget(take_off, 1, 0, 1, 1)
         grid.addWidget(land, 2, 0, 1, 1)
         grid.addWidget(pilot_in_command, 3, 0, 1, 1)
         grid.addWidget(crew_added, 4, 0, 1, 1)
         grid.addWidget(back_button, 5, 0, 1, 1)
-
 
         self.setWindowTitle(f'Flight Number: {flight[0]}')
         self.setLayout(grid)
@@ -101,20 +102,42 @@ class crew_expand_window(QWidget):
     def __init__(self, crew):
         QWidget.__init__(self)
         grid = QGridLayout()
+        grid.setSpacing(12)
+        # self.setGeometry(400, 200, 700, 450)
+
+        name_label = QLabel(f'Name: {crew[4]} {crew[5]} {crew[2]} {crew[3]}')
+        id_label = QLabel(f'Employee Number: {crew[1]}')
+        crew_pos_label = QLabel(f'Crew Position: {crew[6]}')
+
+        self.crew_headers = get_crew_column_query({'employee_id': crew[0]})
+        self.crew_data = get_crew_query({'employee_id': crew[0]})
+
+        self.crew_table = TableModelCurrencies(self, self.crew_data, self.crew_headers)
+        self.table_view = QTableView()
+        self.table_view.setModel(self.crew_table)
+        self.table_view.setSelectionBehavior(self.table_view.SelectRows)
+        self.table_view.setSelectionMode(self.table_view.ContiguousSelection)
+        font = QtGui.QFont("Courier New", 12)
+        self.table_view.setFont(font)
+        self.table_view.resizeColumnsToContents()
+        self.table_view.setSortingEnabled(True)
+        self.table_view.hideColumn(0)
+        self.table_view.verticalHeader()
+        self.table_view.horizontalHeader()
+        # self.table_view.hideColumn(3)
+        # self.table_view.hideColumn(7)
 
         back_button = QPushButton('Back')
         back_button.clicked.connect(lambda: self.display_crew_main_window(main_window.crew_main_window))
 
-        name_label = QLabel(f'Name: {crew[4]} {crew[5]} {crew[2]} {crew[3]}')
-        id_label = QLabel(f'Employee Number: {crew[0]}')
-        crew_pos_label = QLabel(f'Crew Position: {crew[6]}')
-
+        grid.addWidget(self.table_view, 0, 1, 3, 3)
         grid.addWidget(id_label, 0, 0)
         grid.addWidget(name_label, 1, 0)
         grid.addWidget(crew_pos_label, 2, 0)
         grid.addWidget(back_button, 3, 0)
 
-        self.setWindowTitle(f'{crew[0]} {crew[6]}: {crew[4]} {crew[5]} {crew[2]} {crew[3]}')
+        self.setWindowTitle(f'{crew[1]} {crew[6]}: {crew[4]} {crew[5]} {crew[2]} {crew[3]}')
+        print(crews.group({'_id': crew[0]}))
         self.setLayout(grid)
 
     @Slot()
@@ -162,27 +185,26 @@ class flight_add_window(QWidget):
 class crew_add_window(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        #success popup
+        # success popup
 
         grid = QGridLayout()
 
-        values = []
-
-        emp_id = QLineEdit()
-        last_name = QLineEdit()
-        first_name = QLineEdit()
-        middle_name = QLineEdit()
-        suffix = QLineEdit()
-        crew_pos_list = ['P', 'SO', 'IP', 'ISO', 'EP', 'ESO']
-        crew_position = QComboBox()
+        self.emp_id = QLineEdit()
+        self.last_name = QLineEdit()
+        self.first_name = QLineEdit()
+        self.middle_name = QLineEdit()
+        self.suffix = QLineEdit()
+        self.crew_pos_list = ['P', 'SO', 'IP', 'ISO', 'EP', 'ESO']
+        self.crew_position = QComboBox()
+        self.crew_position.addItems(self.crew_pos_list)
 
         crew_add_form = QFormLayout()
-        crew_add_form.addRow(self.tr('Employee Number:'), emp_id)
-        crew_add_form.addRow(self.tr('&First Name:'), first_name)
-        crew_add_form.addRow(self.tr('&Last Name:'), last_name)
-        crew_add_form.addRow(self.tr('&Suffix:'), suffix)
-        crew_add_form.addRow(self.tr('&Middle Name:'), middle_name)
-        crew_add_form.addRow(self.tr('&Crew Position:'), crew_position)
+        crew_add_form.addRow(self.tr('Employee Number:'), self.emp_id)
+        crew_add_form.addRow(self.tr('&First Name:'), self.first_name)
+        crew_add_form.addRow(self.tr('&Last Name:'), self.last_name)
+        crew_add_form.addRow(self.tr('&Suffix:'), self.suffix)
+        crew_add_form.addRow(self.tr('&Middle Name:'), self.middle_name)
+        crew_add_form.addRow(self.tr('&Crew Position:'), self.crew_position)
 
         back_button = QPushButton('Back')
         back_button.clicked.connect(lambda: self.display_crew_main_window(main_window.crew_main_window))
@@ -191,19 +213,31 @@ class crew_add_window(QWidget):
         submit_button.clicked.connect(lambda: self.add_crew())
 
         grid.addLayout(crew_add_form, 1, 1)
-        grid.addWidget(back_button, 2, 0, 0, 0)
-        grid.addWidget(submit_button, 2, 1, 0, 0)
+        grid.addWidget(back_button, 2, 1, )
+        grid.addWidget(submit_button, 2, 2)
 
         self.setWindowTitle('Add New Crewmember')
         self.setLayout(grid)
 
     def add_crew(self):
-        pass
+        f_name = self.first_name.text()
+        m_name = self.middle_name.text()
+        l_name = self.last_name.text()
+        suffix = self.suffix.text()
+        employee_id = self.emp_id.text()
+        crew_position = self.crew_position.currentText()
+
+        value = [f_name, m_name, l_name, suffix, employee_id, crew_position]
+        add_crew_members(value)
+        self.emp_id.clear()
+        self.last_name.clear()
+        self.first_name.clear()
+        self.middle_name.clear()
+        self.suffix.clear()
 
     def display_crew_main_window(self, window):
         window.show()
         self.close()
-
 
 
 # --------------------------------
@@ -229,7 +263,7 @@ class site_main_window(QWidget):
         self.table_view.setModel(self.site_table)
         self.table_view.resizeColumnsToContents()
         self.table_view.setSortingEnabled(True)
-
+        self.table_view.hideColumn(5)
 
         view_site_button = QPushButton('View Site')
         view_site_button.clicked.connect(lambda: self.display_site_expand_window())
@@ -342,20 +376,21 @@ class crew_main_window(QWidget):
         self.setGeometry(400, 200, 700, 450)
         self.setWindowTitle('Crews')
 
-        self.crew_headers = get_crew_column_query()
-        self.crew_data = get_crew_query()
+        self.crew_headers = get_crew_column_query({}, {'currencies': 0})
+        self.crew_data = get_crew_query({}, {'currencies': 0})
         self.crew_table = TableModel(self, self.crew_data, self.crew_headers)
 
         self.table_view = QTableView()
+        self.table_view.setModel(self.crew_table)
         self.table_view.setSelectionBehavior(self.table_view.SelectRows)
         self.table_view.setSelectionMode(self.table_view.ContiguousSelection)
-        font = QtGui.QFont("Courier New", 12)
-        self.table_view.setFont(font)
-        self.table_view.setModel(self.crew_table)
         self.table_view.resizeColumnsToContents()
         self.table_view.setSortingEnabled(True)
         self.table_view.hideColumn(0)
         self.table_view.hideColumn(3)
+        self.table_view.hideColumn(7)
+        font = QtGui.QFont("Courier New", 12)
+        self.table_view.setFont(font)
 
         view_crew_button = QPushButton('View Crew')
         view_crew_button.clicked.connect(lambda: self.display_crew_expand_window())
@@ -419,6 +454,39 @@ class TableModel(QtCore.QAbstractTableModel):
         if orientation == QtCore.Qt.Horizontal and role == QtCore.Qt.DisplayRole:
             return self.the_headers[col]
         return None
+
+    def sort(self, col, order):
+        """sort table by given column number col"""
+        self.emit(QtCore.SIGNAL("layoutAboutToBeChanged()"))
+        self.the_data = sorted(self.the_data, key=operator.itemgetter(col))
+        if order == QtCore.Qt.DescendingOrder:
+            self.the_data.reverse()
+        self.emit(QtCore.SIGNAL("layoutChanged()"))
+
+class TableModelCurrencies(QtCore.QAbstractTableModel):
+    def __init__(self, parent, the_data, the_headers):
+        QtCore.QAbstractTableModel.__init__(self, parent)
+        self.the_data = the_data
+        self.the_headers = the_headers
+
+    def data(self, index, role):
+        if not index.isValid():
+            return None
+        elif role != QtCore.Qt.DisplayRole:
+            return None
+        return self.the_data[index.row()][index.column()]
+
+    def rowCount(self, parent):
+        return len(self.the_data)
+
+    def columnCount(self, parent):
+        return len(self.the_headers)
+
+    def headerData(self, col, orientation, role):
+        if orientation == QtCore.Qt.Horizontal and role == QtCore.Qt.DisplayRole:
+            return self.the_headers[col]
+        if orientation == QtCore.Qt.Vertical and role == QtCore.Qt.DisplayRole:
+            return self.the_headers[col]
 
     def sort(self, col, order):
         """sort table by given column number col"""

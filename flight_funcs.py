@@ -4,7 +4,6 @@ from upconn import *
 db = client.metrics_tracker
 flights = db.flights
 
-
 def gen_random_flight():
     takeoff = random.randint(0, 24)
 
@@ -28,12 +27,12 @@ def gen_random_flight():
 
     return flight_number, aircraft_type, scheduled_takeoff, scheduled_land
 
-def get_flight_query():
-    flight_list = [list(flight.values()) for flight in flights.find()]
+def get_flight_query(*query):
+    flight_list = [list(flight.values()) for flight in flights.find({}, *query)]
     return flight_list
 
-def get_flight_column_query():
-    column_list = [key.title().replace('_', ' ') for key in flights.find_one()]
+def get_flight_column_query(*query):
+    column_list = [key.title().replace('_', ' ') for key in flights.find_one({}, *query)]
     return column_list
 
 def edit_flight():
