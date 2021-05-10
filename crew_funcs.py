@@ -30,12 +30,10 @@ def gen_random_crew():
 
 def get_crew_query(*query):
     crew_list = [list(crew.values()) for crew in crews.find(*query)]
-    print(crew_list)
     return crew_list
 
 def get_crew_column_query(*query):
     column_list = [key.title().replace('_', ' ') for key in crews.find_one(*query)]
-    print(column_list)
     return column_list
 
 def find_crew(employee_ids):

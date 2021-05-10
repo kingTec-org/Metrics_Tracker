@@ -109,23 +109,33 @@ class crew_expand_window(QWidget):
         id_label = QLabel(f'Employee Number: {crew[1]}')
         crew_pos_label = QLabel(f'Crew Position: {crew[6]}')
 
-        self.crew_headers = get_crew_column_query({'employee_id': crew[0]})
-        self.crew_data = get_crew_query({'employee_id': crew[0]})
+        self.crew_headers = get_crew_query()
+        self.crew_data = get_crew_query()
 
-        self.crew_table = TableModelCurrencies(self, self.crew_data, self.crew_headers)
+        self.crew_h_headers = list(self.crew_data[0][7]['Evaluation'].keys())
+        self.crew_v_headers = list(self.crew_headers[0][7].keys())
+
+        a_format = '%d %b, %Y'
+        formatted_data = []
+        for value in list(self.crew_data[0][7].values()):
+            for date in value.values():
+                formatted_data.append(date.strftime(a_format))
+        print(formatted_data)
+
+        self.crew_data = formatted_data
+
+        self.crew_table = TableModelCurrencies(self, self.crew_data, self.crew_h_headers, self.crew_v_headers)
         self.table_view = QTableView()
         self.table_view.setModel(self.crew_table)
-        self.table_view.setSelectionBehavior(self.table_view.SelectRows)
-        self.table_view.setSelectionMode(self.table_view.ContiguousSelection)
+        # self.table_view.setSelectionBehavior(self.table_view.SelectRows)
+        self.table_view.setSelectionMode(self.table_view.NoSelection)
         font = QtGui.QFont("Courier New", 12)
         self.table_view.setFont(font)
         self.table_view.resizeColumnsToContents()
-        self.table_view.setSortingEnabled(True)
-        self.table_view.hideColumn(0)
+        self.table_view.setSortingEnabled(False)
         self.table_view.verticalHeader()
         self.table_view.horizontalHeader()
-        # self.table_view.hideColumn(3)
-        # self.table_view.hideColumn(7)
+        self.table_view.NoEditTriggers
 
         back_button = QPushButton('Back')
         back_button.clicked.connect(lambda: self.display_crew_main_window(main_window.crew_main_window))
@@ -137,7 +147,6 @@ class crew_expand_window(QWidget):
         grid.addWidget(back_button, 3, 0)
 
         self.setWindowTitle(f'{crew[1]} {crew[6]}: {crew[4]} {crew[5]} {crew[2]} {crew[3]}')
-        print(crews.group({'_id': crew[0]}))
         self.setLayout(grid)
 
     @Slot()
@@ -463,30 +472,33 @@ class TableModel(QtCore.QAbstractTableModel):
             self.the_data.reverse()
         self.emit(QtCore.SIGNAL("layoutChanged()"))
 
+
 class TableModelCurrencies(QtCore.QAbstractTableModel):
-    def __init__(self, parent, the_data, the_headers):
-        QtCore.QAbstractTableModel.__init__(self, parent)
+    def __init__(self, parent, the_data, the_h_headers, the_v_headers):
+        super(TableModelCurrencies, self).__init__(parent)
         self.the_data = the_data
-        self.the_headers = the_headers
+        self.the_h_headers = the_h_headers
+        self.the_v_headers = the_v_headers
 
     def data(self, index, role):
         if not index.isValid():
             return None
         elif role != QtCore.Qt.DisplayRole:
             return None
-        return self.the_data[index.row()][index.column()]
+        print(self.the_data[index.row()])
+        return self.the_data[index.row()]
 
     def rowCount(self, parent):
-        return len(self.the_data)
+        return len(self.the_v_headers)
 
     def columnCount(self, parent):
-        return len(self.the_headers)
+        return len(self.the_h_headers)
 
     def headerData(self, col, orientation, role):
-        if orientation == QtCore.Qt.Horizontal and role == QtCore.Qt.DisplayRole:
-            return self.the_headers[col]
         if orientation == QtCore.Qt.Vertical and role == QtCore.Qt.DisplayRole:
-            return self.the_headers[col]
+            return self.the_v_headers[col]
+        if orientation == QtCore.Qt.Horizontal and role == QtCore.Qt.DisplayRole:
+            return self.the_h_headers[col]
 
     def sort(self, col, order):
         """sort table by given column number col"""
