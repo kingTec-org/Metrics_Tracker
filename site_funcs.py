@@ -7,15 +7,13 @@ db = client.metrics_tracker
 sites = db.sites
 
 
-def get_site_query(query=None):
-    site_list = [list(site.values()) for site in sites.find({}, query)]
+def get_site_query(*query):
+    site_list = [list(site.values()) for site in sites.find({}, *query)]
     return site_list
 
-
-def get_site_column_query(query=None):
-    column_list = [key.title().replace('_', ' ') for key in sites.find_one({}, query)]
+def get_site_column_query(*query):
+    column_list = [key.title().replace('_', ' ') for key in sites.find_one({}, *query)]
     return column_list
-
 
 def edit_site():
     # get site info
@@ -23,7 +21,6 @@ def edit_site():
     # allow to be changed
     # mongo update method
     pass
-
 
 def add_site(value):
     site_info = {
@@ -40,11 +37,9 @@ def add_site(value):
     except:
         print('try again')
 
-
 def delete_site(site_id):
     site_id = {'_id': site_id}
     sites.delete_one(site_id)
-
 
 def gen_random_site():
     try:
