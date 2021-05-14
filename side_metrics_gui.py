@@ -1,10 +1,11 @@
 import operator
 import sys
 
-from PySide6 import QtCore, QtGui
+from PySide6 import QtCore
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QMainWindow, QApplication, QWidget, QPushButton, \
-    QTableView, QGridLayout, QLabel, QFormLayout, QLineEdit, QComboBox, QCheckBox
+    QTableView, QGridLayout, QLabel, QFormLayout, QLineEdit, QComboBox, QCheckBox, QVBoxLayout, \
+    QAbstractItemView
 
 from flight_funcs import *
 from site_funcs import *
@@ -46,7 +47,8 @@ class flight_expand_window(QWidget):
         QWidget.__init__(self)
         grid = QGridLayout()
         grid.setSpacing(12)
-        # self.setGeometry(400, 200, 700, 450)
+        # setGeometry(x_pos, y_pos, width, height)
+        self.setGeometry(70, 150, 600, 150)
 
         self.flight = flight
 
@@ -64,8 +66,6 @@ class flight_expand_window(QWidget):
         self.table_view = QTableView()
         self.table_view.setSelectionBehavior(self.table_view.SelectRows)
         self.table_view.setSelectionMode(self.table_view.ContiguousSelection)
-        font = QtGui.QFont("Courier New", 12)
-        self.table_view.setFont(font)
         self.table_view.setModel(self.crew_table)
         self.table_view.resizeColumnsToContents()
         self.table_view.setSortingEnabled(True)
@@ -140,7 +140,8 @@ class flight_expand_window(QWidget):
 class crew_expand_window(QWidget):
     def __init__(self, crew):
         QWidget.__init__(self)
-        self.setGeometry(400, 200, 700, 450)
+        # setGeometry(x_pos, y_pos, width, height)
+        self.setGeometry(70, 150, 320, 360)
         self.setWindowTitle(f'{crew[1]} {crew[6]}: {crew[4]} {crew[5]} {crew[2]} {crew[3]}')
 
         grid = QGridLayout()
@@ -170,9 +171,6 @@ class crew_expand_window(QWidget):
         self.crew_table_model = self.TableModelCurrencies(self, self.crew_data, self.crew_h_headers)
         self.table_view = QTableView()
         self.table_view.setModel(self.crew_table_model)
-        font = QtGui.QFont("Courier New", 12)
-
-        self.table_view.setFont(font)
         self.table_view.resizeColumnsToContents()
 
         self.table_view.setSortingEnabled(True)
@@ -180,14 +178,15 @@ class crew_expand_window(QWidget):
         # self.table_view.setSelectionBehavior(self.table_view.SelectRows)
         self.table_view.setSelectionMode(self.table_view.NoSelection)
 
+        submit_button = QPushButton('Submit')
+
         back_button = QPushButton('Back')
         back_button.clicked.connect(lambda: self.display_crew_main_window(main_window.crew_main_window))
 
-        grid.addWidget(self.table_view, 0, 1, 3, 3)
-        grid.addWidget(id_label, 0, 0)
-        grid.addWidget(name_label, 1, 0)
-        grid.addWidget(crew_pos_label, 2, 0)
-        grid.addWidget(back_button, 3, 0)
+        grid.addWidget(name_label, 0, 0, 1, 1)
+        grid.addWidget(crew_pos_label, 0, 1, 1, 1)
+        grid.addWidget(self.table_view, 1, 0, 1, 3)
+        grid.addWidget(back_button, 2, 0, 1, 3)
 
         self.setLayout(grid)
 
@@ -197,11 +196,16 @@ class crew_expand_window(QWidget):
         # self.hide()
         self.close()
 
+    def display_crew_currency_add_window(self, crew):
+        self.crew_currency_add_window = crew_currency_add_window(crew)
+        self.crew_currency_add_window.show()
+        self.hide()
+
     class TableModelCurrencies(QtCore.QAbstractTableModel):
-        def __init__(self, parent, the_data, the_h_headers):
-            super(TableModelCurrencies, self).__init__(parent)
+        def __init__(self, parent, the_data, the_headers):
+            QtCore.QAbstractTableModel.__init__(self, parent)
             self.the_data = the_data
-            self.the_h_headers = the_h_headers
+            self.the_headers = the_headers
 
         def rowCount(self, parent):
             return len(self.the_data)
@@ -218,7 +222,7 @@ class crew_expand_window(QWidget):
 
         def headerData(self, col, orientation, role):
             if orientation == QtCore.Qt.Horizontal and role == QtCore.Qt.DisplayRole:
-                return self.the_h_headers[col]
+                return self.the_headers[col]
 
         def sort(self, col, order):
             """sort table by given column number col"""
@@ -251,36 +255,34 @@ class flight_crew_add_window(QWidget):
     def __init__(self, flight):
         QWidget.__init__(self)
         # setGeometry(x_pos, y_pos, width, height)
-        self.setGeometry(400, 200, 700, 450)
+        self.setGeometry(70, 150, 700, 450)
         self.setWindowTitle(f'Add Crew to Flight {flight[1]}')
-        grid = QGridLayout()
-        grid.setSpacing(12)
 
         self.headers = main_window.crew_main_window.crew_headers
         self.data = main_window.crew_main_window.crew_data
 
         self.crew_table = self.TableModel(self, self.data, self.headers)
         self.table_view = QTableView()
-
+        self.table_view.setSelectionMode(QAbstractItemView.SingleSelection)
         self.table_view.setSelectionBehavior(self.table_view.SelectRows)
-        self.table_view.setSelectionMode(self.table_view.ContiguousSelection)
-
         self.table_view.setModel(self.crew_table)
-
-        self.table_view.resizeColumnsToContents()
         self.table_view.setSortingEnabled(True)
+
+        self.table_view.setSelectionMode(self.table_view.ContiguousSelection)
+        self.table_view.resizeColumnsToContents()
         self.table_view.hideColumn(1)
         self.table_view.hideColumn(4)
-        self.table_view.hideColumn(8)
+        self.table_view.hideColumn(6)
 
         back_button = QPushButton('Back')
         back_button.clicked.connect(
             lambda: self.display_flight_expand_window())
 
-        grid.addWidget(self.table_view, 0, 0, 1, 1)
-        grid.addWidget(back_button, 1, 0, 1, 1)
+        layout = QVBoxLayout(self)
+        layout.addWidget(self.table_view)
+        layout.addWidget(back_button)
 
-        self.setLayout(grid)
+        self.setLayout(layout)
 
     def display_flight_expand_window(self):
         self.close()
@@ -294,10 +296,16 @@ class flight_crew_add_window(QWidget):
 
             checkbox = QCheckBox()
             checkbox.setChecked(True)
-            self.the_headers.insert(0, '')
-            for crew_member in the_data:
+
+            self.the_headers.insert(0, ' ')
+            for crew_member in self.the_data:
                 crew_member.insert(0, checkbox)
 
+        def rowCount(self, parent):
+            return len(self.the_data)
+
+        def columnCount(self, parent):
+            return len(self.the_headers)
 
         def data(self, index, role):
             if not index.isValid():
@@ -306,35 +314,23 @@ class flight_crew_add_window(QWidget):
                 value = self.the_data[index.row()][index.column()].text()
             else:
                 value = self.the_data[index.row()][index.column()]
+
             if role == QtCore.Qt.EditRole:
                 return value
             elif role == QtCore.Qt.DisplayRole:
                 return value
             elif role != QtCore.Qt.DisplayRole:
                 return None
+
             elif role == QtCore.Qt.CheckStateRole:
                 if index.column() == 0:
-                    # print(">>> data() row,col = %d, %d" % (index.row(), index.column()))
                     if self.the_data[index.row()][index.column()].isChecked():
                         return QtCore.Qt.Checked
                     else:
                         return QtCore.Qt.Unchecked
 
+
             return self.the_data[index.row()][index.column()]
-
-        def flags(self, index):
-            if not index.isValid():
-                return None
-            if index.column() == 0:
-                return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsUserCheckable
-            else:
-                return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
-
-        def rowCount(self, parent):
-            return len(self.the_data)
-
-        def columnCount(self, parent):
-            return len(self.the_headers)
 
         def headerData(self, col, orientation, role):
             if orientation == QtCore.Qt.Horizontal and role == QtCore.Qt.DisplayRole:
@@ -350,9 +346,154 @@ class flight_crew_add_window(QWidget):
                     self.the_data.reverse()
                 self.emit(QtCore.SIGNAL("layoutChanged()"))
 
+        def flags(self, index):
+            if not index.isValid():
+                return None
+            if index.column() == 0:
+                return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsUserCheckable
+            else:
+                return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
+
+        def setData(self, index, value, role):
+            if not index.isValid():
+                return False
+            if role == QtCore.Qt.CheckStateRole and index.column() == 0:
+                print(">>> setData() role = ", role)
+                print(">>> setData() index.column() = ", index.column())
+                if value == QtCore.Qt.Checked:
+                    self.the_data[index.row()][index.column()].setChecked(True)
+                else:
+                    self.the_data[index.row()][index.column()].setChecked(False)
+            else:
+                print(">>> setData() role = ", role)
+                print(">>> setData() index.column() = ", index.column())
+
+            print(">>> setData() index.row = ", index.row())
+            print(">>> setData() index.column = ", index.column())
+            self.dataChanged.emit(index, index)
+            return True
+
 
 class crew_currency_add_window(QWidget):
-    pass
+    def __init__(self, crew_member):
+        QWidget.__init__(self)
+        # setGeometry(x_pos, y_pos, width, height)
+        self.setGeometry(70, 150, 700, 450)
+        self.setWindowTitle(f'{crew_member[3]}\'s Currency Page')
+
+        self.headers = main_window.crew_main_window.crew_headers
+        self.data = main_window.crew_main_window.crew_data
+
+        self.crew_table = self.TableModel(self, self.data, self.headers)
+        self.table_view = QTableView()
+        self.table_view.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.table_view.setSelectionBehavior(self.table_view.SelectRows)
+        self.table_view.setModel(self.crew_table)
+        self.table_view.setSortingEnabled(True)
+
+        self.table_view.setSelectionMode(self.table_view.ContiguousSelection)
+        self.table_view.resizeColumnsToContents()
+        self.table_view.hideColumn(1)
+        self.table_view.hideColumn(4)
+        self.table_view.hideColumn(6)
+
+        back_button = QPushButton('Back')
+        back_button.clicked.connect(
+            lambda: self.display_flight_expand_window())
+
+        layout = QVBoxLayout(self)
+        layout.addWidget(self.table_view)
+        layout.addWidget(back_button)
+
+        self.setLayout(layout)
+
+    def display_crew_expand_window(self):
+        self.close()
+        main_window.crew_main_window.crew_expand_window.show()
+
+    class TableModel(QtCore.QAbstractTableModel):
+        def __init__(self, parent, the_data, the_headers, *args):
+            QtCore.QAbstractTableModel.__init__(self, parent, *args)
+            self.the_data = the_data
+            self.the_headers = the_headers
+
+            checkbox = QCheckBox()
+            checkbox.setChecked(True)
+
+            self.the_headers.insert(0, ' ')
+            for crew_member in self.the_data:
+                crew_member.insert(0, checkbox)
+
+        def rowCount(self, parent):
+            return len(self.the_data)
+
+        def columnCount(self, parent):
+            return len(self.the_headers)
+
+        def data(self, index, role):
+            if not index.isValid():
+                return None
+            if index.column() == 0:
+                value = self.the_data[index.row()][index.column()].text()
+            else:
+                value = self.the_data[index.row()][index.column()]
+
+            if role == QtCore.Qt.EditRole:
+                return value
+            elif role == QtCore.Qt.DisplayRole:
+                return value
+            elif role != QtCore.Qt.DisplayRole:
+                return None
+
+            elif role == QtCore.Qt.CheckStateRole:
+                if index.column() == 0:
+                    if self.the_data[index.row()][index.column()].isChecked():
+                        return QtCore.Qt.Checked
+                    else:
+                        return QtCore.Qt.Unchecked
+
+            return self.the_data[index.row()][index.column()]
+
+        def headerData(self, col, orientation, role):
+            if orientation == QtCore.Qt.Horizontal and role == QtCore.Qt.DisplayRole:
+                return self.the_headers[col]
+            return None
+
+        def sort(self, col, order):
+            """sort table by given column number col"""
+            if col != 0:
+                self.emit(QtCore.SIGNAL("layoutAboutToBeChanged()"))
+                self.the_data = sorted(self.the_data, key=operator.itemgetter(col))
+                if order == QtCore.Qt.DescendingOrder:
+                    self.the_data.reverse()
+                self.emit(QtCore.SIGNAL("layoutChanged()"))
+
+        def flags(self, index):
+            if not index.isValid():
+                return None
+            if index.column() == 0:
+                return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsUserCheckable
+            else:
+                return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
+
+        def setData(self, index, value, role):
+            if not index.isValid():
+                return False
+            if role == QtCore.Qt.CheckStateRole and index.column() == 0:
+                print(">>> setData() role = ", role)
+                print(">>> setData() index.column() = ", index.column())
+                if value == QtCore.Qt.Checked:
+                    self.the_data[index.row()][index.column()].setChecked(True)
+                else:
+                    self.the_data[index.row()][index.column()].setChecked(False)
+            else:
+                print(">>> setData() role = ", role)
+                print(">>> setData() index.column() = ", index.column())
+
+            print(">>> setData() index.row = ", index.row())
+            print(">>> setData() index.column = ", index.column())
+            self.dataChanged.emit(index, index)
+            return True
 
 
 # --------------------------------
@@ -434,7 +575,8 @@ class site_main_window(QWidget):
 
         grid = QGridLayout()
         grid.setSpacing(12)
-        self.setGeometry(400, 200, 700, 450)
+        # setGeometry(x_pos, y_pos, width, height)
+        self.setGeometry(70, 150, 400, 300)
         self.setWindowTitle('Sites')
 
         self.site_headers = get_site_column_query()
@@ -444,8 +586,6 @@ class site_main_window(QWidget):
         self.table_view = QTableView()
         self.table_view.setSelectionBehavior(self.table_view.SelectRows)
         self.table_view.setSelectionMode(self.table_view.ContiguousSelection)
-        font = QtGui.QFont("Courier New", 12)
-        self.table_view.setFont(font)
         self.table_view.setModel(self.site_table)
         self.table_view.resizeColumnsToContents()
         self.table_view.setSortingEnabled(True)
@@ -527,7 +667,8 @@ class site_main_window(QWidget):
 class flight_main_window(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.setGeometry(400, 200, 700, 450)
+        # setGeometry(x_pos, y_pos, width, height)
+        self.setGeometry(70, 150, 420, 300)
         self.setWindowTitle('Flights')
         grid = QGridLayout()
         grid.setSpacing(12)
@@ -553,8 +694,6 @@ class flight_main_window(QWidget):
         self.table_view.setModel(self.flight_table)
         self.table_view.setSelectionBehavior(self.table_view.SelectRows)
         self.table_view.setSelectionMode(self.table_view.ContiguousSelection)
-        font = QtGui.QFont("Courier New", 12)
-        self.table_view.setFont(font)
         self.table_view.resizeColumnsToContents()
         self.table_view.setSortingEnabled(True)
         self.table_view.hideColumn(0)
@@ -642,7 +781,8 @@ class crew_main_window(QWidget):
 
         grid = QGridLayout()
         grid.setSpacing(12)
-        self.setGeometry(400, 200, 700, 450)
+        # setGeometry(x_pos, y_pos, width, height)
+        self.setGeometry(70, 150, 440, 520)
         self.setWindowTitle('Crews')
 
         self.crew_headers = get_crew_column_query({}, {'currencies': 0})
@@ -653,8 +793,6 @@ class crew_main_window(QWidget):
         self.table_view.setModel(self.crew_table)
         self.table_view.setSelectionBehavior(self.table_view.SelectRows)
         self.table_view.setSelectionMode(self.table_view.ContiguousSelection)
-        font = QtGui.QFont("Courier New", 12)
-        self.table_view.setFont(font)
         self.table_view.resizeColumnsToContents()
         self.table_view.setSortingEnabled(True)
         self.table_view.hideColumn(0)
@@ -740,13 +878,11 @@ class crew_main_window(QWidget):
 class InitialWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.site_main_window = site_main_window()
-        self.flight_main_window = flight_main_window()
-        self.crew_main_window = crew_main_window()
+        self.setWindowTitle('Metrics Tracker')
+        self.setGeometry(70, 150, 200, 70)
 
         grid = QGridLayout()
         grid.setSpacing(10)
-        self.setWindowTitle('Metrics Tracker')
 
         main_site_button = QPushButton('Sites')
         main_site_button.clicked.connect(lambda: self.display_site_main_window(self.site_main_window))
@@ -769,6 +905,10 @@ class InitialWindow(QMainWindow):
 
         main_frame.setLayout(grid)
         self.setCentralWidget(main_frame)
+
+        self.site_main_window = site_main_window()
+        self.flight_main_window = flight_main_window()
+        self.crew_main_window = crew_main_window()
 
     @Slot()
     def display_site_main_window(self, window):
