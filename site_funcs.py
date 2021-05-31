@@ -1,6 +1,5 @@
 import random
 
-import countries
 from upconn import *
 
 db = client.metrics_tracker
@@ -24,13 +23,13 @@ def edit_site():
 
 def add_site(value):
     site_info = {
-        '_id': value[0],
-        'location': value[1],
-        'aircraft_type': value[2],
-        '# A/C': value[3],
-        'present_staff': value[4],
-        'assigned_crew': [],
-        'required_staff': value[5]
+        'location': value[0],
+        'aircraft_type': value[1],
+        '# A/C': value[2],
+        'present_staff': value[3],
+        'assigned_crew': {},
+        'required_staff': value[4],
+        'flights': {}
     }
     try:
         sites.insert_one(site_info)
@@ -42,15 +41,11 @@ def delete_site(site_id):
     sites.delete_one(site_id)
 
 def gen_random_site():
-    try:
-        site_id = f'Location {random.randint(1, 15)}'
-    except:
-        site_id = f'Location {random.randint(1, 15)}'
+    location = random.choice(['United States', 'Europe', 'Canada', 'Mexico'])
+    aircraft_type = random.choice(['KCMQ-9', 'KCMQ-10', 'KCMQ-46', 'KCMQ-135'])
 
-    country = random.choice(countries.name)
-    aircraft_type = random.choice(['KCMQ-9', 'KCMQ-1', 'KCMQ-10'])
     aircraft_assigned = str(random.randint(1, 3))
     required_staff = str(int(aircraft_assigned) * 10)
     present_staff = str(int(aircraft_assigned) * random.choice([6, 7, 8, 9, 10]))
 
-    return site_id, country, aircraft_type, aircraft_assigned, present_staff, required_staff
+    return location, aircraft_type, aircraft_assigned, present_staff, required_staff

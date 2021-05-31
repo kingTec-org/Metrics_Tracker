@@ -42,6 +42,10 @@ def find_crew(employee_ids):
     crew_on_flight = [crews.find({'employee_id': employee_id})[0].values() for employee_id in employee_ids]
     return crew_on_flight
 
+def find__single_crew(employee_ids):
+    crew_on_flight = [crews.find_one({'employee_id': employee_id})[0].values() for employee_id in employee_ids]
+    return crew_on_flight
+
 def edit_crew_member():
     # get crew info
     # present crew info
