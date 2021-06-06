@@ -16,13 +16,15 @@
 
 # MAIN FILE
 # ///////////////////////////////////////////////////////////////
-from PySide6.QtCore import QPropertyAnimation, QEasingCurve
-from PySide6.QtGui import QIcon
+from PySide6.QtCore import QPropertyAnimation, QEasingCurve, QTimer, QEvent, QParallelAnimationGroup
+from PySide6.QtGui import QIcon, QColor, Qt
+from PySide6.QtWidgets import QGraphicsDropShadowEffect, QSizeGrip, QPushButton
 from main import *
 
 # GLOBALS
 # ///////////////////////////////////////////////////////////////
 from gui.modules import Settings
+from gui.widgets import CustomGrip
 
 GLOBAL_STATE = False
 GLOBAL_TITLE_BAR = True

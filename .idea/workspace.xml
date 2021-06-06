@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a26c5cbb-4724-4dcd-be4f-d1cb5463a6ba" name="Default Changelist" comment="" />
+    <list default="true" id="a26c5cbb-4724-4dcd-be4f-d1cb5463a6ba" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/images/images/PyDracula_vertical.png" beforeDir="false" afterPath="$PROJECT_DIR$/gui/images/images/PyDracula_vertical.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/images/images/PyDracula_verticalOLD.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/modules/app_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/modules/app_functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/modules/ui_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/modules/ui_functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/modules/ui_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/modules/ui_main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/resources_rc.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/widgets/custom_grips/custom_grips.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/widgets/custom_grips/custom_grips.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -44,6 +54,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_MARK_IGNORED_FILES_AS_EXCLUDED" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Python" />
@@ -299,7 +310,14 @@
       <option name="project" value="LOCAL" />
       <updated>1622778227408</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="Adding additional old GUI pages to new style">
+      <created>1622957195593</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1622957195593</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -361,7 +379,8 @@
     <MESSAGE value="# TODO Add matplotlib support&#10;# TODO Add, Edit, Delete &#10;# TODO Sites, Flights, Crews&#10;# TODO Flights to Sites&#10;# TODO Crews to Flights&#10;# TODO Currencies to Crews&#10;# TODO Bugs" />
     <MESSAGE value="Working towards Presentation Version 0.1 (PV0.1)&#10;# DOING - Crews to Flights&#10;adding checkboxes to multiselect crew&#10;# TODO drag and drop after PV0.1&#10;&#10;For PV0.1&#10;&#10;# TODO Add, Edit, Delete &#10;# TODO Currencies to Crews&#10;# TODO Flights to Sites&#10;&#10;AFTER PV0.1&#10;&#10;# TODO Bugs&#10;# TODO Add matplotlib support" />
     <MESSAGE value="GUI refactoring" />
-    <option name="LAST_COMMIT_MESSAGE" value="GUI refactoring" />
+    <MESSAGE value="Adding additional old GUI pages to new style" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adding additional old GUI pages to new style" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">

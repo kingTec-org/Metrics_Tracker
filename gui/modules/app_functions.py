@@ -18,7 +18,7 @@
 # ///////////////////////////////////////////////////////////////
 import operator
 
-from PySide6 import QtCore, QtWidgets
+from PySide6 import QtCore, QtWidgets, QtGui
 from main import *
 
 
@@ -86,3 +86,6 @@ class TableView(QtWidgets.QTableView):
         self.setSortingEnabled(True)
         self.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
         self.setSizeAdjustPolicy(QtWidgets.QAbstractScrollArea.AdjustToContents)
+        font = QtGui.QFont()
+        font.setPointSize(48)
+        self.setFont(font)
