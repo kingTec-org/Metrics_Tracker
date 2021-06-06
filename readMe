@@ -1,0 +1,4 @@
+pyside6-uic main.ui> /modules/ui_main.py
+resources.qrc -o resources_rc.py
+
+copy new ui_main.py to modules
