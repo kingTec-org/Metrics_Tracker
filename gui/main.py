@@ -17,9 +17,9 @@
 import os
 import sys
 
+from PySide6.QtGui import Qt
 # IMPORT / GUI AND MODULES AND WIDGETS
 # ///////////////////////////////////////////////////////////////
-from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QMainWindow, QApplication
 
 from modules import *
@@ -71,8 +71,8 @@ class MainWindow(QMainWindow):
 
         # LEFT MENUS
         widgets.btn_home.clicked.connect(self.buttonClick)
-        widgets.btn_widgets.clicked.connect(self.buttonClick)
-        widgets.btn_new.clicked.connect(self.buttonClick)
+        widgets.btn_currencies.clicked.connect(self.buttonClick)
+        widgets.btn_fcif.clicked.connect(self.buttonClick)
         widgets.btn_save.clicked.connect(self.buttonClick)
         widgets.btn_sites.clicked.connect(self.buttonClick)
         widgets.btn_flights.clicked.connect(self.buttonClick)
@@ -94,7 +94,6 @@ class MainWindow(QMainWindow):
         # SHOW APP
         # ///////////////////////////////////////////////////////////////
         self.show()
-
         # SET CUSTOM THEME
         # ///////////////////////////////////////////////////////////////
         useCustomTheme = False
