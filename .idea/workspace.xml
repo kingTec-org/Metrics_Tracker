@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a26c5cbb-4724-4dcd-be4f-d1cb5463a6ba" name="Default Changelist" comment="changed from dimensions to QSize object">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/modules/ui_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/modules/ui_main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/resources.qrc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/readMe" beforeDir="false" afterPath="$PROJECT_DIR$/readMe" afterDir="false" />
+    <list default="true" id="a26c5cbb-4724-4dcd-be4f-d1cb5463a6ba" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/gui/modules/ui_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/modules/ui_functions.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
