@@ -666,7 +666,6 @@ class crew_add_window(QWidget):
         self.middle_name = QLineEdit(details[1])
         self.suffix = QLineEdit(details[3])
         self.crew_pos_list = ['P', 'SO', 'IP', 'ISO', 'EP', 'ESO']
-        first_choice = self.crew_pos_list.pop(i)
 
         self.crew_position = QComboBox()
         self.crew_position.addItems(self.crew_pos_list)
@@ -1083,6 +1082,6 @@ if __name__ == '__main__':
     main_window.show()
 
     # Begins the main application loop
-    metrics_tracker.exec_()
+    metrics_tracker.exec()
 
 # TODO create DB for aircraft type and relevant details such as max flight time

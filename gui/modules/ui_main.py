@@ -781,8 +781,6 @@ class Ui_MainWindow(object):
 
         self.verticalMenuLayout.addWidget(self.bottomMenu, 0, Qt.AlignBottom)
 
-
-
         self.appLayout.addWidget(self.leftMenuBg)
 
         self.extraLeftBox = QFrame(self.bgApp)
@@ -791,20 +789,24 @@ class Ui_MainWindow(object):
         self.extraLeftBox.setMaximumSize(QSize(0, 16777215))
         self.extraLeftBox.setFrameShape(QFrame.NoFrame)
         self.extraLeftBox.setFrameShadow(QFrame.Raised)
+
         self.extraColumLayout = QVBoxLayout(self.extraLeftBox)
         self.extraColumLayout.setSpacing(0)
         self.extraColumLayout.setObjectName(u"extraColumLayout")
         self.extraColumLayout.setContentsMargins(0, 0, 0, 0)
+
         self.extraTopBg = QFrame(self.extraLeftBox)
         self.extraTopBg.setObjectName(u"extraTopBg")
         self.extraTopBg.setMinimumSize(QSize(0, 50))
         self.extraTopBg.setMaximumSize(QSize(16777215, 50))
         self.extraTopBg.setFrameShape(QFrame.NoFrame)
         self.extraTopBg.setFrameShadow(QFrame.Raised)
+
         self.verticalLayout_5 = QVBoxLayout(self.extraTopBg)
         self.verticalLayout_5.setSpacing(0)
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
         self.verticalLayout_5.setContentsMargins(0, 0, 0, 0)
+        
         self.extraTopLayout = QGridLayout()
         self.extraTopLayout.setObjectName(u"extraTopLayout")
         self.extraTopLayout.setHorizontalSpacing(10)
@@ -845,62 +847,67 @@ class Ui_MainWindow(object):
         self.extraContent.setObjectName(u"extraContent")
         self.extraContent.setFrameShape(QFrame.NoFrame)
         self.extraContent.setFrameShadow(QFrame.Raised)
+
         self.verticalLayout_12 = QVBoxLayout(self.extraContent)
         self.verticalLayout_12.setSpacing(0)
         self.verticalLayout_12.setObjectName(u"verticalLayout_12")
         self.verticalLayout_12.setContentsMargins(0, 0, 0, 0)
+
         self.extraTopMenu = QFrame(self.extraContent)
         self.extraTopMenu.setObjectName(u"extraTopMenu")
         self.extraTopMenu.setFrameShape(QFrame.NoFrame)
         self.extraTopMenu.setFrameShadow(QFrame.Raised)
+
         self.verticalLayout_11 = QVBoxLayout(self.extraTopMenu)
         self.verticalLayout_11.setSpacing(0)
         self.verticalLayout_11.setObjectName(u"verticalLayout_11")
         self.verticalLayout_11.setContentsMargins(0, 0, 0, 0)
+
         self.btn_share = QPushButton(self.extraTopMenu)
         self.btn_share.setObjectName(u"btn_share")
-        sizePolicy.setHeightForWidth(self.btn_share.sizePolicy().hasHeightForWidth())
         self.btn_share.setSizePolicy(sizePolicy)
         self.btn_share.setMinimumSize(QSize(0, 45))
         self.btn_share.setFont(font)
         self.btn_share.setCursor(QCursor(Qt.PointingHandCursor))
         self.btn_share.setLayoutDirection(Qt.LeftToRight)
         self.btn_share.setStyleSheet(u"background-image: url(:/icons/images/icons/cil-share-boxed.png);")
+        sizePolicy.setHeightForWidth(self.btn_share.sizePolicy().hasHeightForWidth())
 
-        self.verticalLayout_11.addWidget(self.btn_share)
 
         self.btn_adjustments = QPushButton(self.extraTopMenu)
         self.btn_adjustments.setObjectName(u"btn_adjustments")
-        sizePolicy.setHeightForWidth(self.btn_adjustments.sizePolicy().hasHeightForWidth())
         self.btn_adjustments.setSizePolicy(sizePolicy)
         self.btn_adjustments.setMinimumSize(QSize(0, 45))
         self.btn_adjustments.setFont(font)
         self.btn_adjustments.setCursor(QCursor(Qt.PointingHandCursor))
         self.btn_adjustments.setLayoutDirection(Qt.LeftToRight)
         self.btn_adjustments.setStyleSheet(u"background-image: url(:/icons/images/icons/cil-equalizer.png);")
+        sizePolicy.setHeightForWidth(self.btn_adjustments.sizePolicy().hasHeightForWidth())
 
-        self.verticalLayout_11.addWidget(self.btn_adjustments)
 
         self.btn_more = QPushButton(self.extraTopMenu)
         self.btn_more.setObjectName(u"btn_more")
-        sizePolicy.setHeightForWidth(self.btn_more.sizePolicy().hasHeightForWidth())
         self.btn_more.setSizePolicy(sizePolicy)
         self.btn_more.setMinimumSize(QSize(0, 45))
         self.btn_more.setFont(font)
         self.btn_more.setCursor(QCursor(Qt.PointingHandCursor))
         self.btn_more.setLayoutDirection(Qt.LeftToRight)
         self.btn_more.setStyleSheet(u"background-image: url(:/icons/images/icons/cil-layers.png);")
+        sizePolicy.setHeightForWidth(self.btn_more.sizePolicy().hasHeightForWidth())
 
+        self.verticalLayout_11.addWidget(self.btn_share)
+        self.verticalLayout_11.addWidget(self.btn_adjustments)
         self.verticalLayout_11.addWidget(self.btn_more)
 
-        self.verticalLayout_12.addWidget(self.extraTopMenu, 0, Qt.AlignTop)
 
         self.extraCenter = QFrame(self.extraContent)
         self.extraCenter.setObjectName(u"extraCenter")
         self.extraCenter.setFrameShape(QFrame.NoFrame)
         self.extraCenter.setFrameShadow(QFrame.Raised)
+
         self.verticalLayout_10 = QVBoxLayout(self.extraCenter)
         self.verticalLayout_10.setObjectName(u"verticalLayout_10")
+
         self.textEdit = QTextEdit(self.extraCenter)
         self.textEdit.setObjectName(u"textEdit")
         self.textEdit.setMinimumSize(QSize(222, 0))
@@ -910,13 +917,14 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_10.addWidget(self.textEdit)
 
-        self.verticalLayout_12.addWidget(self.extraCenter)
 
         self.extraBottom = QFrame(self.extraContent)
         self.extraBottom.setObjectName(u"extraBottom")
         self.extraBottom.setFrameShape(QFrame.NoFrame)
         self.extraBottom.setFrameShadow(QFrame.Raised)
 
+        self.verticalLayout_12.addWidget(self.extraTopMenu, 0, Qt.AlignTop)
+        self.verticalLayout_12.addWidget(self.extraCenter)
         self.verticalLayout_12.addWidget(self.extraBottom)
 
         self.extraColumLayout.addWidget(self.extraContent)
@@ -1062,7 +1070,7 @@ class Ui_MainWindow(object):
 
         self.pagesContainer = QFrame(self.content)
         self.pagesContainer.setObjectName(u"pagesContainer")
-        #self.pagesContainer.setStyleSheet("")
+        # self.pagesContainer.setStyleSheet("")
         self.pagesContainer.setFrameShape(QFrame.NoFrame)
         self.pagesContainer.setFrameShadow(QFrame.Raised)
 
@@ -1082,6 +1090,34 @@ class Ui_MainWindow(object):
                                 "background-repeat: no-repeat;")
         self.stackedWidget.addWidget(self.home)
 
+        ########################################################################################################################
+        #######################################---MAIN CONTENT OF THE DATABASE---###############################################
+        ########################################################################################################################
+
+        self.sites = QWidget()
+        self.sites.setObjectName(u"sites")
+        self.verticalLayout_20 = QVBoxLayout(self.sites)
+        self.verticalLayout_20.setSpacing(10)
+        self.verticalLayout_20.setObjectName(u"verticalLayout_20")
+        self.verticalLayout_20.setContentsMargins(9, 10, 10, 9)
+        self.site_label = QLabel(self.sites)
+        self.site_label.setObjectName(u"site_label")
+        self.verticalLayout_20.addWidget(self.site_label, 0, Qt.AlignHCenter | Qt.AlignVCenter)
+        self.site_headers = get_site_column_query()
+        self.site_data = get_site_query()
+        self.site_label.setAlignment(Qt.AlignCenter)
+        self.site_table_model = app_functions.TableModel(self, self.site_data, self.site_headers)
+        self.site_table_model.setObjectName(u"site_table")
+        self.site_table_view = app_functions.TableView()
+        self.site_table_view.setModel(self.site_table_model)
+        self.site_table_view.setSelectionBehavior(self.site_table_view.SelectRows)
+        self.site_table_view.setSelectionMode(self.site_table_view.ContiguousSelection)
+        self.site_table_view.hideColumn(0)
+        self.site_table_view.hideColumn(5)
+        self.site_table_view.hideColumn(7)
+        self.site_table_view.hideColumn(8)
+        self.verticalLayout_20.addWidget(self.site_table_view)
+
         self.flights = QWidget()
         self.flights.setObjectName("flights")
         self.flights.setStyleSheet("b")
@@ -1089,7 +1125,6 @@ class Ui_MainWindow(object):
         self.verticalLayout.setSpacing(10)
         self.verticalLayout.setObjectName("verticalLayout")
         self.verticalLayout.setContentsMargins(9, 10, 10, 9)
-
         self.flight_label = QLabel(self.flights)
         self.flight_label.setObjectName(u"flight_label")
         self.flight_headers = get_flight_column_query()
@@ -1104,63 +1139,22 @@ class Ui_MainWindow(object):
         self.flight_table_view.hideColumn(3)
         self.flight_table_view.hideColumn(4)
         self.flight_add_btn = QPushButton("Add Flight")
-
         self.verticalLayout.addWidget(self.flight_label, 0, Qt.AlignHCenter | Qt.AlignVCenter)
         self.verticalLayout.addWidget(self.flight_table_view)
         self.verticalLayout.addWidget(self.flight_add_btn)
 
-        self.stackedWidget.addWidget(self.flights)
-
-        self.sites = QWidget()
-        self.sites.setObjectName(u"sites")
-        self.verticalLayout_20 = QVBoxLayout(self.sites)
-        self.verticalLayout_20.setSpacing(10)
-        self.verticalLayout_20.setObjectName(u"verticalLayout_20")
-        self.verticalLayout_20.setContentsMargins(9, 10, 10, 9)
-
-        self.site_label = QLabel(self.sites)
-        self.site_label.setObjectName(u"site_label")
-
-        self.verticalLayout_20.addWidget(self.site_label, 0, Qt.AlignHCenter | Qt.AlignVCenter)
-
-        self.site_headers = get_site_column_query()
-        self.site_data = get_site_query()
-
-        self.site_label.setAlignment(Qt.AlignCenter)
-
-        self.site_table_model = app_functions.TableModel(self, self.site_data, self.site_headers)
-        self.site_table_model.setObjectName(u"site_table")
-
-        self.site_table_view = app_functions.TableView()
-        self.site_table_view.setModel(self.site_table_model)
-        self.site_table_view.setSelectionBehavior(self.site_table_view.SelectRows)
-        self.site_table_view.setSelectionMode(self.site_table_view.ContiguousSelection)
-        self.site_table_view.hideColumn(0)
-        self.site_table_view.hideColumn(5)
-        self.site_table_view.hideColumn(7)
-        self.site_table_view.hideColumn(8)
-
-        self.verticalLayout_20.addWidget(self.site_table_view)
-        self.stackedWidget.addWidget(self.sites)
-
         self.crews = QWidget()
-        self.crews.setObjectName(u"crews")
+        self.crews.setObjectName("crews")
         self.crews.setMaximumSize(QSize(1178, 603))
         self.verticalLayout_16 = QVBoxLayout(self.crews)
         self.verticalLayout_16.setSpacing(10)
-        self.verticalLayout_16.setObjectName(u"verticalLayout_16")
+        self.verticalLayout_16.setObjectName('verticalLayout_16')
         self.verticalLayout_16.setContentsMargins(-1, 10, 10, -1)
-
         self.crew_label = QLabel(self.crews)
-        self.crew_label.setObjectName(u"crew_label")
-
-        self.verticalLayout_16.addWidget(self.crew_label, 0, Qt.AlignHCenter | Qt.AlignVCenter)
-
+        self.crew_label.setObjectName('crew_label')
         self.crew_headers = get_crew_column_query({}, {'currencies': 0})
         self.crew_data = get_crew_query({}, {'currencies': 0})
-
         self.crew_table_model = app_functions.TableModel(self, self.crew_data, self.crew_headers)
-
         self.crew_table_view = app_functions.TableView()
         self.crew_table_view.setModel(self.crew_table_model)
         self.crew_table_view.setSelectionBehavior(self.crew_table_view.SelectRows)
@@ -1168,13 +1162,46 @@ class Ui_MainWindow(object):
         self.crew_table_view.hideColumn(0)
         self.crew_table_view.hideColumn(3)
         self.crew_table_view.hideColumn(7)
-
-        self.crew_table_model.setObjectName(u"crew_table")
+        self.crew_table_model.setObjectName('crew_table')
+        self.verticalLayout_16.addWidget(self.crew_label, 0, Qt.AlignHCenter | Qt.AlignVCenter)
         self.verticalLayout_16.addWidget(self.crew_table_view)
+        #self.crew_expand.setObjectName('crew_expand')
+        #self.crew_expand.setMaximumSize(QSize(1178, 603))
+        #self.verticalLayout_17 = QVBoxLayout(self.crew_expand)
+        #self.verticalLayout_17.setSpacing(10)
+        #self.verticalLayout_17.setObjectName('verticalLayout_17')
+        #self.verticalLayout_17.setContentsMargins(-1, 10, 10, -1)
+        #self.crew_member_label = QLabel(self.crew_expand)
+        #self.crew_member_label.setObjectName('crew_member_label')
+        #self.verticalLayout_17.addWidget(self.crew_member_label)
+
+        self.currencies = QWidget()
+        self.verticalLayout_18 = QVBoxLayout(self.currencies)
+        self.verticalLayout_18.setSpacing(10)
+        self.verticalLayout_18.setContentsMargins(-1, 10, 10, -1)
+        self.currencies_label = QLabel()
+        self.currencies_label.setObjectName('currencies_label')
+        self.verticalLayout_18.addWidget(self.currencies_label, 0, Qt.AlignHCenter | Qt.AlignVCenter)
+
+        self.fcif_label = QLabel()
+        self.fcif_label.setObjectName('fcif_label')
+
+
+
+        self.stackedWidget.addWidget(self.sites)
+        self.stackedWidget.addWidget(self.flights)
         self.stackedWidget.addWidget(self.crews)
+        self.stackedWidget.addWidget(self.currencies)
+        #self.stackedWidget.addWidget(self.fcifs)
+
+        #self.stackedWidget.addWidget(self.crew_expand)
 
         self.verticalLayout_15.addWidget(self.stackedWidget)
         self.horizontalLayout_4.addWidget(self.pagesContainer)
+
+        ########################################################################################################################
+        #####################################---END MAIN CONTENT OF THE DATABASE---#############################################
+        ########################################################################################################################
 
         self.extraRightBox = QFrame(self.content)
         self.extraRightBox.setObjectName(u"extraRightBox")
@@ -1202,14 +1229,17 @@ class Ui_MainWindow(object):
         self.verticalLayout_13.setSpacing(0)
         self.verticalLayout_13.setObjectName(u"verticalLayout_13")
         self.verticalLayout_13.setContentsMargins(0, 0, 0, 0)
+
         self.topMenus = QFrame(self.contentSettings)
         self.topMenus.setObjectName(u"topMenus")
         self.topMenus.setFrameShape(QFrame.NoFrame)
         self.topMenus.setFrameShadow(QFrame.Raised)
+
         self.verticalLayout_14 = QVBoxLayout(self.topMenus)
         self.verticalLayout_14.setSpacing(0)
         self.verticalLayout_14.setObjectName(u"verticalLayout_14")
         self.verticalLayout_14.setContentsMargins(0, 0, 0, 0)
+
         self.btn_message = QPushButton(self.topMenus)
         self.btn_message.setObjectName(u"btn_message")
         sizePolicy.setHeightForWidth(self.btn_message.sizePolicy().hasHeightForWidth())

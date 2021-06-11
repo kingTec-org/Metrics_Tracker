@@ -18,11 +18,12 @@ import os
 import sys
 
 from PySide6.QtGui import Qt
-# IMPORT / GUI AND MODULES AND WIDGETS
-# ///////////////////////////////////////////////////////////////
 from PySide6.QtWidgets import QMainWindow, QApplication
 
 from modules import *
+
+# IMPORT / GUI AND MODULES AND WIDGETS
+# ///////////////////////////////////////////////////////////////
 
 os.environ["QT_FONT_DPI"] = "96"  # FIX Problem for High DPI and Scale above 100%
 

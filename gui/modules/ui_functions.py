@@ -16,7 +16,7 @@
 
 # MAIN FILE
 # ///////////////////////////////////////////////////////////////
-from PySide6.QtCore import Qt, QEvent, QTimer
+from PySide6.QtCore import Qt, QEvent, QTimer, QPropertyAnimation, QEasingCurve
 from PySide6.QtGui import QIcon, QColor
 from PySide6.QtWidgets import QGraphicsDropShadowEffect, QSizeGrip, QPushButton
 from main import *
