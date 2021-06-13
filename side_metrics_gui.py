@@ -7,8 +7,8 @@ from PySide6.QtWidgets import QMainWindow, QApplication, QWidget, QPushButton, \
     QTableView, QGridLayout, QLabel, QFormLayout, QLineEdit, QComboBox, QCheckBox, QVBoxLayout, \
     QAbstractItemView
 
-from flight_funcs import *
-from site_funcs import *
+from data_tools.flight_funcs import *
+from data_tools.site_funcs import *
 
 # flight_date_format = '%m/%d/%YT%H%M'
 flight_date_format = '%Y-%m-%dT%H:%M:00'
