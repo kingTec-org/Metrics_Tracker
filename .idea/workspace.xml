@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a26c5cbb-4724-4dcd-be4f-d1cb5463a6ba" name="Default Changelist" comment="working calendar functions for flight ranges">
+    <list default="true" id="a26c5cbb-4724-4dcd-be4f-d1cb5463a6ba" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -320,7 +320,21 @@
       <option name="project" value="LOCAL" />
       <updated>1623564770543</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="working calendar functions for flight ranges">
+      <created>1624037237148</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1624037237148</updated>
+    </task>
+    <task id="LOCAL-00029" summary="working calendar functions for flight ranges">
+      <created>1624037428681</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1624037428681</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -397,7 +411,8 @@
     <MESSAGE value="changed from dimensions to QSize object" />
     <MESSAGE value="TODO: crew detail home page next" />
     <MESSAGE value="updating" />
-    <option name="LAST_COMMIT_MESSAGE" value="updating" />
+    <MESSAGE value="working calendar functions for flight ranges" />
+    <option name="LAST_COMMIT_MESSAGE" value="working calendar functions for flight ranges" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
