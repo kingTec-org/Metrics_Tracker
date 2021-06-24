@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a26c5cbb-4724-4dcd-be4f-d1cb5463a6ba" name="Default Changelist" comment="">
+    <list default="true" id="a26c5cbb-4724-4dcd-be4f-d1cb5463a6ba" name="Default Changelist" comment="working calendar functions for flight ranges">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/images/svg_images/logo_home.svg" beforeDir="false" afterPath="$PROJECT_DIR$/gui/images/svg_images/logo_home.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/uis/pages/ui_main_pages.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/uis/pages/ui_main_pages.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/uis/windows/main_window/setup_main_window.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/uis/windows/main_window/setup_main_window.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,6 +98,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="moving_sofa" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Metrics_Tracker" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$APPLICATION_CONFIG_DIR$/scratches" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$APPLICATION_CONFIG_DIR$/scratches/moving_sofa.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="pdf viewer" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Metrics_Tracker" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -118,6 +143,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.main" />
+        <item itemvalue="Python.moving_sofa" />
         <item itemvalue="Python.pdf viewer" />
       </list>
     </recent_temporary>
@@ -334,7 +360,14 @@
       <option name="project" value="LOCAL" />
       <updated>1624037428681</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="working calendar functions for flight ranges">
+      <created>1624042114176</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1624042114176</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">

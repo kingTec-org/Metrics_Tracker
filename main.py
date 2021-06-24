@@ -41,6 +41,8 @@ from gui.uis.windows.main_window import *
 os.environ["QT_FONT_DPI"] = "96"
 # IF IS 4K MONITOR ENABLE 'os.environ["QT_SCALE_FACTOR"] = "2"'
 
+#os.environ["QT_SCALE_FACTOR"] = '2'
+
 # MAIN WINDOW
 # ///////////////////////////////////////////////////////////////
 class MainWindow(QMainWindow):
@@ -92,7 +94,7 @@ class MainWindow(QMainWindow):
             self.ui.left_menu.select_only_one(btn.objectName())
 
             # Load Page 1
-            MainFunctions.set_page(self, self.ui.load_pages.page_1)
+            MainFunctions.set_page(self, self.ui.load_pages.contact_page)
 
         # SITE BTN
         if btn.objectName() == "btn_default_site":
@@ -125,7 +127,7 @@ class MainWindow(QMainWindow):
             # Select Menu
             self.ui.left_menu.select_only_one(btn.objectName())
 
-            # Load Page 4
+            # Load Page 5
             MainFunctions.set_page(self, self.ui.load_pages.page_5)
             MainFunctions.set_right_column_menu(self, self.ui.right_column.menu_1)
 

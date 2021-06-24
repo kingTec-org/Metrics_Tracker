@@ -46,31 +46,32 @@ class Ui_MainPages(object):
         themes = Themes()
         self.themes = themes.items
 
-        self.verticalLayout_2 = QVBoxLayout(MainPages)
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.verticalLayout_2.setContentsMargins(5, 5, 5, 5)
+        self.main_pages_layout = QVBoxLayout(MainPages)
+        self.main_pages_layout.setObjectName(u"verticalLayout_2")
+        self.main_pages_layout.setContentsMargins(5, 5, 5, 5)
 
+        # contains all left side icon pages
         self.pages = QStackedWidget(MainPages)
         self.pages.setObjectName(u"pages")
 
-        self.page_1 = QWidget()
-        self.page_1.setObjectName(u"page_1")
-        self.page_1.setMaximumSize(QSize(300, 150))
+        # logo_page
+        self.contact_page = QWidget()
+        self.contact_page.setObjectName(u"page_1")
+        self.contact_page.setStyleSheet(u"font-size: 14pt")
 
-        self.verticalLayout_7 = QVBoxLayout(self.page_1)
-        self.verticalLayout_7.setObjectName(u"verticalLayout_7")
-
-        self.welcome_base = QFrame(self.page_1)
-        self.welcome_base.setObjectName(u"welcome_base")
-        self.welcome_base.setMinimumSize(QSize(300, 150))
-        self.welcome_base.setMaximumSize(QSize(300, 150))
+        self.contact_page_layout = QVBoxLayout(self.contact_page)
+        self.contact_page_layout.setSpacing(5)
+        self.contact_page_layout.setObjectName(u"page_1_layout")
+        self.contact_page_layout.setContentsMargins(5, 5, 5, 5)
 
         font = QFont()
         font.setPointSize(14)
-
-        self.welcome_base.setFont(font)
-        self.welcome_base.setFrameShape(QFrame.NoFrame)
+        self.welcome_base = QFrame(self.contact_page)
         self.welcome_base.setFrameShadow(QFrame.Raised)
+        self.welcome_base.setObjectName(u"welcome_base")
+        self.welcome_base.setMinimumSize(QSize(300, 150))
+        self.welcome_base.setMaximumSize(QSize(300, 150))
+        self.welcome_base.setFrameShape(QFrame.NoFrame)
 
         self.center_page_layout = QVBoxLayout(self.welcome_base)
         self.center_page_layout.setSpacing(10)
@@ -81,7 +82,6 @@ class Ui_MainPages(object):
         self.logo.setObjectName(u"logo")
         self.logo.setMinimumSize(QSize(300, 120))
         self.logo.setMaximumSize(QSize(300, 120))
-        self.logo.setFont(font)
         self.logo.setFrameShape(QFrame.NoFrame)
         self.logo.setFrameShadow(QFrame.Raised)
 
@@ -90,13 +90,25 @@ class Ui_MainPages(object):
         self.logo_layout.setObjectName(u"logo_layout")
         self.logo_layout.setContentsMargins(0, 0, 0, 0)
 
+        self.center_page_layout.addWidget(self.logo)
+
         self.label_3 = QLabel(self.welcome_base)
         self.label_3.setObjectName(u"label_3")
+        self.label_3.setAlignment(Qt.AlignCenter)
+
+        self.center_page_layout.addWidget(self.label_3)
 
         self.page_2 = QWidget()
         self.page_2.setObjectName(u"page_2")
+
         self.gridLayout = QGridLayout(self.page_2)
         self.gridLayout.setObjectName(u"gridLayout")
+
+        self.crew_headers = get_crew_column_query()
+        self.crew_data = get_crew_query()
+        self.crew_table_model = app_functions.TableModel(self, self.crew_data, self.crew_headers)
+        self.crew_table_model.setObjectName(u"crew_table")
+
         self.tableView_3 = PyTableView(radius=8,
                                        color=self.themes["app_color"]["text_foreground"],
                                        selection_color=self.themes["app_color"]["context_color"],
@@ -114,18 +126,12 @@ class Ui_MainPages(object):
         self.tableView_3.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.tableView_3.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.tableView_3.setSortingEnabled(True)
-
-        self.crew_headers = get_crew_column_query()
-        self.crew_data = get_crew_query()
-        self.crew_table_model = app_functions.TableModel(self, self.crew_data, self.crew_headers)
-        self.crew_table_model.setObjectName(u"crew_table")
         self.tableView_3.setModel(self.crew_table_model)
-
-        self.gridLayout.addWidget(self.tableView_3, 2, 0, 1, 2)
 
         self.server_sync_notice = QLabel(self.page_2)
         self.server_sync_notice.setObjectName(u"server_sync_notice")
 
+        self.gridLayout.addWidget(self.tableView_3, 2, 0, 1, 2)
         self.gridLayout.addWidget(self.server_sync_notice, 0, 1, 1, 1)
 
         self.calendarWidget = PyCalendarWidget(radius=8,
@@ -141,11 +147,6 @@ class Ui_MainPages(object):
                                                context_color=self.themes["app_color"]["context_color"]
                                                )
         self.calendarWidget.setObjectName(u"calendarWidget")
-
-        def print_date():
-            if self.calendarWidget.selectedDate():
-                print(self.calendarWidget.selectedDate())
-        print(print_date())
 
         self.gridLayout.addWidget(self.calendarWidget, 1, 0, 1, 1)
 
@@ -267,9 +268,10 @@ class Ui_MainPages(object):
         self.scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.scroll_area.setWidgetResizable(True)
+
         self.contents = QWidget()
         self.contents.setObjectName(u"contents")
-        self.contents.setGeometry(QRect(0, 0, 639, 576))
+        self.contents.setGeometry(QRect(0, 0, 850, 580))
         self.contents.setStyleSheet(u"background: transparent;")
 
         self.verticalLayout = QVBoxLayout(self.contents)
@@ -277,14 +279,15 @@ class Ui_MainPages(object):
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.verticalLayout.setContentsMargins(5, 5, 5, 5)
 
+        font1 = QFont()
+        font1.setPointSize(16)
+
         self.title_label = QLabel(self.contents)
         self.title_label.setObjectName(u"title_label")
         self.title_label.setMaximumSize(QSize(16777215, 40))
-        font1 = QFont()
-        font1.setPointSize(16)
-        self.title_label.setFont(font1)
         self.title_label.setStyleSheet(u"font-size: 16pt")
         self.title_label.setAlignment(Qt.AlignCenter)
+        self.title_label.setFont(font1)
 
         self.description_label = QLabel(self.contents)
         self.description_label.setObjectName(u"description_label")
@@ -321,7 +324,7 @@ class Ui_MainPages(object):
         self.center_page_layout.addWidget(self.logo)
         self.center_page_layout.addWidget(self.label_3)
 
-        self.verticalLayout_7.addWidget(self.welcome_base)
+        self.contact_page_layout.addWidget(self.welcome_base)
 
         self.gridLayout.addWidget(self.tableView_2, 1, 1, 1, 1)
         self.gridLayout.addWidget(self.site_id_label, 0, 0, 1, 1)
@@ -334,13 +337,13 @@ class Ui_MainPages(object):
         self.gridLayout_4.addWidget(self.tableView, 1, 0, 1, 1)
         self.gridLayout_4.addWidget(self.server_update, 0, 1, 1, 1)
 
-        self.pages.addWidget(self.page_1)
+        self.pages.addWidget(self.contact_page)
         self.pages.addWidget(self.page_2)
         self.pages.addWidget(self.page_3)
         self.pages.addWidget(self.page_4)
         self.pages.addWidget(self.page_5)
 
-        self.verticalLayout_2.addWidget(self.pages)
+        self.main_pages_layout.addWidget(self.pages)
 
         self.retranslateUi(MainPages)
 
