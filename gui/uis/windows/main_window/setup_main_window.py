@@ -198,7 +198,7 @@ class SetupMainWindow:
 
         # SET INITIAL PAGE / SET LEFT AND RIGHT COLUMN MENUS
         # ///////////////////////////////////////////////////////////////
-        MainFunctions.set_page(self, self.ui.load_pages.contact_page)
+        MainFunctions.set_page(self, self.ui.load_pages.page_1)
         MainFunctions.set_left_column_menu(
             self,
             menu=self.ui.left_column.menus.menu_1,
@@ -266,7 +266,7 @@ class SetupMainWindow:
         self.logo_svg = QSvgWidget(Functions.set_svg_image("logo_home.svg"))
         self.ui.load_pages.logo_layout.addWidget(self.logo_svg, Qt.AlignCenter, Qt.AlignCenter)
 
-        # PAGE 2
+        # PAGE 5
         # CIRCULAR PROGRESS 1
         self.circular_progress_1 = PyCircularProgress(
             value=80,

@@ -94,7 +94,7 @@ class MainWindow(QMainWindow):
             self.ui.left_menu.select_only_one(btn.objectName())
 
             # Load Page 1
-            MainFunctions.set_page(self, self.ui.load_pages.contact_page)
+            MainFunctions.set_page(self, self.ui.load_pages.page_1)
 
         # SITE BTN
         if btn.objectName() == "btn_default_site":
