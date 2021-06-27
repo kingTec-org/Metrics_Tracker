@@ -263,7 +263,7 @@ class SetupMainWindow:
         # ///////////////////////////////////////////////////////////////
 
         # PAGE 1 - ADD LOGO TO MAIN PAGE
-        self.logo_svg = QSvgWidget(Functions.set_svg_image("logo_home.svg"))
+        self.logo_svg = QSvgWidget(Functions.set_svg_image('logo_home.svg'))
         self.ui.load_pages.logo_layout.addWidget(self.logo_svg, Qt.AlignCenter, Qt.AlignCenter)
 
         # PAGE 5
@@ -497,11 +497,11 @@ class SetupMainWindow:
         for x in range(10):
             row_number = self.table_widget.rowCount()
             self.table_widget.insertRow(row_number)  # Insert row
-            self.table_widget.setItem(row_number, 0, QTableWidgetItem(str("Wanderson")))  # Add name
-            self.table_widget.setItem(row_number, 1, QTableWidgetItem(str("vfx_on_fire_" + str(x))))  # Add nick
+            self.table_widget.setItem(row_number, 0, QTableWidgetItem(str('Larry Cawley')))  # Add name
+            self.table_widget.setItem(row_number, 1, QTableWidgetItem(str('Tracking Metrics' + str(x))))  # Add nick
             self.pass_text = QTableWidgetItem()
             self.pass_text.setTextAlignment(Qt.AlignCenter)
-            self.pass_text.setText("12345" + str(x))
+            self.pass_text.setText("1337" + str(x))
             self.table_widget.setItem(row_number, 2, self.pass_text)  # Add pass
             self.table_widget.setRowHeight(row_number, 22)
 

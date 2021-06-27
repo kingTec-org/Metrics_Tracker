@@ -64,13 +64,13 @@ class Ui_MainPages(object):
 ########################################################################################################################
         # logo_page
         self.page_1 = QWidget()
-        #self.page_1.setObjectName(u"page_1")
-        #self.page_1.setStyleSheet(u"font-size: 14pt")
+        self.page_1.setObjectName(u"page_1")
+        self.page_1.setStyleSheet(u"font-size: 14pt")
 
         self.page_1_layout = QVBoxLayout(self.page_1)
-        #self.page_1_layout.setSpacing(5)
-        #self.page_1_layout.setObjectName(u"page_1_layout")
-        #self.page_1_layout.setContentsMargins(5, 5, 5, 5)
+        self.page_1_layout.setSpacing(5)
+        self.page_1_layout.setObjectName(u"page_1_layout")
+        self.page_1_layout.setContentsMargins(5, 5, 5, 5)
 
         self.welcome_base = QFrame(self.page_1)
         #self.welcome_base.setObjectName(u"welcome_base")
@@ -80,27 +80,27 @@ class Ui_MainPages(object):
         #self.welcome_base.setFrameShadow(QFrame.Raised)
 
         self.center_page_layout = QVBoxLayout(self.welcome_base)
-        #self.center_page_layout.setSpacing(10)
-        #self.center_page_layout.setObjectName(u"center_page_layout")
-        #self.center_page_layout.setContentsMargins(0, 0, 0, 0)
+        self.center_page_layout.setSpacing(10)
+        self.center_page_layout.setObjectName(u"center_page_layout")
+        self.center_page_layout.setContentsMargins(0, 0, 0, 0)
 
         self.logo = QFrame(self.welcome_base)
-        #self.logo.setObjectName(u"logo")
+        self.logo.setObjectName(u"logo")
         #self.logo.setMinimumSize(QSize(300, 120))
         #self.logo.setMaximumSize(QSize(300, 120))
-        #self.logo.setFrameShape(QFrame.NoFrame)
-        #self.logo.setFrameShadow(QFrame.Raised)
+        self.logo.setFrameShape(QFrame.NoFrame)
+        self.logo.setFrameShadow(QFrame.Raised)
 
         self.logo_layout = QVBoxLayout(self.logo)
-        #self.logo_layout.setSpacing(0)
-        #self.logo_layout.setObjectName(u"logo_layout")
-        #self.logo_layout.setContentsMargins(0, 0, 0, 0)
+        self.logo_layout.setSpacing(0)
+        self.logo_layout.setObjectName(u"logo_layout")
+        self.logo_layout.setContentsMargins(0, 0, 0, 0)
 
         self.label = QLabel(self.welcome_base)
-        #self.label.setObjectName(u"label")
-        #self.label.setAlignment(Qt.AlignCenter)
+        self.label.setObjectName(u"label")
+        self.label.setAlignment(Qt.AlignCenter)
 
-        self.page_1_layout.addWidget(self.welcome_base, 0, Qt.AlignHCenter)
+        self.page_1_layout.addWidget(self.welcome_base, Qt.AlignHCenter)
 
         self.center_page_layout.addWidget(self.logo)
         self.center_page_layout.addWidget(self.label)
@@ -160,6 +160,8 @@ class Ui_MainPages(object):
                                                )
         self.calendarWidget.setObjectName(u"calendarWidget")
 
+        self.calendarWidget.selectedDate()
+
         def create_tableView_2():
             self.tableView_2 = PyTableView(radius=8,
                                            color=self.themes["app_color"]["text_foreground"],
@@ -183,9 +185,12 @@ class Ui_MainPages(object):
         self.tableView_2.setSortingEnabled(True)
 
         self.flight_headers = get_flight_column_query()
+
         self.flight_data = get_flight_query()
+
         self.flight_table_model = app_functions.TableModel(self, self.flight_data, self.flight_headers)
         self.flight_table_model.setObjectName(u"flight_table")
+
         self.tableView_2.setModel(self.flight_table_model)
 
         self.site_id_label = QLabel(self.page_2)
@@ -383,7 +388,6 @@ class Ui_MainPages(object):
         self.server_update.setText(QCoreApplication.translate("MainPages", u"Last Sync", None))
         self.title_label.setText(QCoreApplication.translate("MainPages", u"Custom Widgets Page", None))
         self.description_label.setText(QCoreApplication.translate("MainPages",
-                                                                  u"Here will be all the custom widgets, they will be added over time on this page.\n"
-                                                                  "I will try to always record a new tutorial when adding a new Widget and updating the project on Patreon before launching on GitHub and GitHub after the public release.",
+                                                                  u"Custom Widget Examples, Add Table",
                                                                   None))
     # retranslateUi

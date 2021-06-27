@@ -5,11 +5,37 @@
    viewBox="0 0 79.374998 18.520833"
    version="1.1"
    id="svg1132"
+   sodipodi:docname="logo_home.svg"
+   inkscape:version="1.1 (c68e22c387, 2021-05-23)"
+   inkscape:export-filename="C:\Users\larry\Documents\Programming\Projects\Metrics_Tracker\gui\images\svg_images\logo_home.svg"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <sodipodi:namedview
+     id="namedview15"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:pageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="4.9833333"
+     inkscape:cx="163.04348"
+     inkscape:cy="67.023411"
+     inkscape:window-width="3354"
+     inkscape:window-height="1604"
+     inkscape:window-x="287"
+     inkscape:window-y="235"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer1"
+     inkscape:snap-global="true" />
   <defs
      id="defs1126" />
   <metadata
@@ -40,22 +66,29 @@
            y="2.0865664" /></text>
       <text
          xml:space="preserve"
-         style="font-style:normal;font-weight:normal;font-size:3.46095px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.0865237"
+         style="font-style:normal;font-weight:normal;font-size:3.23022px;line-height:0;font-family:sans-serif;letter-spacing:0px;fill:black;fill-opacity:1;stroke:none;stroke-width:0.0865237"
          x="0.67071694"
          y="3.9174054"
          id="text11214"><tspan
            id="tspan11212"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Segoe UI';-inkscape-font-specification:'Segoe UI';fill:#00b302;fill-opacity:1;stroke-width:0.0865237"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.23022px;line-height:1;font-family:'Eras Bold ITC';-inkscape-font-specification:'Eras Bold ITC';opacity:1;fill:#b1b6a6;fill-opacity:1;stroke-width:0.0865237"
            x="0.67071694"
            y="3.9174054"><tspan
-             style="fill:#00004a;fill-opacity:1"
-             id="tspan51641">M</tspan><tspan
-             style="fill:#b1b6a6;fill-opacity:1"
-             id="tspan61587">etrics </tspan><tspan
-             style="fill:#00004a;fill-opacity:1"
-             id="tspan58181">T</tspan><tspan
-             style="fill:#b1b6a2;fill-opacity:1"
-             id="tspan71081">racker</tspan></tspan></text>
+   style="fill:#343f3e;fill-opacity:1"
+   id="tspan422534">M</tspan>etrics <tspan
+   style="fill:#343f3e;fill-opacity:1"
+   id="tspan425156">T</tspan>racker</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-size:3.46095px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;stroke-width:0.0865237"
+         x="12.292008"
+         y="8.1814184"
+         id="text85374"><tspan
+           sodipodi:role="line"
+           id="tspan85372"
+           style="stroke-width:0.0865237"
+           x="12.292008"
+           y="8.1814184" /></text>
     </g>
   </g>
 </svg>
