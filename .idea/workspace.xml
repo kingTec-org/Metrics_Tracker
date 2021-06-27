@@ -4,6 +4,7 @@
     <list default="true" id="a26c5cbb-4724-4dcd-be4f-d1cb5463a6ba" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/uis/pages/ui_main_pages.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/uis/pages/ui_main_pages.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gui/widgets/py_calendar/py_calendar.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/widgets/py_calendar/py_calendar.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -478,11 +479,6 @@
           <url>file://$PROJECT_DIR$/newgui/app/packages/pyside_or_pyqt/pyside_or_pyqt.py</url>
           <line>16</line>
           <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/gui/uis/pages/ui_main_pages.py</url>
-          <line>51</line>
-          <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

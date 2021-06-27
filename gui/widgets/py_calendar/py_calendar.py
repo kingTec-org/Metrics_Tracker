@@ -10,8 +10,6 @@ from .style import *
 # PY CALENDAR
 # ///////////////////////////////////////////////////////////////
 
-
-
 class PyCalendarWidget(QCalendarWidget):
     def __init__(
             self,
@@ -28,6 +26,15 @@ class PyCalendarWidget(QCalendarWidget):
             context_color="#00ABE8"
     ):
         super().__init__()
+        self.begin_date = None
+        self.end_date = None
+
+        self.highlight_format = QTextCharFormat()
+        self.highlight_format.setBackground(self.palette().brush(QPalette.Highlight))
+        self.highlight_format.setForeground(self.palette().color(QPalette.HighlightedText))
+
+        self.clicked.connect(self.date_is_clicked)
+        print(super().dateTextFormat())
 
         # PARAMETERS
 
@@ -76,3 +83,22 @@ class PyCalendarWidget(QCalendarWidget):
             _context_color=context_color
         )
         self.setStyleSheet(style_format)
+
+    def date_is_clicked(self, date):
+        # reset highlighting of previously selected date range
+        self.format_range(QTextCharFormat())
+        if QApplication.instance().keyboardModifiers() & Qt.ShiftModifier and self.begin_date:
+            self.end_date = date
+            # set highlighting of currently selected date range
+            self.format_range(self.highlight_format)
+        else:
+            self.begin_date = date
+            self.end_date = None
+
+    def format_range(self, date_format):
+        if self.begin_date and self.end_date:
+            d0 = min(self.begin_date, self.end_date)
+            d1 = max(self.begin_date, self.end_date)
+            while d0 <= d1:
+                self.setDateTextFormat(d0, date_format)
+                d0 = d0.addDays(1)

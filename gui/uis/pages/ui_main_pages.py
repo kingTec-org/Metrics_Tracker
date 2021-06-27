@@ -159,10 +159,8 @@ class Ui_MainPages(object):
                                                context_color=self.themes["app_color"]["context_color"]
                                                )
 
+        self.calendarWidget.clicked.connect(self.printDateInfo)
         self.calendarWidget.setObjectName(u"calendarWidget")
-        self.date = self.calendarWidget.showSelectedDate()
-
-        self.calendarWidget.clicked.connect(lambda: print(self.date))
 
         def create_tableView_2():
             self.tableView_2 = PyTableView(radius=8,
@@ -374,6 +372,11 @@ class Ui_MainPages(object):
         self.pages.setCurrentIndex(0)
 
         QMetaObject.connectSlotsByName(MainPages)
+
+    def printDateInfo(self, qDate):
+        print(f'{qDate.month()}/{qDate.day()}/{qDate.year()}')
+        print(f'Day Number of the year: {qDate.dayOfYear()}')
+        print(f'Day Number of the week: {qDate.dayOfWeek()}')
 
     # setupUi
 
