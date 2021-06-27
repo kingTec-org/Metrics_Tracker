@@ -4,7 +4,6 @@
     <list default="true" id="a26c5cbb-4724-4dcd-be4f-d1cb5463a6ba" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/uis/pages/ui_main_pages.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/uis/pages/ui_main_pages.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/widgets/py_calendar/py_calendar.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/widgets/py_calendar/py_calendar.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,17 +53,17 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="add_unversioned_files" value="$PROJECT_DIR$/refs/Screen Shot 2021-06-11 at 12.24.05 PM.png&#10;C:/Users/larry/Documents/Programming/Projects/Metrics_Tracker/refs/Screen Shot 2021-06-11 at 12.24.53 PM.png" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Python" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/gui/uis/windows/main_window" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\larry\Documents\Programming\Projects\Metrics_Tracker\gui\uis\windows\main_window" />
       <recent name="C:\Users\larry\Documents\Programming\Projects\Metrics_Tracker" />
       <recent name="C:\Users\larry\Documents\Programming\Projects\Metrics_Tracker\gui\widgets\py_calendar" />
       <recent name="C:\Users\larry\Documents\Programming\Projects\Metrics_Tracker\PyOneDark_Qt_Widgets_Modern_GUI_v1.0.0\gui\widgets" />
       <recent name="C:\Users\larry\Documents\Programming\Projects\Metrics_Tracker\gui\modules" />
-      <recent name="C:\Users\larry\Documents\Programming\Projects\Metrics_Tracker\gui" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\larry\Documents\Programming\Projects\Metrics_Tracker" />
@@ -386,7 +385,14 @@
       <option name="project" value="LOCAL" />
       <updated>1624758473021</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="calendar date selection working&#10;&#10;refactoring&#10;need flight table to reflect selected dates">
+      <created>1624821405729</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1624821405729</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -465,7 +471,8 @@
     <MESSAGE value="updating" />
     <MESSAGE value="working calendar functions for flight ranges" />
     <MESSAGE value="refactoring&#10;working calendar functions for flight ranges" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactoring&#10;working calendar functions for flight ranges" />
+    <MESSAGE value="calendar date selection working&#10;&#10;refactoring&#10;need flight table to reflect selected dates" />
+    <option name="LAST_COMMIT_MESSAGE" value="calendar date selection working&#10;&#10;refactoring&#10;need flight table to reflect selected dates" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

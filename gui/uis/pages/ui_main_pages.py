@@ -118,87 +118,95 @@ class Ui_MainPages(object):
         self.gridLayout = QGridLayout(self.page_2)
         self.gridLayout.setObjectName(u"gridLayout")
 
+        # 1st element
+        self.site_id_label = QLabel(self.page_2)
+        self.site_id_label.setObjectName(u"site_id_label")
+
+        # 2nd element
+        self.server_sync_notice = QLabel(self.page_2)
+        self.server_sync_notice.setObjectName(u"server_sync_notice")
+
+        # 3rd element
         self.crew_headers = get_crew_column_query()
         self.crew_data = get_crew_query()
         self.crew_table_model = app_functions.TableModel(self, self.crew_data, self.crew_headers)
         self.crew_table_model.setObjectName(u"crew_table")
 
-        self.crew_table = PyTableView(radius=8,
-                                      color=self.themes["app_color"]["text_foreground"],
-                                      selection_color=self.themes["app_color"]["context_color"],
-                                      bg_color=self.themes["app_color"]["bg_two"],
-                                      header_horizontal_color=self.themes["app_color"]["dark_two"],
-                                      header_vertical_color=self.themes["app_color"]["bg_three"],
-                                      bottom_line_color=self.themes["app_color"]["bg_three"],
-                                      grid_line_color=self.themes["app_color"]["bg_one"],
-                                      scroll_bar_bg_color=self.themes["app_color"]["bg_one"],
-                                      scroll_bar_btn_color=self.themes["app_color"]["dark_four"],
-                                      context_color=self.themes["app_color"]["context_color"]
-                                      )
+        def site_crew_table():
+            self.site_crew_table = PyTableView(radius=8,
+                                          color=self.themes["app_color"]["text_foreground"],
+                                          selection_color=self.themes["app_color"]["context_color"],
+                                          bg_color=self.themes["app_color"]["bg_two"],
+                                          header_horizontal_color=self.themes["app_color"]["dark_two"],
+                                          header_vertical_color=self.themes["app_color"]["bg_three"],
+                                          bottom_line_color=self.themes["app_color"]["bg_three"],
+                                          grid_line_color=self.themes["app_color"]["bg_one"],
+                                          scroll_bar_bg_color=self.themes["app_color"]["bg_one"],
+                                          scroll_bar_btn_color=self.themes["app_color"]["dark_four"],
+                                          context_color=self.themes["app_color"]["context_color"]
+                                          )
+        site_crew_table()
+        self.site_crew_table.setObjectName(u"tableView_3")
+        self.site_crew_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.site_crew_table.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        self.site_crew_table.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.site_crew_table.setSortingEnabled(True)
+        self.site_crew_table.setModel(self.crew_table_model)
 
-        self.crew_table.setObjectName(u"tableView_3")
-        self.crew_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        self.crew_table.setSelectionMode(QAbstractItemView.ExtendedSelection)
-        self.crew_table.setSelectionBehavior(QAbstractItemView.SelectRows)
-        self.crew_table.setSortingEnabled(True)
-        self.crew_table.setModel(self.crew_table_model)
+        # 4th element
+        def flight_calender():
+            self.flight_calender = PyCalendarWidget(radius=8,
+                                                    color=self.themes["app_color"]["text_foreground"],
+                                                    selection_color=self.themes["app_color"]["context_color"],
+                                                    bg_color=self.themes["app_color"]["bg_two"],
+                                                    header_horizontal_color=self.themes["app_color"]["dark_two"],
+                                                    header_vertical_color=self.themes["app_color"]["bg_three"],
+                                                    bottom_line_color=self.themes["app_color"]["bg_three"],
+                                                    grid_line_color=self.themes["app_color"]["bg_one"],
+                                                    scroll_bar_bg_color=self.themes["app_color"]["bg_one"],
+                                                    scroll_bar_btn_color=self.themes["app_color"]["dark_four"],
+                                                    context_color=self.themes["app_color"]["context_color"]
+                                                    )
+        flight_calender()
+        self.flight_calender.clicked.connect(self.printDateInfo)
+        self.flight_calender.setObjectName(u"calendarWidget")
 
-        self.server_sync_notice = QLabel(self.page_2)
-        self.server_sync_notice.setObjectName(u"server_sync_notice")
-
-        self.calendarWidget = PyCalendarWidget(radius=8,
-                                               color=self.themes["app_color"]["text_foreground"],
-                                               selection_color=self.themes["app_color"]["context_color"],
-                                               bg_color=self.themes["app_color"]["bg_two"],
-                                               header_horizontal_color=self.themes["app_color"]["dark_two"],
-                                               header_vertical_color=self.themes["app_color"]["bg_three"],
-                                               bottom_line_color=self.themes["app_color"]["bg_three"],
-                                               grid_line_color=self.themes["app_color"]["bg_one"],
-                                               scroll_bar_bg_color=self.themes["app_color"]["bg_one"],
-                                               scroll_bar_btn_color=self.themes["app_color"]["dark_four"],
-                                               context_color=self.themes["app_color"]["context_color"]
-                                               )
-
-        self.calendarWidget.clicked.connect(self.printDateInfo)
-        self.calendarWidget.setObjectName(u"calendarWidget")
-
-        def create_tableView_2():
-            self.tableView_2 = PyTableView(radius=8,
-                                           color=self.themes["app_color"]["text_foreground"],
-                                           selection_color=self.themes["app_color"]["context_color"],
-                                           bg_color=self.themes["app_color"]["bg_two"],
-                                           header_horizontal_color=self.themes["app_color"]["dark_two"],
-                                           header_vertical_color=self.themes["app_color"]["bg_three"],
-                                           bottom_line_color=self.themes["app_color"]["bg_three"],
-                                           grid_line_color=self.themes["app_color"]["bg_one"],
-                                           scroll_bar_bg_color=self.themes["app_color"]["bg_one"],
-                                           scroll_bar_btn_color=self.themes["app_color"]["dark_four"],
-                                           context_color=self.themes["app_color"]["context_color"]
-                                           )
-            return self.tableView_2
-        create_tableView_2()
+        # 5th element
+        def site_flight_table():
+            self.site_flight_table = PyTableView(radius=8,
+                                                 color=self.themes["app_color"]["text_foreground"],
+                                                 selection_color=self.themes["app_color"]["context_color"],
+                                                 bg_color=self.themes["app_color"]["bg_two"],
+                                                 header_horizontal_color=self.themes["app_color"]["dark_two"],
+                                                 header_vertical_color=self.themes["app_color"]["bg_three"],
+                                                 bottom_line_color=self.themes["app_color"]["bg_three"],
+                                                 grid_line_color=self.themes["app_color"]["bg_one"],
+                                                 scroll_bar_bg_color=self.themes["app_color"]["bg_one"],
+                                                 scroll_bar_btn_color=self.themes["app_color"]["dark_four"],
+                                                 context_color=self.themes["app_color"]["context_color"]
+                                                 )
+            site_flight_table.hideColumn(0)
+        site_flight_table()
 
         self.flight_headers = get_flight_column_query()
         self.flight_data = get_flight_query()
         self.flight_table_model = app_functions.TableModel(self, self.flight_data, self.flight_headers)
         self.flight_table_model.setObjectName(u"flight_table")
 
-        self.tableView_2.setObjectName(u"tableView_2")
-        self.tableView_2.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        self.tableView_2.setSelectionMode(QAbstractItemView.ExtendedSelection)
-        self.tableView_2.setSelectionBehavior(QAbstractItemView.SelectRows)
-        self.tableView_2.setSortingEnabled(True)
+        self.site_flight_table.setObjectName(u"tableView_2")
+        self.site_flight_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.site_flight_table.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        self.site_flight_table.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.site_flight_table.setSortingEnabled(True)
+        self.site_flight_table.setModel(self.flight_table_model)
 
-        self.tableView_2.setModel(self.flight_table_model)
 
-        self.site_id_label = QLabel(self.page_2)
-        self.site_id_label.setObjectName(u"site_id_label")
-
+        # arrange elements on the grid
         self.gridLayout.addWidget(self.site_id_label, 0, 0, 1, 1)
         self.gridLayout.addWidget(self.server_sync_notice, 0, 1, 1, 1)
-        self.gridLayout.addWidget(self.calendarWidget, 1, 0, 1, 1)
-        self.gridLayout.addWidget(self.tableView_2, 1, 1, 1, 1)
-        self.gridLayout.addWidget(self.crew_table, 2, 0, 1, 2)
+        self.gridLayout.addWidget(self.flight_calender, 1, 0, 1, 1)
+        self.gridLayout.addWidget(self.site_flight_table, 1, 1, 1, 1)
+        self.gridLayout.addWidget(self.site_crew_table, 2, 0, 1, 2)
 
         ######################################################################################################################
         self.page_3 = QWidget()
@@ -385,8 +393,8 @@ class Ui_MainPages(object):
         self.label.setText(QCoreApplication.translate("MainPages", u"Metrics Tracker", None))
         self.server_sync_notice.setText(QCoreApplication.translate("MainPages", u"Current as of: ", None))
         self.site_id_label.setText(QCoreApplication.translate("MainPages", u"Site:", None))
-        self.label.setText(QCoreApplication.translate("MainPages", u"TextLabel", None))
-        self.label_2.setText(QCoreApplication.translate("MainPages", u"TextLabel", None))
+        self.label.setText(QCoreApplication.translate("MainPages", u"Crew", None))
+        self.label_2.setText(QCoreApplication.translate("MainPages", u"Currency", None))
         self.name.setText(QCoreApplication.translate("MainPages", u"Name:", None))
         self.server_update.setText(QCoreApplication.translate("MainPages", u"Last Sync", None))
         self.title_label.setText(QCoreApplication.translate("MainPages", u"Custom Widgets Page", None))
