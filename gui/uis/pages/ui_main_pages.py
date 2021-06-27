@@ -61,7 +61,7 @@ class Ui_MainPages(object):
         self.pages = QStackedWidget(MainPages)
         self.pages.setObjectName(u"pages")
 
-########################################################################################################################
+        ########################################################################################################################
         # logo_page
         self.page_1 = QWidget()
         self.page_1.setObjectName(u"page_1")
@@ -105,7 +105,7 @@ class Ui_MainPages(object):
         self.center_page_layout.addWidget(self.logo)
         self.center_page_layout.addWidget(self.label)
 
-######################################################################################################################
+        ######################################################################################################################
 
         self.page_2 = QWidget()
         self.page_2.setObjectName(u"page_2")
@@ -123,25 +123,25 @@ class Ui_MainPages(object):
         self.crew_table_model = app_functions.TableModel(self, self.crew_data, self.crew_headers)
         self.crew_table_model.setObjectName(u"crew_table")
 
-        self.tableView_3 = PyTableView(radius=8,
-                                       color=self.themes["app_color"]["text_foreground"],
-                                       selection_color=self.themes["app_color"]["context_color"],
-                                       bg_color=self.themes["app_color"]["bg_two"],
-                                       header_horizontal_color=self.themes["app_color"]["dark_two"],
-                                       header_vertical_color=self.themes["app_color"]["bg_three"],
-                                       bottom_line_color=self.themes["app_color"]["bg_three"],
-                                       grid_line_color=self.themes["app_color"]["bg_one"],
-                                       scroll_bar_bg_color=self.themes["app_color"]["bg_one"],
-                                       scroll_bar_btn_color=self.themes["app_color"]["dark_four"],
-                                       context_color=self.themes["app_color"]["context_color"]
-                                       )
+        self.crew_table = PyTableView(radius=8,
+                                      color=self.themes["app_color"]["text_foreground"],
+                                      selection_color=self.themes["app_color"]["context_color"],
+                                      bg_color=self.themes["app_color"]["bg_two"],
+                                      header_horizontal_color=self.themes["app_color"]["dark_two"],
+                                      header_vertical_color=self.themes["app_color"]["bg_three"],
+                                      bottom_line_color=self.themes["app_color"]["bg_three"],
+                                      grid_line_color=self.themes["app_color"]["bg_one"],
+                                      scroll_bar_bg_color=self.themes["app_color"]["bg_one"],
+                                      scroll_bar_btn_color=self.themes["app_color"]["dark_four"],
+                                      context_color=self.themes["app_color"]["context_color"]
+                                      )
 
-        self.tableView_3.setObjectName(u"tableView_3")
-        self.tableView_3.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        self.tableView_3.setSelectionMode(QAbstractItemView.ExtendedSelection)
-        self.tableView_3.setSelectionBehavior(QAbstractItemView.SelectRows)
-        self.tableView_3.setSortingEnabled(True)
-        self.tableView_3.setModel(self.crew_table_model)
+        self.crew_table.setObjectName(u"tableView_3")
+        self.crew_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.crew_table.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        self.crew_table.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.crew_table.setSortingEnabled(True)
+        self.crew_table.setModel(self.crew_table_model)
 
         self.server_sync_notice = QLabel(self.page_2)
         self.server_sync_notice.setObjectName(u"server_sync_notice")
@@ -158,9 +158,11 @@ class Ui_MainPages(object):
                                                scroll_bar_btn_color=self.themes["app_color"]["dark_four"],
                                                context_color=self.themes["app_color"]["context_color"]
                                                )
-        self.calendarWidget.setObjectName(u"calendarWidget")
 
-        self.calendarWidget.selectedDate()
+        self.calendarWidget.setObjectName(u"calendarWidget")
+        self.date = self.calendarWidget.showSelectedDate()
+
+        self.calendarWidget.clicked.connect(lambda: print(self.date))
 
         def create_tableView_2():
             self.tableView_2 = PyTableView(radius=8,
@@ -174,22 +176,20 @@ class Ui_MainPages(object):
                                            scroll_bar_bg_color=self.themes["app_color"]["bg_one"],
                                            scroll_bar_btn_color=self.themes["app_color"]["dark_four"],
                                            context_color=self.themes["app_color"]["context_color"]
-                                          )
+                                           )
             return self.tableView_2
         create_tableView_2()
+
+        self.flight_headers = get_flight_column_query()
+        self.flight_data = get_flight_query()
+        self.flight_table_model = app_functions.TableModel(self, self.flight_data, self.flight_headers)
+        self.flight_table_model.setObjectName(u"flight_table")
 
         self.tableView_2.setObjectName(u"tableView_2")
         self.tableView_2.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.tableView_2.setSelectionMode(QAbstractItemView.ExtendedSelection)
         self.tableView_2.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.tableView_2.setSortingEnabled(True)
-
-        self.flight_headers = get_flight_column_query()
-
-        self.flight_data = get_flight_query()
-
-        self.flight_table_model = app_functions.TableModel(self, self.flight_data, self.flight_headers)
-        self.flight_table_model.setObjectName(u"flight_table")
 
         self.tableView_2.setModel(self.flight_table_model)
 
@@ -200,9 +200,9 @@ class Ui_MainPages(object):
         self.gridLayout.addWidget(self.server_sync_notice, 0, 1, 1, 1)
         self.gridLayout.addWidget(self.calendarWidget, 1, 0, 1, 1)
         self.gridLayout.addWidget(self.tableView_2, 1, 1, 1, 1)
-        self.gridLayout.addWidget(self.tableView_3, 2, 0, 1, 2)
+        self.gridLayout.addWidget(self.crew_table, 2, 0, 1, 2)
 
-######################################################################################################################
+        ######################################################################################################################
         self.page_3 = QWidget()
         self.page_3.setObjectName(u"page_3")
 
@@ -246,7 +246,7 @@ class Ui_MainPages(object):
         self.gridLayout_3.addWidget(self.all_flights, 1, 0, 1, 2)
 
 
-#################################################################################################
+        #################################################################################################
         self.page_4 = QWidget()
         self.page_4.setObjectName(u"page_4")
 
@@ -280,7 +280,7 @@ class Ui_MainPages(object):
 
         self.tableView_4 = QFormLayout(self.page_4)
 
-#        self.gridLayout_4.addWidget(self.tableView_4, 1, 1, 1, 1)
+        #        self.gridLayout_4.addWidget(self.tableView_4, 1, 1, 1, 1)
 
         self.name = QLabel(self.page_4)
 
@@ -293,7 +293,7 @@ class Ui_MainPages(object):
         self.gridLayout_4.addWidget(self.server_update, 0, 1, 1, 1)
         self.gridLayout_4.addWidget(self.main_crew_table, 1, 0, 1, 2)
 
-######################################################################################################################
+        ######################################################################################################################
         self.page_5 = QWidget()
         self.page_5.setObjectName(u"page_5")
 
@@ -356,7 +356,7 @@ class Ui_MainPages(object):
 
         self.page_5_layout.addWidget(self.scroll_area)
 
-#######################################################################################################################
+        #######################################################################################################################
 
 
         self.page_1_layout.addWidget(self.welcome_base)

@@ -3,10 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="a26c5cbb-4724-4dcd-be4f-d1cb5463a6ba" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/images/svg_images/logo_home.svg" beforeDir="false" afterPath="$PROJECT_DIR$/gui/images/svg_images/logo_home.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/images/svg_images/logo_top_100x22.svg" beforeDir="false" afterPath="$PROJECT_DIR$/gui/images/svg_images/logo_top_100x22.svg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gui/uis/pages/ui_main_pages.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/uis/pages/ui_main_pages.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gui/uis/windows/main_window/setup_main_window.py" beforeDir="false" afterPath="$PROJECT_DIR$/gui/uis/windows/main_window/setup_main_window.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -381,7 +378,14 @@
       <option name="project" value="LOCAL" />
       <updated>1624681907470</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="refactoring&#10;working calendar functions for flight ranges">
+      <created>1624758473021</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1624758473021</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
